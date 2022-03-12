@@ -4,7 +4,7 @@
 #include "kernel/fs.h"
 
 char*
-fmtname(char *path)
+fmtname(char *path)         // 输出最后一层目录名(即文件名);   以路径获得文件名;
 {
   static char buf[DIRSIZ+1];
   char *p;
@@ -27,26 +27,27 @@ ls(char *path)
 {
   char buf[512], *p;
   int fd;
-  struct dirent de;
-  struct stat st;
+  struct dirent de;  // 目录结构体, inum 该目录下文件数, name 文件名;
+  struct stat st;  // 文件结构体，其中type表示文件类型;
 
+  // fprintf(1, "path is %s", path);
   if((fd = open(path, 0)) < 0){
     fprintf(2, "ls: cannot open %s\n", path);
     return;
   }
 
-  if(fstat(fd, &st) < 0){
+  if(fstat(fd, &st) < 0){      // 将fd指向的文件指针存入结构体st中;
     fprintf(2, "ls: cannot stat %s\n", path);
     close(fd);
     return;
   }
 
   switch(st.type){
-  case T_FILE:
+  case T_FILE:       // 表示当前文件为文件;
     printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
     break;
 
-  case T_DIR:
+  case T_DIR:        // 表示当前文件为目录;
     if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
       break;
