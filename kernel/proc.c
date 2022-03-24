@@ -37,11 +37,11 @@ procinit(void)
       char *pa = kalloc();
       if(pa == 0)
         panic("kalloc");
-      uint64 va = KSTACK((int) (p - proc));
-      kvmmap(va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
+      uint64 va = KSTACK((int) (p - proc));  // 这里生成的虚拟页是两页， 其中第一页是guard_page, 第二页作为kstack，也就是va指向的位置;
+      kvmmap(va, (uint64)pa, PGSIZE, PTE_R | PTE_W);  // 可读可写， 但在用户态不能访问，也不能执行;
       p->kstack = va;
   }
-  kvminithart();
+  kvminithart();  // 把更新后的用户页表重新写入satp中;
 }
 
 // Must be called with interrupts disabled,
@@ -274,7 +274,7 @@ fork(void)
     return -1;
   }
   np->sz = p->sz;
-
+  np->mask = p->mask;
   np->parent = p;
 
   // copy saved user registers.
@@ -635,6 +635,19 @@ kill(int pid)
   return -1;
 }
 
+// get number of proc whose state is not unused;
+int getproc(void) {
+   // int i;
+   int cnt = 0;
+   struct proc *p;
+
+   for(p = proc; p < &proc[NPROC]; p++) {
+     if(p->state != UNUSED) 
+        cnt ++;
+   }
+
+   return cnt;
+}
 // Copy to either a user address, or kernel address,
 // depending on usr_dst.
 // Returns 0 on success, -1 on error.

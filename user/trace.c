@@ -14,7 +14,7 @@ main(int argc, char *argv[])
     exit(1);
   }
 
-  if (trace(atoi(argv[1])) < 0) {
+  if (trace(atoi(argv[1])) < 0) {             // 特别注意, 这里已经调用过trace, 唯一的参数就是mask;
     fprintf(2, "%s: trace failed\n", argv[0]);
     exit(1);
   }
@@ -22,6 +22,6 @@ main(int argc, char *argv[])
   for(i = 2; i < argc && i < MAXARG; i++){
     nargv[i-2] = argv[i];
   }
-  exec(nargv[0], nargv);
+  exec(nargv[0], nargv);   // 这里的exec执行就是trace mask 后跟着的指令;
   exit(0);
 }

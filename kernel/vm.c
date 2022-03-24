@@ -53,7 +53,7 @@ void
 kvminithart()
 {
   w_satp(MAKE_SATP(kernel_pagetable));
-  sfence_vma();
+  sfence_vma();   // 刷新/清空当前TLB(暂时不理解);
 }
 
 // Return the address of the PTE in page table pagetable
@@ -71,20 +71,22 @@ kvminithart()
 pte_t *
 walk(pagetable_t pagetable, uint64 va, int alloc)
 {
-  if(va >= MAXVA)
+  if(va >= MAXVA)  // 有效地址, 38位之后全为0;
     panic("walk");
 
-  for(int level = 2; level > 0; level--) {
+  for(int level = 2; level > 0; level--) {   // 一级一级找物理地址;
     pte_t *pte = &pagetable[PX(level, va)];
-    if(*pte & PTE_V) {
-      pagetable = (pagetable_t)PTE2PA(*pte);
-    } else {
+    if(*pte & PTE_V) {  // 物理地址的第0位;   
+      pagetable = (pagetable_t)PTE2PA(*pte);   // 如果存在就拿该pagetable;
+    } else {           // 否则，创建一个新的映射;
       if(!alloc || (pagetable = (pde_t*)kalloc()) == 0)
         return 0;
-      memset(pagetable, 0, PGSIZE);
-      *pte = PA2PTE(pagetable) | PTE_V;
+      memset(pagetable, 0, PGSIZE);   // 内容全为0;
+      *pte = PA2PTE(pagetable) | PTE_V;  // 赋为有效;
     }
   }
+  /*需要注意的是，如果传入的是新va，相关的映射未被建立，那么walk只会建立第二级和第三级页表（根页表是已经存在的），为它们分配新的物理帧，walk并没有为最后一级页表的PTE所指向的物理帧分配新的一页。也就是说，如果这个映射是新的，通过walk返回的PTE是无效的（全0），如果原来就有这个映射，那么walk就返回包含映射内容的PTE。*/
+
   return &pagetable[PX(0, va)];
 }
 
@@ -146,20 +148,20 @@ kvmpa(uint64 va)
 // be page-aligned. Returns 0 on success, -1 if walk() couldn't
 // allocate a needed page-table page.
 int
-mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm)
+mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm)  // va是起始的映射地址, pa是结尾的映射地址;
 {
   uint64 a, last;
   pte_t *pte;
 
   a = PGROUNDDOWN(va);
   last = PGROUNDDOWN(va + size - 1);
-  for(;;){
-    if((pte = walk(pagetable, a, 1)) == 0)
-      return -1;
+  for(;;){   // 直到完成所有的映射;
+    if((pte = walk(pagetable, a, 1)) == 0)     // 调用walk查找最后一级页表的PTE;
+      return -1;            
     if(*pte & PTE_V)
       panic("remap");
     *pte = PA2PTE(pa) | perm | PTE_V;
-    if(a == last)
+    if(a == last)   // 最后一个要映射的
       break;
     a += PGSIZE;
     pa += PGSIZE;
@@ -180,7 +182,7 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
     panic("uvmunmap: not aligned");
 
   for(a = va; a < va + npages*PGSIZE; a += PGSIZE){
-    if((pte = walk(pagetable, a, 0)) == 0)
+    if((pte = walk(pagetable, a, 0)) == 0)   // 使用walk找到相应的pte;
       panic("uvmunmap: walk");
     if((*pte & PTE_V) == 0)
       panic("uvmunmap: not mapped");
@@ -237,7 +239,7 @@ uvmalloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
   oldsz = PGROUNDUP(oldsz);
   for(a = oldsz; a < newsz; a += PGSIZE){
     mem = kalloc();
-    if(mem == 0){
+    if(mem == 0){    // 没有可分配空间了?
       uvmdealloc(pagetable, a, oldsz);
       return 0;
     }
@@ -255,6 +257,8 @@ uvmalloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
 // newsz.  oldsz and newsz need not be page-aligned, nor does newsz
 // need to be less than oldsz.  oldsz can be larger than the actual
 // process size.  Returns the new process size.
+
+// 调用uvmunmap来回收已分配的物理内存。
 uint64
 uvmdealloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
 {

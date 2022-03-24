@@ -6,6 +6,9 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "sysinfo.h"
+// #include "proc.c"
+// #include "kalloc.c"
 
 uint64
 sys_exit(void)
@@ -39,7 +42,7 @@ sys_wait(void)
 }
 
 uint64
-sys_sbrk(void)
+sys_sbrk(void)    // 用户调用该函数， 增加或减少自己的用户地址空间;
 {
   int addr;
   int n;
@@ -94,4 +97,34 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+uint64
+sys_trace(void)
+{
+  int mask;
+
+  if(argint(0, &mask) < 0)
+    return -1;
+  myproc()->mask = mask;
+
+  return 0;
+}
+
+uint64
+sys_sysinfo(void) 
+{
+  struct sysinfo s;
+  uint64 st; // user pointer to struct stat
+  
+  s.freemem = kfreemem();   // 得到空闲内存的字节数;   注意，这几个函数一定要在defs.h中申明;
+  s.nproc = getproc();  // 得到进程数;
+
+  if(argaddr(0, &st) < 0)   // st应该是user_space的调用地址空间?   这里是得到 系统调用 a0 的值并存在指针St中, 其中a0是函数系统调用的返回值;
+    return -1;                 // 指针形式就是返回地址?
+                            // st是物理内存页?这里真不清楚，不知道第一个系统参数是什么;
+  struct proc *p = myproc();
+  if(copyout(p->pagetable, st, (char *)&s, sizeof(s)) < 0)       // 把struct sysinfo s (把sysinfo结构体拷贝回内存空间)
+      return -1;
+  return 0;
 }

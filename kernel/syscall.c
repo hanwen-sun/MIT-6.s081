@@ -32,7 +32,7 @@ fetchstr(uint64 addr, char *buf, int max)
 }
 
 static uint64
-argraw(int n)
+argraw(int n)      // 检索用户寄存器;
 {
   struct proc *p = myproc();
   switch (n) {
@@ -55,7 +55,7 @@ argraw(int n)
 
 // Fetch the nth 32-bit system call argument.
 int
-argint(int n, int *ip)
+argint(int n, int *ip)  // 得到第n个系统调用参数, 并以整数形式保存在ip中;
 {
   *ip = argraw(n);
   return 0;
@@ -65,7 +65,7 @@ argint(int n, int *ip)
 // Doesn't check for legality, since
 // copyin/copyout will do that.
 int
-argaddr(int n, uint64 *ip)
+argaddr(int n, uint64 *ip)   // 得到第n个系统调用参数, 并以指针形式保存在ip中;
 {
   *ip = argraw(n);
   return 0;
@@ -75,7 +75,7 @@ argaddr(int n, uint64 *ip)
 // Copies into buf, at most max.
 // Returns string length if OK (including nul), -1 if error.
 int
-argstr(int n, char *buf, int max)
+argstr(int n, char *buf, int max)  // 得到第n个系统调用参数, 并以文件描述符形式保存在ip中;
 {
   uint64 addr;
   if(argaddr(n, &addr) < 0)
@@ -104,8 +104,10 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_wait(void);
 extern uint64 sys_write(void);
 extern uint64 sys_uptime(void);
+extern uint64 sys_trace(void);
+extern uint64 sys_sysinfo(void);
 
-static uint64 (*syscalls[])(void) = {
+static uint64 (*syscalls[])(void) = {   // 函数指针表, 系统调用号与syscalls数组中的条目相匹配；
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
 [SYS_wait]    sys_wait,
@@ -127,17 +129,36 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_trace]   sys_trace,
+[SYS_sysinfo]    sys_sysinfo,
 };
 
+const char *syscallNames[] = {
+    0, "fork", "exit", "wait",
+    "pipe", "read", "kill", "exec",
+    "fstat", "chdir", "dup", "getpid",
+    "sbrk", "sleep", "uptime", "open",
+    "write", "mknod", "unlink", "link",
+    "mkdir", "close", "trace", "sysinfo"
+};
+
+// 所有系统函数的调用都需要经过该接口!
 void
-syscall(void)
+syscall(void)         // 在该函数中添加代码以打印跟踪输出;
 {
   int num;
   struct proc *p = myproc();
 
-  num = p->trapframe->a7;
+  num = p->trapframe->a7;        // trapframe 陷阱帧, (指陷入内核态), ->a7得到系统调用号;
+                                 // 对于第一次系统调用，a7中的内容是SYS_exec
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    p->trapframe->a0 = syscalls[num]();
+    p->trapframe->a0 = syscalls[num]();    // 索引到对应的系统调用函数并调用， 返回值存储在a0中;
+                                           // 通常负数表示错误， 正数或0表示成功。
+    // int pid = getpid();
+    if(p->mask >> num & 1) {
+      printf("%d: syscall %s -> %d\n", p->pid, syscallNames[num], p->trapframe->a0);
+    }
+
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);

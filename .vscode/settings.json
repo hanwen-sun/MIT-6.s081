@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "sysinfo.h": "c",
+        "*.tcc": "c",
+        "optional": "c",
+        "functional": "c",
+        "random": "c",
+        "fstream": "c",
+        "istream": "c",
+        "ostream": "c",
+        "sstream": "c",
+        "streambuf": "c"
+    }
+}
