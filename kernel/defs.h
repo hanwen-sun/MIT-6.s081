@@ -108,7 +108,9 @@ void            yield(void);
 int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
 int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
-
+void            proc_free_ker_pagetable(pagetable_t pagetable, uint64 kstack);
+void            uvmmap(pagetable_t pgt, uint64 va, uint64 pa, uint64 sz, int perm);
+int             uvkcopy(pagetable_t old, pagetable_t new, uint64 old_sz, uint64 new_sz); 
 // swtch.S
 void            swtch(struct context*, struct context*);
 
@@ -171,13 +173,21 @@ uint64          uvmdealloc(pagetable_t, uint64, uint64);
 #else
 int             uvmcopy(pagetable_t, pagetable_t, uint64);
 #endif
+extern char etext[]; 
 void            uvmfree(pagetable_t, uint64);
+void            uvmfree_(pagetable_t pagetable, uint64 va, uint64 sz);
 void            uvmunmap(pagetable_t, uint64, uint64, int);
 void            uvmclear(pagetable_t, uint64);
 uint64          walkaddr(pagetable_t, uint64);
 int             copyout(pagetable_t, uint64, char *, uint64);
 int             copyin(pagetable_t, char *, uint64, uint64);
 int             copyinstr(pagetable_t, char *, uint64, uint64);
+void            vmprint(pagetable_t pagetable, int depth, int flaG);
+pagetable_t     uvminit_();
+
+// vmcopyin.c
+int             copyin_new(pagetable_t pagetable, char *dst, uint64 srcva, uint64 len);
+int             copyinstr_new(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max);
 
 // plic.c
 void            plicinit(void);

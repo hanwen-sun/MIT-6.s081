@@ -93,7 +93,7 @@ userret:
         # a1: user page table, for satp.
 
         # switch to the user page table.
-        csrw satp, a1
+        csrw satp, a1    
         sfence.vma zero, zero
 
         # put the saved user a0 in sscratch, so we

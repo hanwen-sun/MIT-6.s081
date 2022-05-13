@@ -9,6 +9,8 @@
 
 static int loadseg(pde_t *pgdir, uint64 addr, struct inode *ip, uint offset, uint sz);
 
+/*
+系统调用exec将存储在文件系统上的，新的用户程序装载进内存里，然后执行它 */
 int
 exec(char *path, char **argv)
 {
@@ -20,8 +22,11 @@ exec(char *path, char **argv)
   struct proghdr ph;
   pagetable_t pagetable = 0, oldpagetable;
   struct proc *p = myproc();
+  // printf("create my process!\n");
 
   begin_op();
+
+  printf("called the start of all filesystem!\n");
 
   if((ip = namei(path)) == 0){
     end_op();
@@ -29,16 +34,21 @@ exec(char *path, char **argv)
   }
   ilock(ip);
 
+  // printf("there!\n");
   // Check ELF header
   if(readi(ip, 0, (uint64)&elf, 0, sizeof(elf)) != sizeof(elf))
     goto bad;
   if(elf.magic != ELF_MAGIC)
     goto bad;
-
+  
+  // 创建一个没有用户部分映射的页表;
+  printf("create new pagetable!\n");
   if((pagetable = proc_pagetable(p)) == 0)
     goto bad;
 
+  printf("load program into memory!\n");
   // Load program into memory.
+  // 为程序段分配物理空间， 并完成虚拟地址到物理地址的映射转换。(此时物理地址内容都为0)
   for(i=0, off=elf.phoff; i<elf.phnum; i++, off+=sizeof(ph)){
     if(readi(ip, 0, (uint64)&ph, off, sizeof(ph)) != sizeof(ph))
       goto bad;
@@ -52,6 +62,8 @@ exec(char *path, char **argv)
     if((sz1 = uvmalloc(pagetable, sz, ph.vaddr + ph.memsz)) == 0)
       goto bad;
     sz = sz1;
+    if(sz >= PLIC)
+      goto bad;
     if(ph.vaddr % PGSIZE != 0)
       goto bad;
     if(loadseg(pagetable, ph.vaddr, ip, ph.off, ph.filesz) < 0)
@@ -68,11 +80,13 @@ exec(char *path, char **argv)
   // Use the second as the user stack.
   sz = PGROUNDUP(sz);
   uint64 sz1;
-  if((sz1 = uvmalloc(pagetable, sz, sz + 2*PGSIZE)) == 0)
+  if((sz1 = uvmalloc(pagetable, sz, sz + 2*PGSIZE)) == 0)   // 分配2个pagesize的物理地址空间;
     goto bad;
   sz = sz1;
+  // uvmclear将PTE_U设为无效，因此这一页用作保护页
   uvmclear(pagetable, sz-2*PGSIZE);
   sp = sz;
+  // 第二页用作userstack;
   stackbase = sp - PGSIZE;
 
   // Push argument strings, prepare rest of stack in ustack.
@@ -96,6 +110,7 @@ exec(char *path, char **argv)
     goto bad;
   if(copyout(pagetable, sp, (char *)ustack, (argc+1)*sizeof(uint64)) < 0)
     goto bad;
+  
 
   // arguments to user main(argc, argv)
   // argc is returned via the system call return
@@ -114,11 +129,26 @@ exec(char *path, char **argv)
   p->sz = sz;
   p->trapframe->epc = elf.entry;  // initial program counter = main
   p->trapframe->sp = sp; // initial stack pointer
+
+  
+    // 在这里添加kernel_page_table, 从0 -> sz;
+  // 这里切换进程了， 要把原来进程的kernel_page先unfree?;
+  printf("free old user->kernel_page!\n");
+  uvmunmap(p->kernel_pagetable, 0, PGROUNDUP(oldsz)/PGSIZE, 0);
+  printf("create new kernel_pagetable!\n");
+  if(uvkcopy(p->pagetable, p->kernel_pagetable, 0, p->sz) < 0) {   // 这里应该是有问题的;(暂时这么添加);
+      goto bad;
+  }
+
+  printf("free pagetbale!\n");
   proc_freepagetable(oldpagetable, oldsz);
+  if(p->pid==1) vmprint(p->pagetable, 1, 0);   // 打印第一个进程的页表;
+  printf("pagetable free end!\n");
 
   return argc; // this ends up in a0, the first argument to main(argc, argv)
 
  bad:
+  printf("exec bad!\n");
   if(pagetable)
     proc_freepagetable(pagetable, sz);
   if(ip){

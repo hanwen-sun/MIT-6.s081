@@ -5,7 +5,6 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
-
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -34,14 +33,17 @@ procinit(void)
       // Allocate a page for the process's kernel stack.
       // Map it high in memory, followed by an invalid
       // guard page.
+      // 注: 原来这里是在userinit()中, uvminit()之前就已经为所有进程分配好了kernel_stack;
+      // 映射对象是global_kernel_table;
+      /*
       char *pa = kalloc();
       if(pa == 0)
         panic("kalloc");
-      uint64 va = KSTACK((int) (p - proc));
-      kvmmap(va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
-      p->kstack = va;
+      uint64 va = KSTACK((int) (p - proc));   // 分配kernel_stack;
+      kvmmap(va, (uint64)pa, PGSIZE, PTE_R | PTE_W);  // 映射kernel_stack -> pyhsical space;
+      p->kstack = va; */
   }
-  kvminithart();
+  // kvminithart();   // 这里干啥?
 }
 
 // Must be called with interrupts disabled,
@@ -66,10 +68,12 @@ mycpu(void) {
 // Return the current struct proc *, or zero if none.
 struct proc*
 myproc(void) {
+  // printf("create process begin!\n");
   push_off();
   struct cpu *c = mycpu();
   struct proc *p = c->proc;
   pop_off();
+  // printf("create process end!\n");
   return p;
 }
 
@@ -106,13 +110,23 @@ allocproc(void)
 
 found:
   p->pid = allocpid();
-
+  printf("new process id is: %d\n", p->pid);
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
     release(&p->lock);
     return 0;
   }
 
+  // 在这里先创建kernel_page, 再将kstack在kernel_page --> pa;
+  p->kernel_pagetable = uvminit_();
+  char *pa = kalloc();
+  if(pa == 0)
+      panic("kalloc");
+  uint64 va = KSTACK((int) (p - proc));   // 分配kernel_stack;  
+  mappages(p->kernel_pagetable, va, PGSIZE, (uint64)pa, PTE_R | PTE_W);  // 映射kernel_stack -> pyhsical space;
+  // 映射了一页pagesize;
+  p->kstack = va;
+  
   // An empty user page table.
   p->pagetable = proc_pagetable(p);
   if(p->pagetable == 0){
@@ -139,8 +153,14 @@ freeproc(struct proc *p)
   if(p->trapframe)
     kfree((void*)p->trapframe);
   p->trapframe = 0;
+  
+  if(p->kernel_pagetable)
+    proc_free_ker_pagetable(p->kernel_pagetable, p->kstack);
+  p->kernel_pagetable = 0;
+  
   if(p->pagetable)
     proc_freepagetable(p->pagetable, p->sz);
+  
   p->pagetable = 0;
   p->sz = 0;
   p->pid = 0;
@@ -190,9 +210,25 @@ proc_pagetable(struct proc *p)
 void
 proc_freepagetable(pagetable_t pagetable, uint64 sz)
 {
-  uvmunmap(pagetable, TRAMPOLINE, 1, 0);
+  uvmunmap(pagetable, TRAMPOLINE, 1, 0);  // 对应两个mappage;
   uvmunmap(pagetable, TRAPFRAME, 1, 0);
-  uvmfree(pagetable, sz);
+  uvmfree(pagetable, sz);       // 清除所有pte;
+}
+
+// 解pagetable中的映射, 同时清楚kstack中的所有pte;
+// 4.15 bug: process_id 2 free的时候出现bug;
+void proc_free_ker_pagetable(pagetable_t pagetable, uint64 kstack)
+{
+  printf("proc_free_kernel!, process_id = %d\n", myproc()->pid);
+  // printf("free uart0\n");
+  uvmunmap(pagetable, UART0, 1, 0);
+  uvmunmap(pagetable, VIRTIO0, 1, 0);
+  // uvmunmap(pagetable, CLINT, 1, 0);
+  uvmunmap(pagetable, PLIC, 1, 0);
+  uvmunmap(pagetable, KERNBASE, 1, 0);
+  uvmunmap(pagetable, (uint64)etext, 1, 0);
+  uvmunmap(pagetable, TRAMPOLINE, 1, 0);
+  uvmfree_(pagetable, kstack, PGSIZE);
 }
 
 // a user program that calls exec("/init")
@@ -211,16 +247,22 @@ uchar initcode[] = {
 void
 userinit(void)
 {
+  // printf("user init begin!\n");
   struct proc *p;
 
-  p = allocproc();
+  p = allocproc();     // 分配一个process结构体;
   initproc = p;
   
   // allocate one user page and copy init's instructions
   // and data into it.
-  uvminit(p->pagetable, initcode, sizeof(initcode));
+  // printf("uvminit!\n");
+  uvminit(p->pagetable, initcode, sizeof(initcode));    // 这里应该会调用exec;
   p->sz = PGSIZE;
+  // printf("uvminit end!\n");
 
+  if(uvkcopy(p->pagetable, p->kernel_pagetable, 0, p->sz) == -1) {
+    printf("error userinit!\n");
+  }
   // prepare for the very first "return" from kernel to user.
   p->trapframe->epc = 0;      // user program counter
   p->trapframe->sp = PGSIZE;  // user stack pointer
@@ -241,14 +283,22 @@ growproc(int n)
   uint sz;
   struct proc *p = myproc();
 
+  // 增加或者减少pgt的映射;
   sz = p->sz;
+  // 这里对user_kernel_pgt调用相应的增加和减少映射;
   if(n > 0){
     if((sz = uvmalloc(p->pagetable, sz, sz + n)) == 0) {
       return -1;
     }
+
+    if( uvkcopy(p->pagetable, p->kernel_pagetable, sz - n, sz) == -1) {
+      return -1;
+    }
   } else if(n < 0){
     sz = uvmdealloc(p->pagetable, sz, sz + n);
+    uvmdealloc(p->kernel_pagetable, sz - n, sz);
   }
+  
   p->sz = sz;
   return 0;
 }
@@ -288,6 +338,13 @@ fork(void)
     if(p->ofile[i])
       np->ofile[i] = filedup(p->ofile[i]);
   np->cwd = idup(p->cwd);
+  
+  // 在这里添加user->kernel_table的虚拟地址复制;
+  if(uvkcopy(np->pagetable, np->kernel_pagetable, 0, np->sz) < 0) {   // 将新fork的进程的pagetable全部复制到kernel_pagetable处;
+    freeproc(np);
+    release(&np->lock);
+    return -1;
+  }
 
   safestrcpy(np->name, p->name, sizeof(p->name));
 
@@ -454,7 +511,7 @@ wait(uint64 addr)
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
 void
-scheduler(void)
+scheduler(void)   // 进程调度器;
 {
   struct proc *p;
   struct cpu *c = mycpu();
@@ -473,8 +530,16 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
-        swtch(&c->context, &p->context);
-
+        
+        // printf("scheduler process: %d!\n", p->pid);
+        // printf("change to kernel_table!\n");
+        w_satp(MAKE_SATP(p->kernel_pagetable));       // 切换kernel_table;
+        // printf("flush the tlb!\n");
+        sfence_vma();
+        // printf("switch!\n");
+        swtch(&c->context, &p->context);   // Save current registers in old. Load from new.	
+        // printf("change back!\n");
+        kvminithart();   // 切换为global_kernel_table;
         // Process is done running for now.
         // It should have changed its p->state before coming back.
         c->proc = 0;
@@ -537,6 +602,7 @@ yield(void)
 void
 forkret(void)
 {
+  // printf("forkret!\n");
   static int first = 1;
 
   // Still holding p->lock from scheduler.
