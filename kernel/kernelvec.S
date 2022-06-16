@@ -83,8 +83,8 @@ kernelvec:
         addi sp, sp, 256
 
         // return to whatever we were doing in the kernel.
-        sret
-
+        sret     // sret是risc-v 指令，复制sepc到pc中。
+                // 根据sstatus寄存器的设置，切换到监管者模式，并重新开放中断
         #
         # machine-mode timer interrupt.
         #

@@ -56,7 +56,7 @@ struct trapframe {
   /*  88 */ uint64 t2;
   /*  96 */ uint64 s0;
   /* 104 */ uint64 s1;
-  /* 112 */ uint64 a0;
+  /* 112 */ uint64 a0;    // 注意将这里的a0与rsic-v的a0寄存器区分!  (这里的a0就是user的a0)
   /* 120 */ uint64 a1;
   /* 128 */ uint64 a2;
   /* 136 */ uint64 a3;
@@ -94,11 +94,18 @@ struct proc {
   int xstate;                  // Exit status to be returned to parent's wait
   int pid;                     // Process ID
 
+  int alarm_interval;          // interval of alarm
+  void (*alarm_handler)();     // the address of alarm_handler
+  int alarm_ticks;
+
   // these are private to the process, so p->lock need not be held.
   uint64 kstack;               // Virtual address of kernel stack
   uint64 sz;                   // Size of process memory (bytes)
   pagetable_t pagetable;       // User page table
   struct trapframe *trapframe; // data page for trampoline.S
+  struct trapframe *alarm_trapframe;   // save trapframe for another time for handler callee
+  int is_alarming;          // 防止在handler过程中再次调用alarm;
+
   struct context context;      // swtch() here to run process
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory

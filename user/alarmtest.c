@@ -23,16 +23,18 @@ main(int argc, char *argv[])
 {
   test0();
   test1();
+  // exit(0);
   test2();
   exit(0);
 }
 
-volatile static int count;
+volatile static int count;       // 中断服务?
 
 void
 periodic()
 {
   count = count + 1;
+  printf("periodic %d\n", count);
   printf("alarm!\n");
   sigreturn();
 }
@@ -46,17 +48,23 @@ test0()
   printf("test0 start\n");
   count = 0;
   sigalarm(2, periodic);
-  for(i = 0; i < 1000*500000; i++){
+  for(i = 0; i < 1000*500000; i++){      // 中断调用后的sepc返回值出错了;
     if((i % 1000000) == 0)
       write(2, ".", 1);
+    if(count > 0)                      // 这里只调用一次就结束;
+      printf("%d\n", count);
     if(count > 0)
       break;
   }
+  printf("sigalarm(0, 0)\n");
   sigalarm(0, 0);
+  printf("sigalarm done!\n");
+
   if(count > 0){
     printf("test0 passed\n");
   } else {
     printf("\ntest0 failed: the kernel never called the alarm handler\n");
+    // exit(1);
   }
 }
 
@@ -84,9 +92,9 @@ test1()
   printf("test1 start\n");
   count = 0;
   j = 0;
-  sigalarm(2, periodic);
+  sigalarm(2, periodic);   // 这个只调用一次, 相当于设定一些参数, 陷入trap调用的syscall;
   for(i = 0; i < 500000000; i++){
-    if(count >= 10)
+    if(count >= 10)         // 测试每次中断调用后能回到原来的位置重复调用;
       break;
     foo(i, &j);
   }
@@ -145,7 +153,7 @@ slow_handler()
 {
   count++;
   printf("alarm!\n");
-  if (count > 1) {
+  if (count > 1) {   //注意, 在handler执行过程中可能再次中断重复调用!!!
     printf("test2 failed: alarm handler called more than once\n");
     exit(1);
   }

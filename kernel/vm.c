@@ -358,13 +358,13 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 
   while(len > 0){
     va0 = PGROUNDDOWN(dstva);
-    pa0 = walkaddr(pagetable, va0);
+    pa0 = walkaddr(pagetable, va0);  // 检查用户进程是否拥有该虚拟地址?  即一定要先分配好!
     if(pa0 == 0)
       return -1;
     n = PGSIZE - (dstva - va0);
     if(n > len)
       n = len;
-    memmove((void *)(pa0 + (dstva - va0)), src, n);
+    memmove((void *)(pa0 + (dstva - va0)), src, n);   // 各作为起始地址，拷贝n个字节;
 
     len -= n;
     src += n;
@@ -406,19 +406,20 @@ int
 copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
 {
   uint64 n, va0, pa0;
-  int got_null = 0;
+  int got_null = 0;   // 是否遇到'\0'
 
   while(got_null == 0 && max > 0){
-    va0 = PGROUNDDOWN(srcva);
-    pa0 = walkaddr(pagetable, va0);
-    if(pa0 == 0)
+    va0 = PGROUNDDOWN(srcva);   // va0一定是页表对齐的, 所以这里要转换;
+    pa0 = walkaddr(pagetable, va0);   // 找到用户虚拟地址对应的物理地址;
+    if(pa0 == 0)   // 虚拟地址不存在;    这里可以防止恶意访问， 即访问其他用户或者内核的虚拟地址;
       return -1;
-    n = PGSIZE - (srcva - va0);
+    n = PGSIZE - (srcva - va0);      // 这一页实际需要拷贝的;
     if(n > max)
       n = max;
 
-    char *p = (char *) (pa0 + (srcva - va0));
-    while(n > 0){
+    char *p = (char *) (pa0 + (srcva - va0));   // 这里特别注意pa0是物理地址，也是内核的虚拟地址;(直接映射)
+    // 这里是本次拷贝的起始地址;  是内核的虚拟地址，也即是实际的物理地址;
+    while(n > 0){       // 拷贝所有字符;          所以访问pa0就是直接访问物理地址;
       if(*p == '\0'){
         *dst = '\0';
         got_null = 1;

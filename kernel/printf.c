@@ -59,6 +59,16 @@ printptr(uint64 x)
     consputc(digits[x >> (sizeof(uint64) * 8 - 4)]);
 }
 
+void backtrace() {
+  uint64 fp = r_fp(), top = PGROUNDUP(fp);
+  printf("backtrace:\n");
+  while(fp != top) {   // 这里暂时不理解
+    printf("%p\n", *(uint64*)(fp - 8));  // 这里也应该输出地址!
+    printf("%p\n", *(uint64*)(fp - 16));   
+    fp = *(uint64*)(fp - 16);  // 先强制类型转换为地址, 再取地址;
+  }
+  printf("%p\n", *(uint64*)(fp - 8));  
+}
 // Print to the console. only understands %d, %x, %p, %s.
 void
 printf(char *fmt, ...)
@@ -115,12 +125,14 @@ printf(char *fmt, ...)
 }
 
 void
-panic(char *s)
+panic(char *s)              // 在这里调用backtrace;
 {
   pr.locking = 0;
   printf("panic: ");
   printf(s);
   printf("\n");
+  backtrace();
+
   panicked = 1; // freeze uart output from other CPUs
   for(;;)
     ;

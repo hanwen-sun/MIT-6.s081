@@ -55,6 +55,7 @@ sys_sbrk(void)
 uint64
 sys_sleep(void)
 {
+  backtrace();
   int n;
   uint ticks0;
 
@@ -94,4 +95,20 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+uint64 
+sys_sigalarm(void) {
+    if(argint(0, &(myproc()->alarm_interval)) != -1 && argaddr(1, (uint64*)(&myproc()->alarm_handler)) != -1) {  // 读取参数;
+        return 0;
+    }
+    return -1;
+}
+
+uint64 
+sys_sigreturn(void) {
+  memmove(myproc()->trapframe, myproc()->alarm_trapframe, sizeof(struct trapframe));
+  myproc()->is_alarming = 0;
+  // printf("sigreturm!\n");
+  return 0;
 }

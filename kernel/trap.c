@@ -77,8 +77,17 @@ usertrap(void)
     exit(-1);
 
   // give up the CPU if this is a timer interrupt.
-  if(which_dev == 2)
+  if(which_dev == 2) {
+    int alarm_ticks_ = ++(p->alarm_ticks);
+    if(alarm_ticks_ == p->alarm_interval && !p->is_alarming) {
+      memmove(p->alarm_trapframe, p->trapframe, sizeof(struct trapframe));   // 特别注意, 这里顺序别反;
+      p->is_alarming = 1;
+      p->trapframe->epc = (uint64)(p->alarm_handler);
+      p->alarm_ticks = 0;
+    }
+
     yield();
+  }
 
   usertrapret();
 }
@@ -131,19 +140,19 @@ usertrapret(void)
 // interrupts and exceptions from kernel code go here via kernelvec,
 // on whatever the current kernel stack is.
 void 
-kerneltrap()
+kerneltrap()            // 处理设备中断和异常;
 {
   int which_dev = 0;
-  uint64 sepc = r_sepc();
+  uint64 sepc = r_sepc();            // 用户pc?
   uint64 sstatus = r_sstatus();
-  uint64 scause = r_scause();
+  uint64 scause = r_scause();     // 代表引发trap的原因;
   
-  if((sstatus & SSTATUS_SPP) == 0)
+  if((sstatus & SSTATUS_SPP) == 0)        // spp位指示一个trap是来自用户模式还是监管者模式;
     panic("kerneltrap: not from supervisor mode");
   if(intr_get() != 0)
     panic("kerneltrap: interrupts enabled");
 
-  if((which_dev = devintr()) == 0){
+  if((which_dev = devintr()) == 0){             // devintr() -- 2是计时器中断, 0是未知原因;
     printf("scause %p\n", scause);
     printf("sepc=%p stval=%p\n", r_sepc(), r_stval());
     panic("kerneltrap");
@@ -151,11 +160,11 @@ kerneltrap()
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2 && myproc() != 0 && myproc()->state == RUNNING)
-    yield();
+    yield();    // 让出时间片;
 
   // the yield() may have caused some traps to occur,
   // so restore trap registers for use by kernelvec.S's sepc instruction.
-  w_sepc(sepc);
+  w_sepc(sepc);            
   w_sstatus(sstatus);
 }
 
