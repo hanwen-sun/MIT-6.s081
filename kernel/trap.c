@@ -50,7 +50,7 @@ usertrap(void)
   // save user program counter.
   p->trapframe->epc = r_sepc();
   
-  if(r_scause() == 8){
+  if(r_scause() == 8){   // 由系统调用陷入kernel;
     // system call
 
     if(p->killed)
@@ -67,8 +67,51 @@ usertrap(void)
     syscall();
   } else if((which_dev = devintr()) != 0){
     // ok
-  } else {
-    printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
+  } 
+  else if(r_scause() == 13 || r_scause() == 15) {  // page fault;
+  // scause 出错原因类型;
+            // stval  出错虚拟地址;
+            // sepc   触发page_fault的指令的地址;
+    
+    //  1. r_stval拿到出错的虚拟地址;
+    //  2. PGROUNDDOWN(va) 向下对齐;
+    //  3. mem = kalloc() 分配一page的物理地址; 特别判断mem == 0;
+    //  4. mappage(pagetable, va, mem);
+    
+    uint64 va = r_stval();   // 拿到虚拟地址;
+    if(va > p->sz)
+      p->killed = 1;
+    
+    else {
+      va = PGROUNDDOWN(va);      // 特别注意， 这里一定要先向下对齐!!!, 再以此为起始位置分配;
+    // printf("page fault: %p\n", va);
+      char* pa = kalloc();
+      if(pa == 0)
+      p->killed = 1;
+      else {
+        memset(pa, 0, PGSIZE);
+        if(mappages(p->pagetable, va, PGSIZE, (uint64)pa, PTE_R | PTE_W | PTE_X | PTE_U) != 0){   // return 0 -- success;  特别注意,
+          kfree(pa);        //char* 不用转 void* ?                                             
+          p->killed = 1;
+        }
+      }
+    }
+  }
+ /* else if(r_scause() == 13 || r_scause() == 15) {
+    // 处理页面错误
+    uint64 fault_va = r_stval();  // 产生页面错误的虚拟地址
+    char* pa;                     // 分配的物理地址
+    if(PGROUNDUP(p->trapframe->sp) - 1 < fault_va && fault_va < p->sz &&
+      (pa = kalloc()) != 0) {
+        memset(pa, 0, PGSIZE);
+        if(mappages(p->pagetable, PGROUNDDOWN(fault_va), PGSIZE, (uint64)pa, PTE_R | PTE_W | PTE_X | PTE_U) != 0) {
+          kfree(pa);
+          p->killed = 1;
+        }
+      }
+  }*/
+  else {  
+    printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);  // 系统调用出错原因, 线程;
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
     p->killed = 1;
   }

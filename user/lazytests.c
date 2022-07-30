@@ -11,7 +11,7 @@
 #define REGION_SZ (1024 * 1024 * 1024)
 
 void
-sparse_memory(char *s)
+sparse_memory(char *s)    // 稀疏空间赋值;
 {
   char *i, *prev_end, *new_end;
   
@@ -22,9 +22,11 @@ sparse_memory(char *s)
   }
   new_end = prev_end + REGION_SZ;
 
+  // printf("address value!\n");
   for (i = prev_end + PGSIZE; i < new_end; i += 64 * PGSIZE)
     *(char **)i = i;
 
+  // printf("check value!\n");
   for (i = prev_end + PGSIZE; i < new_end; i += 64 * PGSIZE) {
     if (*(char **)i != i) {
       printf("failed to read value from memory\n");
@@ -32,6 +34,7 @@ sparse_memory(char *s)
     }
   }
 
+  // printf("pass sparse_memory test!\n");
   exit(0);
 }
 
@@ -52,13 +55,13 @@ sparse_memory_unmap(char *s)
     *(char **)i = i;
 
   for (i = prev_end + PGSIZE; i < new_end; i += PGSIZE * PGSIZE) {
-    pid = fork();
+    pid = fork();     // 这里要修改fork, 正确的复制地址;
     if (pid < 0) {
       printf("error forking\n");
       exit(1);
-    } else if (pid == 0) {
-      sbrk(-1L * REGION_SZ);
-      *(char **)i = i;
+    } else if (pid == 0) {    // 子进程;
+      sbrk(-1L * REGION_SZ);  // 减少region_sz;
+      *(char **)i = i;    
       exit(0);
     } else {
       int status;
@@ -107,9 +110,12 @@ run(void f(char *), char *s) {
   }
   if(pid == 0) {
     f(s);
+    // printf("f done!\n");   // 这句似乎不会输出? 因为前面已经exit()了;
     exit(0);
   } else {
+    // printf("run parent process!\n");
     wait(&xstatus);
+    // printf("run parent process\n");
     if(xstatus != 0) 
       printf("test %s: FAILED\n", s);
     else

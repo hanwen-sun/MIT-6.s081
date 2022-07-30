@@ -151,14 +151,14 @@ mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm)
   uint64 a, last;
   pte_t *pte;
 
-  a = PGROUNDDOWN(va);
-  last = PGROUNDDOWN(va + size - 1);
+  a = PGROUNDDOWN(va);            // 虚拟地址先向下对齐;(map的起始地址);
+  last = PGROUNDDOWN(va + size - 1);    // map的结束地址;
   for(;;){
-    if((pte = walk(pagetable, a, 1)) == 0)
+    if((pte = walk(pagetable, a, 1)) == 0)    // walk只会为前两层置PTE_V;  (这里等于0只可能是物理空间用完)
       return -1;
-    if(*pte & PTE_V)
+    if(*pte & PTE_V)                    
       panic("remap");
-    *pte = PA2PTE(pa) | perm | PTE_V;
+    *pte = PA2PTE(pa) | perm | PTE_V;    // mappages会在最后一层置PTE_V;
     if(a == last)
       break;
     a += PGSIZE;
@@ -180,10 +180,12 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
     panic("uvmunmap: not aligned");
 
   for(a = va; a < va + npages*PGSIZE; a += PGSIZE){
-    if((pte = walk(pagetable, a, 0)) == 0)
-      panic("uvmunmap: walk");
-    if((*pte & PTE_V) == 0)
-      panic("uvmunmap: not mapped");
+    if((pte = walk(pagetable, a, 0)) == 0)    // 该pte没有被占用; 注意这里的第三位传入的0, 检查该虚拟地址是否被分配过物理内存;
+      continue;
+      //panic("uvmunmap: walk");       // 这里是最后一层的前面就没有PTE_V;
+    if((*pte & PTE_V) == 0)   // 最后一层没有PTE_V;
+      continue;
+      // panic("uvmunmap: not mapped");
     if(PTE_FLAGS(*pte) == PTE_V)
       panic("uvmunmap: not a leaf");
     if(do_free){
@@ -234,10 +236,10 @@ uvmalloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
   if(newsz < oldsz)
     return oldsz;
 
-  oldsz = PGROUNDUP(oldsz);
-  for(a = oldsz; a < newsz; a += PGSIZE){
-    mem = kalloc();
-    if(mem == 0){
+  oldsz = PGROUNDUP(oldsz);   // oldsz对齐到page的最高点;
+  for(a = oldsz; a < newsz; a += PGSIZE){   // 一个page一个page的分配;
+    mem = kalloc();   // 分配4096的物理内存;
+    if(mem == 0){       // 内存不够用;     
       uvmdealloc(pagetable, a, oldsz);
       return 0;
     }
@@ -277,12 +279,13 @@ freewalk(pagetable_t pagetable)
   // there are 2^9 = 512 PTEs in a page table.
   for(int i = 0; i < 512; i++){
     pte_t pte = pagetable[i];
-    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){
+    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){    // 被置位而且被清除标志位;
       // this PTE points to a lower-level page table.
       uint64 child = PTE2PA(pte);
       freewalk((pagetable_t)child);
       pagetable[i] = 0;
-    } else if(pte & PTE_V){
+    } else if(pte & PTE_V){             // 被置位但未被清除标志位;
+      printf("pte: %p\n", pte);
       panic("freewalk: leaf");
     }
   }
@@ -315,9 +318,11 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
-      panic("uvmcopy: pte should exist");
+      continue;
+      // panic("uvmcopy: pte should exist");
     if((*pte & PTE_V) == 0)
-      panic("uvmcopy: page not present");
+      continue;
+      // panic("uvmcopy: page not present");
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
     if((mem = kalloc()) == 0)

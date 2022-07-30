@@ -143,7 +143,7 @@ uartstart()
       return;
     }
     
-    if((ReadReg(LSR) & LSR_TX_IDLE) == 0){
+    if((ReadReg(LSR) & LSR_TX_IDLE) == 0){   // 上一个字符已经就绪但还没有发送;
       // the UART transmit holding register is full,
       // so we cannot give it another byte.
       // it will interrupt when it's ready for a new byte.
@@ -154,9 +154,9 @@ uartstart()
     uart_tx_r = (uart_tx_r + 1) % UART_TX_BUF_SIZE;
     
     // maybe uartputc() is waiting for space in the buffer.
-    wakeup(&uart_tx_r);
+    wakeup(&uart_tx_r);   // 唤醒一个outputc进程;
     
-    WriteReg(THR, c);
+    WriteReg(THR, c);   // 将字符写入THR, 之后uart会发送该字符;
   }
 }
 
@@ -181,10 +181,10 @@ uartintr(void)
 {
   // read and process incoming characters.
   while(1){
-    int c = uartgetc();
+    int c = uartgetc();   // 从uart读入一字节(在RHR寄存器中);
     if(c == -1)
       break;
-    consoleintr(c);
+    consoleintr(c);      // 将该字节传入console处理;
   }
 
   // send buffered characters.

@@ -46,9 +46,25 @@ sys_sbrk(void)
 
   if(argint(0, &n) < 0)
     return -1;
-  addr = myproc()->sz;
-  if(growproc(n) < 0)
-    return -1;
+
+  struct proc *p = myproc();
+  addr = p->sz;   // 这个是旧地址;
+  // if(growproc(n) < 0)
+    // return -1;
+  uint sz = p->sz;
+  if(n > 0){
+    //if((sz = uvmalloc(p->pagetable, sz, sz + n)) == 0) {
+      //return -1;
+    sz = addr + n;
+    }
+  else if(n < 0 && sz + n > 0){
+    sz = uvmdealloc(p->pagetable, sz, sz + n);
+  }
+  else  
+      return -1;
+
+  p->sz = sz;
+  // myproc()->sz = myproc()->sz + n;
   return addr;
 }
 

@@ -78,5 +78,5 @@ kalloc(void)
 
   if(r)
     memset((char*)r, 5, PGSIZE); // fill with junk
-  return (void*)r;
+  return (void*)r;   // 这里return的地址首地址;
 }

@@ -79,7 +79,7 @@ consolewrite(int user_src, uint64 src, int n)
 // or kernel address.
 //
 int
-consoleread(int user_dst, uint64 dst, int n)
+consoleread(int user_dst, uint64 dst, int n)   // 读取缓冲池的一整行;
 {
   uint target;
   int c;
@@ -111,7 +111,7 @@ consoleread(int user_dst, uint64 dst, int n)
 
     // copy the input byte to the user-space buffer.
     cbuf = c;
-    if(either_copyout(user_dst, dst, &cbuf, 1) == -1)
+    if(either_copyout(user_dst, dst, &cbuf, 1) == -1)    // 读一整行到用户空间中;
       break;
 
     dst++;
@@ -144,15 +144,15 @@ consoleintr(int c)
     procdump();
     break;
   case C('U'):  // Kill line.
-    while(cons.e != cons.w &&
-          cons.buf[(cons.e-1) % INPUT_BUF] != '\n'){
+    while(cons.e != cons.w &&                   // 特别注意, 这里cons.e不等于cons.w, 见后面default;
+          cons.buf[(cons.e-1) % INPUT_BUF] != '\n'){   // 回退一整行;
       cons.e--;
       consputc(BACKSPACE);
     }
     break;
-  case C('H'): // Backspace
-  case '\x7f':
-    if(cons.e != cons.w){
+  case C('H'): // Backspace    
+  case '\x7f': 
+    if(cons.e != cons.w){       // 回退一格;
       cons.e--;
       consputc(BACKSPACE);
     }
@@ -162,15 +162,15 @@ consoleintr(int c)
       c = (c == '\r') ? '\n' : c;
 
       // echo back to the user.
-      consputc(c);
+      consputc(c);     // 传送一个字节到uart
 
       // store for consumption by consoleread().
-      cons.buf[cons.e++ % INPUT_BUF] = c;
+      cons.buf[cons.e++ % INPUT_BUF] = c;     
 
-      if(c == '\n' || c == C('D') || cons.e == cons.r+INPUT_BUF){
+      if(c == '\n' || c == C('D') || cons.e == cons.r+INPUT_BUF){   // 达到一整行或缓冲区已满;
         // wake up consoleread() if a whole line (or end-of-file)
         // has arrived.
-        cons.w = cons.e;
+        cons.w = cons.e;                  // 唤醒读进程, write index = edit index;
         wakeup(&cons.r);
       }
     }
