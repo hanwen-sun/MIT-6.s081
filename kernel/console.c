@@ -58,6 +58,7 @@ struct {
 int
 consolewrite(int user_src, uint64 src, int n)
 {
+  // printf("console write!\n");
   int i;
 
   acquire(&cons.lock);
@@ -81,6 +82,7 @@ consolewrite(int user_src, uint64 src, int n)
 int
 consoleread(int user_dst, uint64 dst, int n)
 {
+  // printf("console read!\n");
   uint target;
   int c;
   char cbuf;

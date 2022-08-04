@@ -63,6 +63,7 @@ runcmd(struct cmd *cmd)
   struct listcmd *lcmd;
   struct pipecmd *pcmd;
   struct redircmd *rcmd;
+  printf("run cmd!\n");
 
   if(cmd == 0)
     exit(1);
@@ -144,6 +145,7 @@ getcmd(char *buf, int nbuf)
 int
 main(void)
 {
+  printf("sh!\n");
   static char buf[100];
   int fd;
 
@@ -157,6 +159,7 @@ main(void)
 
   // Read and run input commands.
   while(getcmd(buf, sizeof(buf)) >= 0){
+    printf("Read and run input commands\n");
     if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Chdir must be called by the parent, not the child.
       buf[strlen(buf)-1] = 0;  // chop \n
@@ -164,8 +167,11 @@ main(void)
         fprintf(2, "cannot cd %s\n", buf+3);
       continue;
     }
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
+    if(fork1() == 0) {
+        printf("test\n");
+        runcmd(parsecmd(buf));
+    }
+      
     wait(0);
   }
   exit(0);
@@ -182,7 +188,7 @@ int
 fork1(void)
 {
   int pid;
-
+  printf("sh fork()\n");
   pid = fork();
   if(pid == -1)
     panic("fork");
@@ -327,6 +333,7 @@ struct cmd *nulterminate(struct cmd*);
 struct cmd*
 parsecmd(char *s)
 {
+  printf("parsecmd!\n");
   char *es;
   struct cmd *cmd;
 
@@ -338,6 +345,7 @@ parsecmd(char *s)
     panic("syntax");
   }
   nulterminate(cmd);
+  printf("parsecmd end!\n");
   return cmd;
 }
 

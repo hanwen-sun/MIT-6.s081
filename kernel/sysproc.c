@@ -46,7 +46,8 @@ sys_sbrk(void)    // 用户调用该函数， 增加或减少自己的用户地�
 {
   int addr;
   int n;
-
+  printf("sbrk call!\n");
+  
   if(argint(0, &n) < 0)
     return -1;
   addr = myproc()->sz;

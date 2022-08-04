@@ -50,6 +50,9 @@ usertrap(void)
   // save user program counter.
   p->trapframe->epc = r_sepc();
   
+  // if(r_scause() != 8)
+    // printf("usertrap() r_scause: %d\n", r_scause());
+
   if(r_scause() == 8){
     // system call
 

@@ -155,6 +155,8 @@ syscall(void)         // 在该函数中添加代码以打印跟踪输出;
     p->trapframe->a0 = syscalls[num]();    // 索引到对应的系统调用函数并调用， 返回值存储在a0中;
                                            // 通常负数表示错误， 正数或0表示成功。
     // int pid = getpid();
+    if(num == 7 || num == 1 || num == 12)
+      printf("%d: syscall %s -> %d\n", p->pid, syscallNames[num], p->trapframe->a0);
     if(p->mask >> num & 1) {
       printf("%d: syscall %s -> %d\n", p->pid, syscallNames[num], p->trapframe->a0);
     }

@@ -258,6 +258,7 @@ growproc(int n)
 int
 fork(void)
 {
+  printf("fork begin!\n");
   int i, pid;
   struct proc *np;
   struct proc *p = myproc();
@@ -296,6 +297,7 @@ fork(void)
   np->state = RUNNABLE;
 
   release(&np->lock);
+  printf("fork end!\n");
 
   return pid;
 }
@@ -456,6 +458,7 @@ wait(uint64 addr)
 void
 scheduler(void)
 {
+  // printf("scheduler begin!\n");
   struct proc *p;
   struct cpu *c = mycpu();
   
@@ -467,6 +470,8 @@ scheduler(void)
     int found = 0;
     for(p = proc; p < &proc[NPROC]; p++) {
       acquire(&p->lock);
+      // printf("scheduler!\n");
+
       if(p->state == RUNNABLE) {
         // Switch to chosen process.  It is the process's job
         // to release its lock and then reacquire it
@@ -483,11 +488,14 @@ scheduler(void)
       }
       release(&p->lock);
     }
+
+    // printf("scheduler done!\n");
     if(found == 0) {
       intr_on();
       asm volatile("wfi");
     }
   }
+  printf("scheduler end!\n");
 }
 
 // Switch to scheduler.  Must hold only p->lock
