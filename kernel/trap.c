@@ -10,7 +10,7 @@ struct spinlock tickslock;
 uint ticks;
 
 extern char trampoline[], uservec[], userret[];
-
+extern int cnt[];
 // in kernelvec.S, calls kerneltrap().
 void kernelvec();
 
@@ -49,7 +49,9 @@ usertrap(void)
   
   // save user program counter.
   p->trapframe->epc = r_sepc();
-  
+  //if(r_scause() != 8)
+    //printf("pid: %d  r_scause() %d\n", p->pid, r_scause());
+
   if(r_scause() == 8){
     // system call
 
@@ -67,7 +69,43 @@ usertrap(void)
     syscall();
   } else if((which_dev = devintr()) != 0){
     // ok
-  } else {
+  } else if(r_scause() == 13 || r_scause() == 15){   // 处理page_fault错误;
+      char *mem;
+      pte_t *pte;
+      uint64 pa;
+      uint flags;
+      uint64 va = r_stval();   // 拿到虚拟地址;
+      // printf("pid: %d va: %d\n",p->pid, va);
+      va = PGROUNDDOWN(va);      // 特别注意， 这里一定要先向下对齐!!!, 再以此为起始位置分配;
+      if((pte = walk(p->pagetable, va, 0)) == 0)   // 拿到被复制的地址的pte;
+            panic("page fault trap: pte should exist");
+      pa = PTE2PA(*pte);
+      if(cnt[pa / PGSIZE] == 1) {
+          *pte |= PTE_W;
+          *pte &= ~PTE_COW;
+      }
+      // printf("va() %p\n", va);
+      // p->killed = 1;
+      else {
+          if((mem = kalloc()) == 0) {
+         printf("usertrap(): there's no enough space!\n");
+      }
+
+      if((pte = walk(p->pagetable, va, 0)) == 0)   // 拿到被复制的地址的pte;
+        panic("page fault trap: pte should exist");
+      
+      flags = (PTE_FLAGS(*pte) | PTE_W) & ~PTE_COW;   // 特别注意这里要加pte_w, 否则会在同一位置一直发生缺页错误;
+      memmove(mem, (char*)pa, PGSIZE);
+      uvmunmap(p->pagetable, va, 1, 0);   // 先把分配的去除掉, 否则会remap!
+      cnt[pa / PGSIZE]--;
+
+      if(mappages(p->pagetable, va, PGSIZE, (uint64)mem, flags) != 0){
+         panic("page fault trap: map fail!\n");
+         p->killed = 1;
+      }
+      }
+    }
+    else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
     p->killed = 1;

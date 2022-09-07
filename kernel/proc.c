@@ -241,6 +241,7 @@ growproc(int n)
   uint sz;
   struct proc *p = myproc();
 
+  // printf("growproc() %d\n", n);
   sz = p->sz;
   if(n > 0){
     if((sz = uvmalloc(p->pagetable, sz, sz + n)) == 0) {
@@ -258,6 +259,7 @@ growproc(int n)
 int
 fork(void)
 {
+  // printf("fork begin!\n");
   int i, pid;
   struct proc *np;
   struct proc *p = myproc();
@@ -296,7 +298,8 @@ fork(void)
   np->state = RUNNABLE;
 
   release(&np->lock);
-
+  // printf("parent pid: %d, child pid: %d\n", p->pid, pid);
+  // printf("fork end!\n");
   return pid;
 }
 
@@ -333,7 +336,7 @@ void
 exit(int status)
 {
   struct proc *p = myproc();
-
+  // printf("pid: %d call exit!\n", p->pid);
   if(p == initproc)
     panic("init exiting");
 
@@ -514,7 +517,7 @@ sched(void)
     panic("sched interruptible");
 
   intena = mycpu()->intena;
-  swtch(&p->context, &mycpu()->context);
+  swtch(&p->context, &mycpu()->context);   // 交换当前进程
   mycpu()->intena = intena;
 }
 

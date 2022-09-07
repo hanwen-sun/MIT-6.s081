@@ -41,6 +41,7 @@ sys_wait(void)
 uint64
 sys_sbrk(void)
 {
+  //printf("sbrk begin!\n");
   int addr;
   int n;
 
@@ -49,6 +50,7 @@ sys_sbrk(void)
   addr = myproc()->sz;
   if(growproc(n) < 0)
     return -1;
+  //printf("sbrk end!\n");
   return addr;
 }
 

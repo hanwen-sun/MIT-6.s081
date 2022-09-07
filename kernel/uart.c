@@ -84,7 +84,7 @@ uartinit(void)
 // from interrupts; it's only suitable for use
 // by write().
 void
-uartputc(int c)
+uartputc(int c)   // 在console中调用;
 {
   acquire(&uart_tx_lock);
 
@@ -180,7 +180,7 @@ void
 uartintr(void)
 {
   // read and process incoming characters.
-  while(1){
+  while(1){    // 读入结束后才会开始输出;
     int c = uartgetc();
     if(c == -1)
       break;

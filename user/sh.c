@@ -57,6 +57,7 @@ struct cmd *parsecmd(char*);
 void
 runcmd(struct cmd *cmd)
 {
+  // printf("run cmd!\n");
   int p[2];
   struct backcmd *bcmd;
   struct execcmd *ecmd;
@@ -164,8 +165,10 @@ main(void)
         fprintf(2, "cannot cd %s\n", buf+3);
       continue;
     }
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
+    if(fork1() == 0) {
+        runcmd(parsecmd(buf));
+    }
+      
     wait(0);
   }
   exit(0);
@@ -182,8 +185,11 @@ int
 fork1(void)
 {
   int pid;
-
+  // printf("sh()  fork!\n");
   pid = fork();
+  
+  // printf("pid = %d\n", pid);
+
   if(pid == -1)
     panic("fork");
   return pid;

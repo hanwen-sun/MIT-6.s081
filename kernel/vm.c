@@ -15,6 +15,7 @@ extern char etext[];  // kernel.ld sets this to end of kernel code.
 
 extern char trampoline[]; // trampoline.S
 
+extern int cnt[];
 /*
  * create a direct-map page table for the kernel.
  */
@@ -71,8 +72,11 @@ kvminithart()
 pte_t *
 walk(pagetable_t pagetable, uint64 va, int alloc)
 {
-  if(va >= MAXVA)
+  if(va >= MAXVA) {
+    printf("va: %p\n", va);
     panic("walk");
+  }
+    
 
   for(int level = 2; level > 0; level--) {
     pte_t *pte = &pagetable[PX(level, va)];
@@ -305,7 +309,7 @@ uvmfree(pagetable_t pagetable, uint64 sz)
 // physical memory.
 // returns 0 on success, -1 on failure.
 // frees any allocated pages on failure.
-int
+/*int
 uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 {
   pte_t *pte;
@@ -327,6 +331,51 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
       kfree(mem);
       goto err;
     }
+  }
+  return 0;
+
+ err:
+  uvmunmap(new, 0, i / PGSIZE, 1);
+  return -1;
+} */
+
+int
+uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
+{
+  pte_t *pte;
+  uint64 pa, i;
+  uint flags, flag_new;
+  // char *mem;
+
+  for(i = 0; i < sz; i += PGSIZE){
+    if((pte = walk(old, i, 0)) == 0)   // 拿到被复制的地址的pte;
+      panic("uvmcopy: pte should exist");
+    if((*pte & PTE_V) == 0)
+      panic("uvmcopy: page not present");
+    pa = PTE2PA(*pte);   // 转换为物理地址;
+    flags = PTE_FLAGS(*pte);
+    *pte &= ~PTE_W;
+    *pte |= PTE_COW; 
+    flag_new = (flags & ~PTE_W) | PTE_COW;
+    
+    /*if(i == 0) {
+      printf("pa()  %p\n", pa);
+      printf("pte() %p\n", *pte);
+      printf("flags() %p\n", flags);
+      printf("pte_() %p\n", *pte);
+      printf("flag_new() %p\n", flag_new);
+    }*/
+    /*if((mem = kalloc()) == 0)  // 分配新物理地址;
+      goto err;
+    memmove(mem, (char*)pa, PGSIZE);
+    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
+      kfree(mem);
+      goto err;
+    } */
+    if(mappages(new, i, PGSIZE, (uint64)pa, flag_new) != 0){
+      goto err;
+    }
+    cnt[pa / PGSIZE]++;
   }
   return 0;
 
@@ -358,14 +407,44 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 
   while(len > 0){
     va0 = PGROUNDDOWN(dstva);
+
     pa0 = walkaddr(pagetable, va0);
+    pte_t *pte = walk(pagetable, va0, 0);
+
+    if(*pte & PTE_COW) {
+      if(cnt[pa0 / PGSIZE] == 1) {
+          *pte |= PTE_W;
+          *pte &= ~PTE_COW;
+      }
+
+      else {
+      char *mem;
+      if((mem = kalloc()) == 0)
+        return -1;
+      uint flags;
+
+      flags = (PTE_FLAGS(*pte) | PTE_W) & ~PTE_COW;   // 特别注意这里要加pte_w, 否则会在同一位置一直发生缺页错误;
+      memmove(mem, (char*)pa0, PGSIZE);
+      uvmunmap(pagetable, va0, 1, 0);   // 先把分配的去除掉, 否则会remap!
+      cnt[pa0 / PGSIZE]--;
+
+      if(mappages(pagetable, va0, PGSIZE, (uint64)mem, flags) != 0){
+         kfree(mem);
+         panic("copyout(): map fail!\n");
+         return -1;
+      }
+      pa0 = (uint64)mem;  // 换对应的物理地址;
+      }
+    }
+    
     if(pa0 == 0)
       return -1;
     n = PGSIZE - (dstva - va0);
     if(n > len)
       n = len;
+    
     memmove((void *)(pa0 + (dstva - va0)), src, n);
-
+      
     len -= n;
     src += n;
     dstva = va0 + PGSIZE;

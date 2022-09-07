@@ -16,8 +16,11 @@ simpletest()
   int sz = (phys_size / 3) * 2;
 
   printf("simple: ");
-  
+  // printf("%d\n", sz);
+
   char *p = sbrk(sz);
+  // printf("sbrk done!\n");
+
   if(p == (char*)0xffffffffffffffffL){
     printf("sbrk(%d) failed\n", sz);
     exit(-1);
@@ -33,11 +36,15 @@ simpletest()
     exit(-1);
   }
 
-  if(pid == 0)
-    exit(0);
+  if(pid == 0) {   // 结束子进程;
+    printf("child pid done!\n");
+    exit(0);  // 这里的释放发生了问题;
+  }
+    
 
   wait(0);
-
+  // printf("fork done!\n");
+  
   if(sbrk(-sz) == (char*)0xffffffffffffffffL){
     printf("sbrk(-%d) failed\n", sz);
     exit(-1);
@@ -125,7 +132,7 @@ char junk3[4096];
 
 // test whether copyout() simulates COW faults.
 void
-filetest()
+filetest()     // 注意, 这里要修改copyout!!!
 {
   printf("file: ");
   
@@ -151,10 +158,13 @@ filetest()
       int j = *(int*)buf;
       if(j != i){
         printf("error: read the wrong value\n");
+        printf("j(): %d  i(): %d\n", j, i);
         exit(1);
       }
       exit(0);
     }
+
+    // printf("write begin!\n");
     if(write(fds[1], &i, sizeof(i)) != sizeof(i)){
       printf("error: write failed\n");
       exit(-1);
@@ -180,16 +190,20 @@ filetest()
 int
 main(int argc, char *argv[])
 {
+  // printf("begin cowtest!\n");
+  
   simpletest();
 
   // check that the first simpletest() freed the physical memory.
   simpletest();
 
+  
   threetest();
+  
   threetest();
-  threetest();
+  threetest(); 
 
-  filetest();
+  filetest(); 
 
   printf("ALL COW TESTS PASSED\n");
 
