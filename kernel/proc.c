@@ -90,7 +90,7 @@ allocpid() {
 // and return with p->lock held.
 // If there are no free procs, or a memory allocation fails, return 0.
 static struct proc*
-allocproc(void)
+allocproc(void)     // 在first user init中调用;
 {
   struct proc *p;
 
@@ -104,7 +104,7 @@ allocproc(void)
   }
   return 0;
 
-found:
+found:      // 找到一个unused进程;
   p->pid = allocpid();
 
   // Allocate a trapframe page.
@@ -124,7 +124,7 @@ found:
   // Set up new context to start executing at forkret,
   // which returns to user space.
   memset(&p->context, 0, sizeof(p->context));
-  p->context.ra = (uint64)forkret;
+  p->context.ra = (uint64)forkret;    // 只设置context的ra和sp;
   p->context.sp = p->kstack + PGSIZE;
 
   return p;

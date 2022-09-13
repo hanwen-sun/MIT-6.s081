@@ -8,7 +8,7 @@
 #define NBUCKET 5
 #define NKEYS 100000
 
-struct entry {
+struct entry {   // 链表的条目?
   int key;
   int value;
   struct entry *next;
@@ -16,6 +16,7 @@ struct entry {
 struct entry *table[NBUCKET];
 int keys[NKEYS];
 int nthread = 1;
+pthread_mutex_t lock[NBUCKET];
 
 double
 now()
@@ -51,7 +52,9 @@ void put(int key, int value)
     e->value = value;
   } else {
     // the new is new.
+    pthread_mutex_lock(&lock[i]);   // 特别注意, 每个桶有个锁;
     insert(key, value, &table[i], table[i]);
+    pthread_mutex_unlock(&lock[i]);
   }
 }
 
@@ -62,6 +65,7 @@ get(int key)
 
 
   struct entry *e = 0;
+  //pthread_mutex_lock(&lock[value]);
   for (e = table[i]; e != 0; e = e->next) {
     if (e->key == key) break;
   }
@@ -109,16 +113,19 @@ main(int argc, char *argv[])
   }
   nthread = atoi(argv[1]);
   tha = malloc(sizeof(pthread_t) * nthread);
-  srandom(0);
+  srandom(0);    // 初始化随机数种子;
   assert(NKEYS % nthread == 0);
   for (int i = 0; i < NKEYS; i++) {
-    keys[i] = random();
+    keys[i] = random();        // 生成10w个数;
   }
 
   //
   // first the puts
   //
-  t0 = now();
+  for(int i = 0; i < NBUCKET; i++)
+    pthread_mutex_init(&lock[i], NULL);
+
+  t0 = now();   // 时间;
   for(int i = 0; i < nthread; i++) {
     assert(pthread_create(&tha[i], NULL, put_thread, (void *) (long) i) == 0);
   }
@@ -135,7 +142,7 @@ main(int argc, char *argv[])
   //
   t0 = now();
   for(int i = 0; i < nthread; i++) {
-    assert(pthread_create(&tha[i], NULL, get_thread, (void *) (long) i) == 0);
+    assert(pthread_create(&tha[i], NULL, get_thread, (void *) (long) i) == 0);   // 每个线程都检查全部;
   }
   for(int i = 0; i < nthread; i++) {
     assert(pthread_join(tha[i], &value) == 0);

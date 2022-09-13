@@ -10,15 +10,34 @@
 #define STACK_SIZE  8192
 #define MAX_THREAD  4
 
+struct context {
+  uint64 ra;
+  uint64 sp;
+
+  // callee-saved
+  uint64 s0;
+  uint64 s1;
+  uint64 s2;
+  uint64 s3;
+  uint64 s4;
+  uint64 s5;
+  uint64 s6;
+  uint64 s7;
+  uint64 s8;
+  uint64 s9;
+  uint64 s10;
+  uint64 s11;
+};
 
 struct thread {
   char       stack[STACK_SIZE]; /* the thread's stack */
   int        state;             /* FREE, RUNNING, RUNNABLE */
-
+  struct context context;
 };
+
 struct thread all_thread[MAX_THREAD];
 struct thread *current_thread;
-extern void thread_switch(uint64, uint64);
+extern void thread_switch(struct context*, struct context*);
               
 void 
 thread_init(void)
@@ -35,21 +54,28 @@ thread_init(void)
 void 
 thread_schedule(void)
 {
+  // printf("thread_schedule!\n");
   struct thread *t, *next_thread;
 
   /* Find another runnable thread. */
   next_thread = 0;
-  t = current_thread + 1;
+  t = current_thread + 1;   // 这里跳了一个thread的地址;
+  // printf("current thread = %d\n", current_thread);
+  // printf("t = %d\n", t);
+
   for(int i = 0; i < MAX_THREAD; i++){
     if(t >= all_thread + MAX_THREAD)
-      t = all_thread;
+      t = all_thread;    // 回到最开始;
     if(t->state == RUNNABLE) {
+      // printf("t = %d\n", t);
       next_thread = t;
       break;
     }
     t = t + 1;
   }
-
+  
+  // printf("current thread = %d\n", current_thread);
+  // printf("next thread = %d\n", next_thread);
   if (next_thread == 0) {
     printf("thread_schedule: no runnable threads\n");
     exit(-1);
@@ -63,6 +89,7 @@ thread_schedule(void)
      * Invoke thread_switch to switch from t to next_thread:
      * thread_switch(??, ??);
      */
+    thread_switch(&t->context, &current_thread->context);   // 这里传地址;
   } else
     next_thread = 0;
 }
@@ -70,6 +97,7 @@ thread_schedule(void)
 void 
 thread_create(void (*func)())
 {
+  // printf("thread create!\n");
   struct thread *t;
 
   for (t = all_thread; t < all_thread + MAX_THREAD; t++) {
@@ -77,11 +105,16 @@ thread_create(void (*func)())
   }
   t->state = RUNNABLE;
   // YOUR CODE HERE
+  memset(&t->context, 0, sizeof(t->context));
+  t->context.ra = (uint64)func;   // 这里不太确定?
+  t->context.sp = (uint64)t->stack + STACK_SIZE;
+  // (*func)();
 }
 
 void 
 thread_yield(void)
 {
+  // printf("thread_yield!\n");
   current_thread->state = RUNNABLE;
   thread_schedule();
 }
@@ -95,8 +128,11 @@ thread_a(void)
   int i;
   printf("thread_a started\n");
   a_started = 1;
-  while(b_started == 0 || c_started == 0)
-    thread_yield();
+  while(b_started == 0 || c_started == 0) {
+    // printf("A other!\n");
+    thread_yield();   // B, C 他未创建，则先创建其他；
+  }
+    
   
   for (i = 0; i < 100; i++) {
     printf("thread_a %d\n", i);
