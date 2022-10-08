@@ -78,8 +78,11 @@ int
 argstr(int n, char *buf, int max)
 {
   uint64 addr;
-  if(argaddr(n, &addr) < 0)
+  if(argaddr(n, &addr) < 0) {
+    // printf("agraddr fail!\n");
     return -1;
+  }
+    
   return fetchstr(addr, buf, max);
 }
 

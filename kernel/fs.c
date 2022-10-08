@@ -199,7 +199,7 @@ ialloc(uint dev, short type)
   struct buf *bp;
   struct dinode *dip;
 
-  for(inum = 1; inum < sb.ninodes; inum++){
+  for(inum = 1; inum < sb.ninodes; inum++){   // ialloc涉及bread和brelese!!
     bp = bread(dev, IBLOCK(inum, sb));
     dip = (struct dinode*)bp->data + inum%IPB;
     if(dip->type == 0){  // a free inode
@@ -526,19 +526,23 @@ namecmp(const char *s, const char *t)
 // Look for a directory entry in a directory.
 // If found, set *poff to byte offset of entry.
 struct inode*
-dirlookup(struct inode *dp, char *name, uint *poff)
+dirlookup(struct inode *dp, char *name, uint *poff)  // 传入的文件的inode, 文件的名称, poff是什么不清楚;
 {
   uint off, inum;
   struct dirent de;
 
   if(dp->type != T_DIR)
     panic("dirlookup not DIR");
+  // printf("dp->size = %d\n", dp->size);
 
   for(off = 0; off < dp->size; off += sizeof(de)){
     if(readi(dp, 0, (uint64)&de, off, sizeof(de)) != sizeof(de))
       panic("dirlookup read");
+    
+    // printf("de.inum: %d  de.name: %s\n", de.inum, de.name);
     if(de.inum == 0)
       continue;
+    // printf("de.name = %s\n", de.name);
     if(namecmp(name, de.name) == 0){
       // entry matches path element
       if(poff)
@@ -548,6 +552,8 @@ dirlookup(struct inode *dp, char *name, uint *poff)
     }
   }
 
+  // printf("not find directory entry! %s\n", name);
+  // 没有找到entry?
   return 0;
 }
 
@@ -627,6 +633,7 @@ skipelem(char *path, char *name)
 static struct inode*
 namex(char *path, int nameiparent, char *name)
 {
+  // printf("begin namex!\n");
   struct inode *ip, *next;
 
   if(*path == '/')
@@ -634,19 +641,29 @@ namex(char *path, int nameiparent, char *name)
   else
     ip = idup(myproc()->cwd);
 
+  // printf("ip->inum: %d\nip->type: %d\n", ip->inum, ip->type);
+
+ // printf("find namex %s\n", path);
   while((path = skipelem(path, name)) != 0){
+    //printf("path = %s\n name = %s\n", path, name);
     ilock(ip);
     if(ip->type != T_DIR){
       iunlockput(ip);
+      //printf("namex fail_1\n");
+
       return 0;
     }
     if(nameiparent && *path == '\0'){
       // Stop one level early.
       iunlock(ip);
+      // printf("stop one level early!\n");
+
       return ip;
     }
     if((next = dirlookup(ip, name, 0)) == 0){
       iunlockput(ip);
+      //printf("namex fail_2!\n");
+
       return 0;
     }
     iunlockput(ip);
@@ -654,8 +671,12 @@ namex(char *path, int nameiparent, char *name)
   }
   if(nameiparent){
     iput(ip);
+    //printf("namex fail_3!\n");
+
     return 0;
   }
+
+  // printf("namex success!\n");
   return ip;
 }
 

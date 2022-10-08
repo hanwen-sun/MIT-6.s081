@@ -68,6 +68,8 @@ void test1(void)
   }
   printf("test1 results:\n");
   n = ntas(1);
+  printf("%d %d\n", n, m);
+  
   if(n-m < 10) 
     printf("test1 OK\n");
   else
@@ -97,9 +99,9 @@ countfree()
 }
 
 void test2() {
-  int free0 = countfree();
+  int free0 = countfree();   // 查找当前free的page;
   int free1;
-  int n = (PHYSTOP-KERNBASE)/PGSIZE;
+  int n = (PHYSTOP-KERNBASE)/PGSIZE;   // 总page数;
   printf("start test2\n");  
   printf("total free number of pages: %d (out of %d)\n", free0, n);
   if(n - free0 > 1000) {

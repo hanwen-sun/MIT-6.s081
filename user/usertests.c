@@ -1758,6 +1758,7 @@ manywrites(char *s)
             exit(1);
           }
           int sz = sizeof(buf);
+          // printf("begin write!\n");
           int cc = write(fd, buf, sz);
           if(cc != sz){
             printf("%s: write(%d) ret %d\n", s, sz, cc);
@@ -1773,6 +1774,7 @@ manywrites(char *s)
     }
   }
 
+  printf("get here!\n");
   for(int ci = 0; ci < nchildren; ci++){
     int st = 0;
     wait(&st);

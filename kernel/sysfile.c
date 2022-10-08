@@ -249,7 +249,7 @@ create(char *path, short type, short major, short minor)
 
   ilock(dp);
 
-  if((ip = dirlookup(dp, name, 0)) != 0){
+  if((ip = dirlookup(dp, name, 0)) != 0){   // 解析至最后一个目录;
     iunlockput(dp);
     ilock(ip);
     if(type == T_FILE && (ip->type == T_FILE || ip->type == T_DEVICE))
@@ -258,7 +258,7 @@ create(char *path, short type, short major, short minor)
     return 0;
   }
 
-  if((ip = ialloc(dp->dev, type)) == 0)
+  if((ip = ialloc(dp->dev, type)) == 0)   // 为文件x分配inode;
     panic("create: ialloc");
 
   ilock(ip);
@@ -354,16 +354,29 @@ sys_open(void)
 uint64
 sys_mkdir(void)
 {
+  //printf("begin mkdir!\n");
   char path[MAXPATH];
   struct inode *ip;
 
   begin_op();
   if(argstr(0, path, MAXPATH) < 0 || (ip = create(path, T_DIR, 0, 0)) == 0){
     end_op();
+
+    // printf("mkdir %s fail!\n", path);
     return -1;
   }
+
+  //printf("end mkdri!\n");
+  //ip = namei(path);
+
   iunlockput(ip);
-  end_op();
+
+  //printf("direct test!\n");
+  //ip = namei(path);
+
+  end_op();   // 这里出的错!!!
+
+  // printf("mkdir %s success!\n", path);
   return 0;
 }
 
@@ -390,19 +403,26 @@ sys_mknod(void)
 uint64
 sys_chdir(void)
 {
+  //printf("call chdir!\n");
   char path[MAXPATH];
   struct inode *ip;
   struct proc *p = myproc();
   
   begin_op();
-  if(argstr(0, path, MAXPATH) < 0 || (ip = namei(path)) == 0){
+
+  //printf("direct test!\n");
+  //ip = namei(path);
+  if(argstr(0, path, MAXPATH) < 0 || (ip = namei(path)) == 0){   // 注意, 这里指namei(path)的返回值为0;
+    // printf()
     end_op();
+    // printf("chdir fail_1!\n");
     return -1;
   }
   ilock(ip);
   if(ip->type != T_DIR){
     iunlockput(ip);
     end_op();
+    // printf("chdir fail_2!\n");
     return -1;
   }
   iunlock(ip);

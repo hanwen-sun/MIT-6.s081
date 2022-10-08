@@ -33,12 +33,14 @@ createfile(char *file, int nblock)
     exit(-1);
   }
   for(i = 0; i < nblock; i++) {
+    // printf("%d\n", i);
     if(write(fd, buf, sizeof(buf)) != sizeof(buf)) {
       printf("write %s failed\n", file);
       exit(-1);
     }
   }
   close(fd);
+  //printf("create file success!\n");
 }
 
 void
@@ -97,11 +99,21 @@ test0()
   for(int i = 0; i < NCHILD; i++){
     dir[0] = '0' + i;
     mkdir(dir);
+    
+    //char test[2];
+    //test[0] = '1';
+    //test[1] = '\0';
+
+    //mkdir(test);
+
+    // printf("chdir %s\n", dir);
     if (chdir(dir) < 0) {
       printf("chdir failed\n");
       exit(1);
     }
     unlink(file);
+
+    //printf("createfile!\n");
     createfile(file, N);
     if (chdir("..") < 0) {
       printf("chdir failed\n");
@@ -109,6 +121,7 @@ test0()
     }
   }
   m = ntas(0);
+  //printf("begin loop!\n");
   for(int i = 0; i < NCHILD; i++){
     dir[0] = '0' + i;
     int pid = fork();

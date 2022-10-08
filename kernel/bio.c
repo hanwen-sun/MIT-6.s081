@@ -85,7 +85,7 @@ bget(uint dev, uint blockno)
   int idx = ihash(blockno);
   
   acquire(&bcache.hashlocks[idx]);
-  printf("cpuid: %d idx = %d idx_size: %d\n", cpuid(), idx, bcache.Size[idx]);
+  // printf("cpuid: %d idx = %d idx_size: %d\n", cpuid(), idx, bcache.Size[idx]);
   //printf("acquire hashlock!\n");
 
   /*b = &bcache.bucket[idx];
@@ -114,7 +114,7 @@ bget(uint dev, uint blockno)
     }
 
     //printf("b->next\n");
-    printf("%d %d %d\n", cpuid(), b->dev, b->blockno);
+    // printf("%d %d %d\n", cpuid(), b->dev, b->blockno);
     if(cnt > 30)
       panic("loop error!");
   }
@@ -144,10 +144,64 @@ bget(uint dev, uint blockno)
     // printf("allocate success!\n");
     return b;
   }
+  
+  release(&bcache.lock);
+  release(&bcache.hashlocks[idx]);
 
+  int mintime = 0x3f3f3f3f;
+  struct buf *pick = b;
+  int flag = 1;
+
+  acquire(&bcache.hashlock);   // 这里一定要加hashlock!!!非常重要, 不然会有另一个线程找到和这里同样的分配的块;
+  for(int i = 0; i < NBUCKET; i++) {
+    acquire(&bcache.hashlocks[i]);
+    b = &bcache.bucket[i];
+    while(b->next) {
+      if(b->next->refcnt == 0 && b->next->timestamp < mintime) {
+          mintime = b->next->timestamp;
+          pick = b;
+          flag = 1;
+      }
+      b = b->next; 
+    }
+    release(&bcache.hashlocks[i]);
+  }
+  if(!flag)
+    panic("no buffer!");
+
+  int idx_ = ihash(pick->next->blockno);
+  
+  acquire(&bcache.hashlocks[idx_]);
+  struct buf *tmp = pick->next;
+  if(idx_ == idx) {
+    tmp->dev = dev;
+    tmp->refcnt = 1;
+    tmp->blockno = blockno;
+    tmp->valid = 0;
+    release(&bcache.hashlocks[idx_]);
+    release(&bcache.hashlock);
+    acquiresleep(&tmp->lock);
+    return tmp;
+  }
+  
+  
+  pick->next = pick->next->next;  // 直接删除;  这里还需要保留pick->next;
+  release(&bcache.hashlocks[idx_]);
+  acquire(&bcache.hashlocks[idx]);
+  tmp->next = bcache.bucket[idx].next;
+  bcache.bucket[idx].next = tmp;
+  tmp->dev = dev;
+  tmp->refcnt = 1;
+  tmp->blockno = blockno;
+  tmp->valid = 0;
+  release(&bcache.hashlocks[idx]);
+  release(&bcache.hashlock);
+  acquiresleep(&tmp->lock);
+  return tmp;
   // printf("begin to victim!\n");
   // 已经分配完
   // 在buf中找一个refcnt为0且时间最早的;
+  /*
   release(&bcache.hashlocks[idx]);  // 特别注意, 这里要先释放!!!   
   acquire(&bcache.hashlock);
   acquire(&bcache.hashlocks[idx]);
@@ -231,7 +285,8 @@ bget(uint dev, uint blockno)
     release(&bcache.hashlock);
     acquiresleep(&victim->lock);
     return victim;
-  }   
+  }   */
+
   panic("bget");
 }
 

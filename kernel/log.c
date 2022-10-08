@@ -163,10 +163,18 @@ end_op(void)
   }
   release(&log.lock);
 
+  //char path[2];
+  //path[1] = '0';
+  //path[2] = '\0';
+  //printf("end_op!\n");
+  //namei(path);
+  
   if(do_commit){
     // call commit w/o holding locks, since not allowed
     // to sleep with locks.
+    // printf("call commit!\n");
     commit();
+    // namei(path);
     acquire(&log.lock);
     log.committing = 0;
     wakeup(&log);
