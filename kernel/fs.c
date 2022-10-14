@@ -378,8 +378,9 @@ static uint
 bmap(struct inode *ip, uint bn)
 {
   uint addr, *a;
-  struct buf *bp;
+  struct buf *bp, *bp_;
 
+  
   if(bn < NDIRECT){
     if((addr = ip->addrs[bn]) == 0)
       ip->addrs[bn] = addr = balloc(ip->dev);
@@ -387,8 +388,10 @@ bmap(struct inode *ip, uint bn)
   }
   bn -= NDIRECT;
 
-  if(bn < NINDIRECT){
+  //int off_1 = bn - NINDIRECT_2;
+  if(bn < NINDIRECT){   // 注意这里的小于!
     // Load indirect block, allocating if necessary.
+    //printf("alloc first index!\n");
     if((addr = ip->addrs[NDIRECT]) == 0)
       ip->addrs[NDIRECT] = addr = balloc(ip->dev);
     bp = bread(ip->dev, addr);
@@ -401,6 +404,40 @@ bmap(struct inode *ip, uint bn)
     return addr;
   }
 
+  bn -= NINDIRECT;
+  uint offset = bn / NINDIRECT;   // 第一级索引的偏移;   注意, 这里可能发生段错误?
+  /*if(offset == 256) {
+    printf("bn = %d\n", bn);
+    panic("out of range!\n");
+  }*/
+  
+  uint offset_ = bn % NINDIRECT;   // 第二级索引的偏移;
+  if(bn < NINDIRECT_2){
+    if((addr = ip->addrs[NDIRECT + 1]) == 0)
+      ip->addrs[NDIRECT + 1] = addr = balloc(ip->dev);     // 分配二级索引中的第一级;
+    
+    bp = bread(ip->dev, addr);
+    a = (uint*)bp->data;
+    
+    if((addr = a[offset]) == 0) {
+      if(offset >= 250)
+        printf("the second index: %d allocated!\n", offset);
+      a[offset] = addr = balloc(ip->dev);
+      log_write(bp);
+    }
+    brelse(bp); 
+    bp_ = bread(ip->dev, addr);
+   
+    a = (uint*)bp_->data;
+    if((addr = a[offset_]) == 0) {
+      a[offset_] = addr = balloc(ip->dev);
+      log_write(bp_);
+    }
+    brelse(bp_);
+    return addr;
+  }
+
+  printf("bn = %d\n", bn);
   panic("bmap: out of range");
 }
 
@@ -409,10 +446,11 @@ bmap(struct inode *ip, uint bn)
 void
 itrunc(struct inode *ip)
 {
-  int i, j;
-  struct buf *bp;
-  uint *a;
+  int i, j, k;
+  struct buf *bp, *bp_;
+  uint *a, *b;
 
+  printf("begin itrunc!\n");
   for(i = 0; i < NDIRECT; i++){
     if(ip->addrs[i]){
       bfree(ip->dev, ip->addrs[i]);
@@ -432,6 +470,28 @@ itrunc(struct inode *ip)
     ip->addrs[NDIRECT] = 0;
   }
 
+  printf("begin itrunc the second index!\n");
+  if(ip->addrs[NDIRECT + 1]){
+    bp = bread(ip->dev, ip->addrs[NDIRECT + 1]);
+    a = (uint*)bp->data;
+    for(j = 0; j < NINDIRECT; j++){
+      if(a[j]) {
+        bp_ = bread(ip->dev, a[j]);
+        b = (uint*)bp_->data;
+        for(k = 0; k < NINDIRECT; k++){
+          if(b[k])
+            bfree(ip->dev, b[k]);
+        }
+        brelse(bp_);
+        bfree(ip->dev, a[j]);
+      }
+    }
+    brelse(bp);
+    bfree(ip->dev, ip->addrs[NDIRECT + 1]);
+    ip->addrs[NDIRECT + 1] = 0;
+  }
+
+  printf("itrunc end!\n");
   ip->size = 0;
   iupdate(ip);
 }
