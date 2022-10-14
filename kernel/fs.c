@@ -70,7 +70,7 @@ balloc(uint dev)
   bp = 0;
   for(b = 0; b < sb.size; b += BPB){
     bp = bread(dev, BBLOCK(b, sb));
-    for(bi = 0; bi < BPB && b + bi < sb.size; bi++){
+    for(bi = 0; bi < BPB && b + bi < sb.size; bi++){    // 更新位图;
       m = 1 << (bi % 8);
       if((bp->data[bi/8] & m) == 0){  // Is block free?
         bp->data[bi/8] |= m;  // Mark block in use.
@@ -249,12 +249,12 @@ iget(uint dev, uint inum)
   // Is the inode already cached?
   empty = 0;
   for(ip = &icache.inode[0]; ip < &icache.inode[NINODE]; ip++){
-    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){
+    if(ip->ref > 0 && ip->dev == dev && ip->inum == inum){    // 缓存命中;
       ip->ref++;
       release(&icache.lock);
       return ip;
     }
-    if(empty == 0 && ip->ref == 0)    // Remember empty slot.
+    if(empty == 0 && ip->ref == 0)    // Remember empty slot.  找到空的cache block;
       empty = ip;
   }
 
@@ -385,7 +385,7 @@ bmap(struct inode *ip, uint bn)
       ip->addrs[bn] = addr = balloc(ip->dev);
     return addr;
   }
-  bn -= NDIRECT;
+  bn -= NDIRECT;   // 需要使用二级块;
 
   if(bn < NINDIRECT){
     // Load indirect block, allocating if necessary.

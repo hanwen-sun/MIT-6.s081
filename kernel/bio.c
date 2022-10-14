@@ -78,30 +78,10 @@ static struct buf*
 bget(uint dev, uint blockno)
 {
   struct buf *b;
-
-  //acquire(&bcache.lock);
-  // printf("bget!\n");
   // 1. 在已有的bucket中寻找;
   int idx = ihash(blockno);
   
   acquire(&bcache.hashlocks[idx]);
-  // printf("cpuid: %d idx = %d idx_size: %d\n", cpuid(), idx, bcache.Size[idx]);
-  //printf("acquire hashlock!\n");
-
-  /*b = &bcache.bucket[idx];
-  b = b->next;
-  while(b) {
-    if(b->blockno == blockno && b->dev == dev) {   // 缓存命中;
-      //printf("buffer get!\n");
-      b->refcnt++;
-      release(&bcache.hashlocks[idx]);
-      acquiresleep(&b->lock);
-      return b;
-    }
-
-    b = b->next;
-    printf("b->next!\n");
-  } */
 
   int cnt = 0;
   for(b = bcache.bucket[idx].next; b; b = b->next){
@@ -198,94 +178,6 @@ bget(uint dev, uint blockno)
   release(&bcache.hashlock);
   acquiresleep(&tmp->lock);
   return tmp;
-  // printf("begin to victim!\n");
-  // 已经分配完
-  // 在buf中找一个refcnt为0且时间最早的;
-  /*
-  release(&bcache.hashlocks[idx]);  // 特别注意, 这里要先释放!!!   
-  acquire(&bcache.hashlock);
-  acquire(&bcache.hashlocks[idx]);
-
-  uint min_time  = 0x3f3f3f3f;
-  struct buf *victim = b;
-  // initsleeplock(&victim->lock,  "test");
-  int flag = 0;
-
-  for(b = bcache.buf; b < bcache.buf + NBUF; b++) {  
-    if(b->refcnt == 0 && b->timestamp < min_time) {
-      //  release(&bcache.lock);
-      flag = 1;
-      min_time = b->timestamp;
-      victim = b;
-    }
-  }
-
-  // printf("victim.blockno: %d victim.timestamp: %d \n", victim->blockno, victim->timestamp);
-  if(!flag)
-    panic("bget: no buffers");
-
-  // printf("%d\n", min_time);
-  int idx_ = ihash(victim->blockno);
-  release(&bcache.lock);
-  
-
-  if(idx_ == idx) {   // 可能会散列到同一个桶中, 避免死锁;
-    //printf("victim same bucket!\n");
-    // release(&bcache.lock);
-    // acquire(&bcache.hashlocks[idx]);
-    //printf("idx: %d\n", idx);
-    victim->dev = dev;
-    victim->refcnt = 1;
-    victim->blockno = blockno;
-    victim->valid = 0;
-    release(&bcache.hashlocks[idx]);
-    release(&bcache.hashlock);
-    acquiresleep(&victim->lock);
-    return victim;
-  }
-  else {
-    //printf("victim different bucket!\n");
-    printf("cpuid: %d idx: %d idx_: %d\n", cpuid(), idx, idx_);
-    // release(&bcache.lock);
-    // acquire(&bcache.hashlocks[idx]);
-    acquire(&bcache.hashlocks[idx_]);
-
-    // 在idx_中找到要替换的;
-    b = &bcache.bucket[idx_];
-    int cnt_ = 0;
-    while(b->next) {
-      cnt_++;
-      if(b->next->blockno == victim->blockno && b->next->dev == victim->dev)  {  // 一定能找到;
-        //printf("find replace!\n");
-        b->next = b->next->next;  // 直接删除;
-        bcache.Size[idx_]--;
-        release(&bcache.hashlocks[idx_]);
-        break;
-      }
-
-      b = b->next;
-      if(cnt_ > 30)
-        panic("loop error 2!");
-      //printf("%d b->next\n", cpuid());
-    }
-    // 移动到idx桶中;
-    //printf("begin move!\n");
-    victim->dev = dev;
-    victim->refcnt = 1;
-    victim->blockno = blockno;
-    victim->valid = 0;
-
-    
-    b = &bcache.bucket[idx];
-    victim->next = b->next;
-    b->next = victim;
-    bcache.Size[idx]++;
-    
-    release(&bcache.hashlocks[idx]);
-    release(&bcache.hashlock);
-    acquiresleep(&victim->lock);
-    return victim;
-  }   */
 
   panic("bget");
 }
