@@ -126,26 +126,26 @@ sys_link(void)
     return -1;
 
   begin_op();
-  if((ip = namei(old)) == 0){
+  if((ip = namei(old)) == 0){   // 查找old_path的inode; 存在;
     end_op();
     return -1;
   }
 
   ilock(ip);
-  if(ip->type == T_DIR){
+  if(ip->type == T_DIR){   // inode不能为路径名(路径名不能创建硬链接);
     iunlockput(ip);
     end_op();
     return -1;
   }
 
-  ip->nlink++;
-  iupdate(ip);
+  ip->nlink++;   // 硬链接 + 1
+  iupdate(ip);   // 更新inode并释放锁;
   iunlock(ip);
 
-  if((dp = nameiparent(new, name)) == 0)
+  if((dp = nameiparent(new, name)) == 0)   // 查找新路径名的最后一个元素的父目录; 存在;
     goto bad;
   ilock(dp);
-  if(dp->dev != ip->dev || dirlink(dp, name, ip->inum) < 0){
+  if(dp->dev != ip->dev || dirlink(dp, name, ip->inum) < 0){   // 新路径与原路径要在一个设备上;  创建一个新entry, 指向inode;
     iunlockput(dp);
     goto bad;
   }
@@ -283,6 +283,41 @@ create(char *path, short type, short major, short minor)
   return ip;
 }
 
+uint64 sys_symlink(void) {         // 函数主体部分用到了create, 要放在create之下;
+  char new[MAXPATH], old[MAXPATH];
+  struct inode *ip;
+
+  if(argstr(0, old, MAXPATH) < 0 || argstr(1, new, MAXPATH) < 0)
+    return -1;
+
+  begin_op();
+  if((ip = create(new, T_SYMLINK, 0, 0)) == 0)   // 创建软链接inode;
+  {
+    printf("symlink path: %s has existed!\n", new);
+    end_op();
+    return -1;
+  }
+
+  // 特别注意, 这里create后ip是lock + get的状态;
+  // ilock(ip);
+  if(writei(ip, 0, (uint64)old, 0, MAXPATH) < MAXPATH)  // 注意, 这里会自动往ip-addr中写入;
+  {
+    printf("symlink: writei fail!\n");
+    iunlockput(ip);
+    end_op();
+    return -1;
+  }
+  // 写入成功
+
+  iupdate(ip);
+  iunlockput(ip);
+
+  end_op();
+
+  return 0;
+}
+
+
 uint64
 sys_open(void)
 {
@@ -291,20 +326,20 @@ sys_open(void)
   struct file *f;
   struct inode *ip;
   int n;
-
+    // path mode;
   if((n = argstr(0, path, MAXPATH)) < 0 || argint(1, &omode) < 0)
     return -1;
 
   begin_op();
 
-  if(omode & O_CREATE){
+  if(omode & O_CREATE){       // 创建inode;
     ip = create(path, T_FILE, 0, 0);
     if(ip == 0){
       end_op();
       return -1;
     }
   } else {
-    if((ip = namei(path)) == 0){
+    if((ip = namei(path)) == 0){  // 查找到inode;
       end_op();
       return -1;
     }
@@ -322,6 +357,34 @@ sys_open(void)
     return -1;
   }
 
+  int cnt = 0;
+  while(ip->type == T_SYMLINK && !(omode & O_NOFOLLOW)) {
+    if(cnt >= 10) {
+      printf("soft link cycle!\n");
+      iunlockput(ip);
+      end_op();
+      return -1;
+    }
+
+      char path_new[MAXPATH];
+      if(readi(ip, 0, (uint64)path_new, 0, MAXPATH) < MAXPATH) {
+          printf("open readi error!\n");
+          iunlockput(ip);
+          end_op();
+          return -1;
+      } 
+
+      iunlockput(ip);
+      if((ip = namei(path_new)) == 0){  // 查找到inode;
+        end_op();
+        return -1;
+      }
+      ilock(ip);
+      cnt++;
+  }
+  // 循环结束, 此时inode为其他的类型, 后续不需要再修改;
+
+  // inode为file类型;
   if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
     if(f)
       fileclose(f);

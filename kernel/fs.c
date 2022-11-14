@@ -378,7 +378,7 @@ static uint
 bmap(struct inode *ip, uint bn)
 {
   uint addr, *a;
-  struct buf *bp, *bp_;
+  struct buf *bp;
 
   
   if(bn < NDIRECT){
@@ -420,24 +420,24 @@ bmap(struct inode *ip, uint bn)
     a = (uint*)bp->data;
     
     if((addr = a[offset]) == 0) {
-      if(offset >= 250)
-        printf("the second index: %d allocated!\n", offset);
+      // if(offset >= 250)
+        //printf("the second index: %d allocated!\n", offset);
       a[offset] = addr = balloc(ip->dev);
       log_write(bp);
     }
     brelse(bp); 
-    bp_ = bread(ip->dev, addr);
-   
-    a = (uint*)bp_->data;
+    bp = bread(ip->dev, addr);
+    a = (uint*)bp->data;
+    
     if((addr = a[offset_]) == 0) {
       a[offset_] = addr = balloc(ip->dev);
-      log_write(bp_);
+      log_write(bp);
     }
-    brelse(bp_);
+    brelse(bp);
     return addr;
   }
 
-  printf("bn = %d\n", bn);
+  //printf("bn = %d\n", bn);
   panic("bmap: out of range");
 }
 
@@ -450,7 +450,7 @@ itrunc(struct inode *ip)
   struct buf *bp, *bp_;
   uint *a, *b;
 
-  printf("begin itrunc!\n");
+  //printf("begin itrunc!\n");
   for(i = 0; i < NDIRECT; i++){
     if(ip->addrs[i]){
       bfree(ip->dev, ip->addrs[i]);
@@ -470,7 +470,7 @@ itrunc(struct inode *ip)
     ip->addrs[NDIRECT] = 0;
   }
 
-  printf("begin itrunc the second index!\n");
+ // printf("begin itrunc the second index!\n");
   if(ip->addrs[NDIRECT + 1]){
     bp = bread(ip->dev, ip->addrs[NDIRECT + 1]);
     a = (uint*)bp->data;
@@ -491,7 +491,7 @@ itrunc(struct inode *ip)
     ip->addrs[NDIRECT + 1] = 0;
   }
 
-  printf("itrunc end!\n");
+  //printf("itrunc end!\n");
   ip->size = 0;
   iupdate(ip);
 }
@@ -554,6 +554,8 @@ writei(struct inode *ip, int user_src, uint64 src, uint off, uint n)
   if(off + n > MAXFILE*BSIZE)
     return -1;
 
+  //if(off + n >= 60000 * 1024)
+    //printf("writei: %d\n", off + n);
   for(tot=0; tot<n; tot+=m, off+=m, src+=m){
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
     m = min(n - tot, BSIZE - off%BSIZE);

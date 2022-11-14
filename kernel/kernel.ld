@@ -9,7 +9,7 @@ SECTIONS
    */
   . = 0x80000000;
 
-  .text : {
+  .text : {           # 存放代码段;
     *(.text .text.*)
     . = ALIGN(0x1000);
     _trampoline = .;
@@ -19,21 +19,21 @@ SECTIONS
     PROVIDE(etext = .);
   }
 
-  .rodata : {
+  .rodata : {       # 存放只读数据;
     . = ALIGN(16);
     *(.srodata .srodata.*) /* do not need to distinguish this from .rodata */
     . = ALIGN(16);
     *(.rodata .rodata.*)
   }
 
-  .data : {
+  .data : {         # 存放可读可写数据;
     . = ALIGN(16);
     *(.sdata .sdata.*) /* do not need to distinguish this from .data */
     . = ALIGN(16);
     *(.data .data.*)
   }
 
-  .bss : {
+  .bss : {         # 存放全局变量;
     . = ALIGN(16);
     *(.sbss .sbss.*) /* do not need to distinguish this from .bss */
     . = ALIGN(16);

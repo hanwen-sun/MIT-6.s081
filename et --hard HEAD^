@@ -1,0 +1,1333 @@
+[33m106c841791c086721b710a65774919e7981e3270[m[33m ([m[1;36mHEAD -> [m[1;32mfs[m[33m)[m 20221014
+[33m74a81c619dcb9f5daad16b227d799c30c4d563ab[m[33m ([m[1;31morigin/fs[m[33m)[m Merge branch 'riscv' into fs
+[33ma3c5ae4872880ea4a497bb7356cd62191bfe1cc3[m[33m ([m[1;31morigin/riscv[m[33m)[m Merge remote-tracking branch 'xv6-dev/riscv' into riscv
+[33md7c0a1b7a703f7366942092f9cf421b6cd111a36[m hopefully make writei more correct
+[33mef8d47a751213be422d15c7bfee47aca4926d623[m fs lab
+[33m147855e5219e91886e71e796fd51fbc6b1a056d2[m test for closed pipe or killed on every char, not just if pipe full
+[33m4df1a265cb994ce9cbf9e7dce88b79b1dd7cc5dd[m fix uart.c to work with UART_TX_BUF_SIZE == 1
+[33m55ad99f7293fc6d639a30d36820a770ee71a6cae[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m286b2f3c3306a621c415e8c7ce67bc2a6501998a[m consolewrite does not need cons.lock -- can lead to sleep() with lock held
+[33m05a7db1a0a20187760d8a78ff7badfa4cc7e3314[m Fix minor typos
+[33mc64aa44d7b5167f5b061b1e2fdf94d240a98b2bb[m kvmmake() makes a complete kernel page table, matching Figure 3.3
+[33m075d0f0c4a870ce2c825f41e111bfdf75a877cae[m Merge remote-tracking branch 'xv6-dev/riscv' into riscv
+[33m806580d6423274e7b38329362f64a549e04ddbab[m set riscv use-compressed-breakpoints yes
+[33m6c167595037a0872338d999c7ce0971a5606dedb[m more explicable scratch area size for machine-mode timer interrupts
+[33m0c55849d28a2df0416d28c83bc9da47411e2c78f[m Don't map the CLINT, since it never used in the kernel in supervisor mode
+[33ma9b3dd457c647d2836080af4f1cd7c7cb4d1a40d[m eliminate virtio DMA into kernel stacks.
+[33m271d89ae3065d397e26faa8e05aeec5cc3cd8934[m improve virtio_disk comments; bring it closer to wording in the spec
+[33mda002a48fbbf69a0d965755d9f6b66817e8a15a5[m don't unpin if recovering -- the resulting negative refcnt suppresses next unpin
+[33m792d60e91224bc15ce41aaff2560a82b63fdf06f[m avoid deadlock by disk intr acking interrupt first, then processing ring
+[33me3672e018aaaadafccc3634911d69f46ec4b4819[m often causes deadlock after a few minutes
+[33mb9359c353318ba70596b55ec57f8d9f6c43c2758[m Corrects order of UART RX/TX interrupt enable bits
+[33mb96547403df0e07865bc2269215cfeb0260b893d[m Fix minor typos
+[33m1c4b582fc74a3b6192f7a1aba1c667b1b5e840bd[m Clarify CLINT and PLIC acronym
+[33m62d97e3fce1a223b84226cda05c0af73637129b0[m Merge remote-tracking branch 'xv6-dev/riscv' into riscv
+[33md9c7b13acce9ac17e550ec02799edf8da059d78a[m Add s to many printf statements that expect it (thanks Cece Chu) Add dirtest to the list of tests
+[33mdb7d48ddd7af0d556314306f5649c4196742ff30[m Avoid WFI until the system is idle.
+[33m3ac513c0a4187363b797b052b7d677674a11a021[m When either_copyin/out fails, return an error from write/read
+[33m788b4d1bc9a761212fe4f611cb02e8d34aca1775[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m05074badc447ce9532824924bfc41a003579beb0[m When either_copyin/out fails, return an error from write/read
+[33m2055fe13ac413a53d74baafdfa47e4c892ff9dc9[m better grind error messages
+[33ma92b3edf1d77f9e70f520d31074a5774ef75f15b[m Don't call WFI for LAB_FS
+[33m4e1967f1888f2cc8e50d31774273888a26acf92e[m wfi to save CPU time on Athena
+[33me23d53f27f6e187732a92a2b4705639d1c260f05[m Delete doc dir because they take much space in student submissions
+[33mffb2ee074a42ed30a87fd6804682fa62eca13500[m move panicked check to uart.c
+[33mdb067d24da0b6472afe9ce4165e0868772b11964[m suppress write() output after panic()
+[33m2ec9c6ed66629fd5b833f06af2080eab46c0af35[m Remove obselete ifdef that shouldn't have been there ever
+[33md7e5f269106f4b76fcbd90331a3b44f879ee9c54[m fix usertests to pass all the riscv-sol-fall20 solutions.
+[33mefaa7b8e2ae2ae059f3985bda718d91f3501b294[m Adjust a few prototypes to be explicit that they don't take arguments
+[33m59a9863a17d881498bf7519878566f74341a1b71[m touch sbrk()-allocated memory to make sure it exists
+[33maefa2697d705e316aa5255004e4b6a129e9afe2a[m usertest for exec() out of memory recovery and fix a few exec() bugs
+[33mb33574df38f358ba2173caa92e8287b5b0cb9cff[m Use the major number defined in file.h.  The minor number is ignored; might as well use 0.
+[33m740d36373630e519117077f867437c9abbfd1f8d[m Delete some obselete stuff
+[33mb154cf091c57db1b412a022490c0cec009b4cf6b[m x
+[33m4a87a0ae8bc4a186842fb5f57454412de56f52bc[m fix a bug in the out-of-memory handling code in exec
+[33madee82c3e7334a09996c0fe9cc75d9a80abc81c8[m handle another out-of-memory in fork(). the policy here is not consistent, since other calls (e.g. exec()) panic on out of memory.
+[33m4c22c54480f020c36de120ce868912c022e48113[m try to handle a few of the possible out-of-memory errors in fork()
+[33m70c6fe861e64195032083a9fd59a81bd113d1b0b[m modify uvmunmap() to be in aligned pages fix a bug in fork() recovering from out of memory
+[33me1a2cd59faf0cf7a3b315cefff11d68b68ec54a7[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33md32eac366fd06ec58cc3b34a3ca1824864bd7618[m pa isn't needed in the uvmunmap() loop
+[33m315c37c0f1e7c05f7b7d0ec145a2002b0612c49c[m Update to the latest specs
+[33m468946781fd551d69252f13a41ffc77c5e30fae9[m copyright and 6.S081
+[33m737bd3a55d9380906f097f1d82d47fe2b23bf486[m Ack bug finders.
+[33m2db95f08b14f2779a31cb9e3e830f762f36f2660[m Typo (thanks yt <jaichenhengjie@qq.com>)
+[33mf14aa421c456875fbb5fff0ef2f5c4154f11e38d[m Generate initcode without compressed extensions
+[33mc24844714bf68feb8965c16be6ad9c82e27cc530[m update initcode to avoid using the compressed extension
+[33m9eff4b0871ca68376bc409c991fbce414e700921[m Write interrupt ack register in virtio_disk_intr()
+[33mb557e7c32e935b9bb2f5d8ed8503de52f43cf87f[m Update ramdisk.c
+[33mffcb883adff508497f71fae6ca72a8fa70483edc[m Fix minor typos
+[33m6cb6764bb1778b8c4f92680295f928fec074e3d7[m test string system call arguments that cross over the end of the last page.
+[33m234391b6bf4d4809930300c1637403987c273461[m test copyinstr()'s handling of the terminating null
+[33m354adfdafc3993771f58236771e213016ff9aed8[m streamline copyin/copyout code in usertests fix bugs in read/write return values when there's an error
+[33mf01b1a8b71b8e0e8d7564a475a31c4e951463874[m test pointer checking in copyin, copyout, copyinstr
+[33me4b93466792125248bc5e2dfd9c000ab10c59528[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m8b9b7999376f67f45cf9efde675d418841a264ce[m modify each page in usertests countfree() get rid of static for walk() and freewalk()
+[33m6c3099d31401dfb76204c276572b7a34caad9b44[m Change tf -> trapframe in a few comments
+[33m050a69610afee9884bc3df27215d0d5534743975[m defines for UART register bits
+[33mdb0f092ae44f85db450718588c2deea080c27d0e[m fix printf() in interrupts
+[33m823864099d0d8def9d4bcf9e382cf42e05bd7afa[m interrupt-driven uart output, hopefully a nice example for teaching.
+[33m3b053f5d58b4914c6389588ad4e556bc887bc99d[m cpu->scheduler -> cpu->context to reduce confusion
+[33md6dad42aaffe7460025f103ed3807f589df6b24d[m rename p->tf to p->trapframe, for consistency with p->context
+[33m7a7cd1adefb6eb29523c8fcb762edfe489639f85[m drop QEMUEXTRA
+[33mf3979b7212f1bb9d72947f54abead5be973c6aed[m make "echo hello > x" truncate file x.
+[33mc98e1afe7996b639fd36285240e9171b4866fe9d[m allow more files
+[33m507028de9df94a1e93cdfcd3d1c19fc184d91f06[m more grind
+[33md1b8b19cd36299555be2085f526f48a639e5b7e6[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m20f1dd940964d7e01cf8c8d9b1a5b751840b7f3b[m more grind
+[33m73e931fd420163cb3e7757a3426ca650b4cd3419[m yet another toolchain name
+[33m16b3b63f06c1ea17da484aeebea4a57fb2a6e44a[m grind: run parallel system calls forever
+[33m028af2764622d489583cd88935cd1d2a7fbe8248[m mention LRU list a bit more in comments.
+[33m9de9211b1158bfbe169c5099dae11432d5950105[m usertests -c to repeat tests forever detect memory leaks no more "already ran user tests"
+[33me7ffb74ad1e4c4e8a4a5e62968f52499dc0c7079[m fix a potential memory leak
+[33md9160fb4b98e3ce04d3928c1fbd2ec26b3cc746a[m nits
+[33mf2ab0eb644a60f946f35fcb5578fba53720edfa7[m Clean up linker script
+[33m2821d43cc95b4f9faf79ff94daa5d3a8ea5e7861[m nits
+[33mf2df0fa5471c9951ff9a12bea51efbe22afb196e[m Fix ulib's memmove to handle overlap when src<dst
+[33m8509784d8000d6791a205626e81b03b3f9bf856b[m Add implementations of memcmp and memcpy to ulib
+[33ma52d296814d869f16ced4fb68246223b4a64fa38[m delete alarmtest from riscv
+[33m56583b1402a7f8fad0f8c3c296e26f12b1114c95[m updated alarmtest
+[33m78f863f8aead6346dfdfc62e91af25c9383e25a7[m Add editorconfig
+[33md4416744777740f74a19294d332697639714d8d4[m Make QEMU memory size match PHYSTOP
+[33mdeaff5d8a689e6aa7b64b38619cf667b963256da[m no buf->qnext
+[33m9ead904afef8d060c2cc5cee6bd8e8d223de8c40[m fix major validation
+[33m37df68e5dedbf2a26c2bf0bdae090b206ce78b48[m story is more complex than I thought.
+[33md175beadf5f009d0fb8881e32c913b1bc175c9f6[m bug fix: reparent() sometimes deadlocked bug fix: exit() sometimes released a different parent lock than it acquired usertests
+[33m843ce7776568ac2d4f71886e95077709b83bc613[m Stress copyin for the full allocated page (good for lazy lab).
+[33md940fd122d8e04dfc1122ca6b224703eead55f66[m don't leak memory if exec() arguments are invalid.
+[33m6b79ee69b799c03f939c2ffc52c30d2bcdf7f2ef[m Refactor big sbrk test in smaller, easier-to-understand tests
+[33mee67dbd211512f279a9032eec31a81043dbf3ff2[m Not much: factor sbrksimple from big sbrktest
+[33m7c7ed208221dbd115c7cc88faa0e42150cfa14a2[m don't leak a file system block if the buf argument to write is invalid and a usertest
+[33me1a37303c89696a110c61a156768ea15cc03a246[m yet another sbrk() bug fix, and usertest
+[33m4de161f973aa06d5f08de1063d3fc9c22e4547e7[m don't panic if a program frees all its memory with sbrk(). if a program sbrk()'s to a non-page-boundary, don't free that page. corresponding usertests.
+[33mca30cac702157d0d3a2c89e4436f0bff303a6e0a[m more incorrect cast to uint
+[33m402e7b56053312f4e96737ee7cd82395c998f00f[m fix a potential kernel crash add a regression test for it
+[33m57e40a020411924dc89fba9fdd22a048ff4513f0[m nits
+[33mba1c42849ac4b1b8f845213f553d629e631471d7[m print name at start of test
+[33m25e6803e171fd0cbbf71f889ba2d80621e0336f3[m a comment
+[33m3f6e372a29709225f53f4d326170af1aeecb2cf5[m make exec test self contained
+[33mf6a37c17f26fe743f9c4773352d8b823ccc4e9e3[m Standarize the way tests are run and report errors Support running one test, by specifying the name as a command argument to usertests
+[33m0d01de2a32b0c7ae1eaee5d79faf075cf38df997[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m2df42355f7bf63b7c4344094955330048b5090f6[m all of PTE_FLAGS
+[33mb150908354dd166ed9f00287064216d09a3ba807[m add `-bios none' to silence qemu
+[33m036b5edf12fccc06a11287ad58565f253ab2eef6[m set architecture riscv:rv64 -- fix gdb trampoline disassembly, thanks jonathan
+[33m35010f0d0fae49e91b92585f3e97e56da4ac0082[m error exit status is 1
+[33m7e6c37e67e6da62e02089fc3292569103b7e94b3[m Support exit status for exit/wait One test case for returning a exit status Passes usertests, but haven't used it to simplify tests
+[33m035cca95fe87c67ee1e33b9edfb2d87e24476fa8[m Make the end variable be really at the end of bss, and delete + 4096 in freerange()
+[33me5b7fa62cce4787838c0e52dc9f6399babf2e75e[m thanks to Anthony Coulter
+[33mfc337af2b6275d8b0b8bc41b5e2eb3619eb47bf1[m fix a grep bug
+[33mc0beeccb1b46cfba7762740b901ca266adb65a6f[m have echo use FD 1 for clarity
+[33m25e113138d677eacb8f2ce872ca7ff7596ae44e0[m sfence.vma in trampoline as well
+[33m9b9e2dd0f24428659d1f931009dd6429a9f5f1ac[m fix sfence_vma comment
+[33m86a1d4b29570095ff7d668785ac9e37aa7436260[m sfence_vma after satp
+[33m64b93d175ac6eb739036b394fbb0766fbf06f5b7[m user printf(1 -> printf(
+[33ma3f6d9fd1e21a7339f2bc26f185f7d561bc370c4[m cow moved to xv6-riscv-fall19
+[33m92c3c02098ed0e3fabb56121ea45317e9a951ea7[m RISC-V port doesn't borrow this code
+[33m510bcde8945739d3f83cfa85df0091913f9d3e61[m Add major/minor/mkdev Maybe apply this change to master
+[33m7241838b4cecefb32bad4698e748fc31d008d94d[m Move labs into 6.828 repo. The lab text isn't dependent on specific xv6 code. Lab submission instructions etc. are likely going to be more MIT 6.828 specific.
+[33mc612d452fdb03080c77517f6c1b32b8d11c6c40a[m validateint doesn't test something interesting on RISC-V; delete it.
+[33mb564fca24652dad80946b1e690db37dd87c66dbe[m Rationalize some constants in usertests
+[33md98ddadd79ae45dec44f191986bf59136dd15e88[m Also release buffer on failed copyout
+[33m6005ef5a1c0bb17a3a5da683d95ed9e1e6f44e68[m Release buffer also when copyin fails
+[33md9818b89e136ed51242257ca6cbf0a78292f862b[m 512 -> BSIZE
+[33ma825f22cf8783a078b65cdc3c8393811c3c1b702[m Merge remote-tracking branch 'origin/master' into riscv
+[33m82638c019ced44651d65c99aaa7c698676c217be[m Avoid rereading the superblock in bfree
+[33m21ad8c76bc9975f2223c136ba254deda2ab8036d[m A few now unused DOC
+[33mce565ae04a62f28cfa480707ee9c190719cb8168[m dan cross
+[33me10f797762aad6cd1c008926a00cf6dfa1636fd1[m Merge remote-tracking branch 'origin/master' into riscv
+[33m0581c37baf8950ae9602a1419498a800f9fade4f[m Removed unused `dirlookup` argument in `create`
+[33m2501560cd691fcdb9c310dccc14ac4e7486c99d9[m Cosmetic cleanup: fsinit reads sb and calls loginit. initialize icache in main.c and don't make it disk specific; the icache is shared.  This doesn't matter since we have only one disk, but conceptually cleaner and maybe helpful to students for mount lab.
+[33ma9953236cc9f1befb625575671bc39f1ab254bf0[m x
+[33me61377bf8a046bb216f768f2df6c76fe06a477e4[m Update write up to reflect new test cases.
+[33m5498ee2e92b363a93a21021b8c3082e5d6bcdced[m Draft mount/umount lab as an alternative lab for fs.html
+[33me398a9815c8dc65d556333f9bb65c61ca5be2954[m Wrap state of disk driver in a struct so that it is easier to support several disks (e.g., in a mount lab).
+[33md96a8c5661ac27c82e577edc6714832b970586dc[m add alarmtest.c to the repository they don't have to modify alarmtest.c, so we can use the original version to test, to make it harder to cheat.
+[33mdeec67f05db8377dc912c33ff910002364f9199a[m alarm stuff
+[33mfdea26548977d9a9b188c90ebe6e89c1cc1a8dfa[m two notes
+[33m564d10bb2211dce09cacd8efe6d1609e76041df8[m Add simple crash recovery assignment to fs lab
+[33mc5163e4a4244c5834971bd2b285205205439dbd3[m nits
+[33m3bee885ed7b5d39341a24a7d64959f54ddf45bab[m some XXX questions
+[33me788af9b81300b108a7d1705e23f73167ea71c67[m oops, back to alarm()
+[33m0b5c01d429d9f4927fa5acb46c32c9c2be948e76[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m9110f40b7d65e7090b6214fd5db4814693b2e635[m sigalarm
+[33m7510ac70e5e03b26d8ad3355a9e5d30d6bd48507[m Combine the linux mmap hw with memory-mapped files in xv6 into a separate lab
+[33m0c10cbe829787a2745b0f7e3ad46f200b0b94d34[m syscall lab nits
+[33m0c3125b9ebf5fde1396620da3f5839b88a3ae50b[m Add uthread
+[33mb02ef59e1498b3fa2eebeb12bf17548082695414[m x
+[33m62ece4b09e6a568ede0e3b524af959194e0cb792[m Merge branch 'riscv-bcache' into riscv
+[33mfb8a0099d48643775d0bca626af1a73a3ab618a4[m fences for starting
+[33m77da01abb147e0c5a1312d26e2c022296a93d7d5[m First draft of text for mmap assignment.
+[33md600026c3ff9249e79a225d036be12dd6d2a7b23[m cut ramdisk
+[33mb70cd9ebd7f48762739f78dfacfebf84f0a5f66a[m Import big file assignment.
+[33m9c4f62e8e3e7f114c6f82a75579a815e6329d767[m x
+[33m848d1906e81992c78bee9e9ce5a5d38e107265cc[m Track in buf if disk "owns" buffer
+[33m87183da13d80555fde253823108be12667246079[m An easier version of bcache assignment
+[33mf37a3e396454268074f48517e3773f099846d0e3[m Make pin/unpin explicit
+[33mf1bb53c690051994f5a2c43ee900f9e335bd019c[m The driver should free descriptors, not interrupt handler.  This avoids handler freeing descriptors before driver sees that the request has completed.
+[33m530431045237d7ccbbc0bb65ed83309845c19893[m Remove B_DIRTY Use refcnt to pin blocks into the cache Replace flags/B_VALID with a boolean field valid Use info[id].status to signal completion of disk interrupt Pass a read/write flag to virtio_disk_rw
+[33m34980381bd75ce28ffea2113559aefa1b02c64f0[m checkpoint
+[33m005773c0c3cf3119273d1fd001c01241f7eae5c2[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m47b9cfee4991a74bb999b795e57d9c86b7f45c50[m separate out timer init code for clarity
+[33m1ec50c5848010f607d286228955adb50c05c53ca[m xxx
+[33m33494edad5970586ed61efc967405b07db529b72[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m2d89a101c45cb73d2800c74ca3ff5c576933e0b7[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33m6507da772d63d4dd0e365b976f2b400d64dcfccb[m argptr no longer needed, since copyin checks
+[33mfe14bd1113d571ec6abd45f3d99dadabc24fd06e[m a thought
+[33mbdcd23ea49885b5fd205d2856073d3d89b3a9bc2[m a bit more
+[33md82f43e0c747347de18737f4a446474207fb65b9[m Checkpoint start of locking lab
+[33m629faafa36325bf36e153605d6bd233f3f417a69[m cleaner UART register interface
+[33ma33f60fea30c931207aa05c933dab4bd992a40c2[m console/uart tweaks
+[33mcf48b24c03325a4489e5dea9e2419893b7bf8783[m beautify console.c
+[33m281d450a088b348b898f2e23f6951e6d4f1efac0[m split printf into a separate file, to make console.c more like a driver
+[33m734faa27acfe136f4cab3ea06e70193c0ecc5402[m Pass over lab text
+[33mcc1a303d096e0fbd256c2b602271a9a3cf19e05d[m fetchint isn't used any more
+[33mf0987d82dcb621969199d91ceb11a66adaceeec1[m ???
+[33m8ec873b7d8a4a52f01e1e301f1af0996ff222638[m Checkpoint: split alarmtest exercise in two exercises
+[33mc714e3e35c98ed1fb13a8f1b52f6b1a03cfad783[m machinevec -> timervec
+[33mfa2e2e3c81b2686229acc204ece380953a8031ea[m uservec before userret in trampoline, to match book and kernelvec
+[33m8d30e21b59d2f6d48e593cd6c2399d0743971155[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33mea95a6654c3f921849f3541aa856a8806ebf571e[m trampin -> uservec trampout -> userret
+[33m0358ee912bb37439d36a76ca4469aaa1ab6c2a48[m syscall lab/alarm
+[33m57a861bea1ef57a44574cfc74737d5b35db0e261[m Checkpoint start syscall lab
+[33m808811f9f49a21ae1a00b2e5805cf62cc31c0518[m Add syscall tracing to the first xv6 lab
+[33mc0b1c239ea97bb56ad5c24110e6d52e9633a2847[m x
+[33m47c9721d785908f9102979b71eb86d60ef086c9a[m a few name changes in panic msg
+[33m8c12928cc59b5a0b1d9aa6aada2772d0d2320542[m First draft of first lab assignment?
+[33m4e62de64cd3b8b67bdb2c3d8edab1ca353427a84[m fix an exit/exit deadlock -> one more locking protocol violation increase timer rate from 1/second to 10/second
+[33mb19adf79f9ef5174cd0ff51b703f2ec0d9ad3cde[m purge x86 stuff from defs.h
+[33m5d5e4e065f4e593c9e396a52b8e599cdc62c9e7d[m comments for timer setup
+[33maef3e0f5a41c3b45eeb47e407cacb6cfa59168a0[m sieve exercise
+[33m61dc67b5d2febd302c96cee2821ac190fdd24c4a[m Simple find assignment
+[33m9a817bd134cd83c8a8c8cc96f022a0c22cc5bdb4[m rationalize some vm function names
+[33mda898a11b61fd36e430ffd89b495dd5693c66e30[m ???
+[33m5d75346e4a53ef6d113d51266e472166e32060e4[m find
+[33m711bd3156df1f3022bd341eebea620b4dc0a28f0[m Checkpoint some warm-up exercises
+[33ma77287e9244ae5dac7060c0b8817bc195325af0c[m no more PAGEBREAK
+[33mb4f89bb5290cff5926e5a735487b024f8314e028[m ping-pong exercise
+[33m8f6865d1f1b945aae1a7989798571de5382cf930[m display assembly instructions, to help with first.tex exercise
+[33m49db5119e9f7b57b73c2f2a1d6da4e055e0e8649[m x
+[33m26ce97fc76233b1668c52d3e7b9d155f0f3ee6b6[m One more
+[33me6276088107e814bea95aee42868065dc41c1e8b[m Delete a few other no-longer relevant files
+[33m6f3a441c10ca714041c0ace01b0e7d92d5846768[m Remove a few no longer relevant files
+[33mdfc2cf9123a558670dceca880e1d9f4d2f236a7a[m add rtm's cow lab
+[33ma41365faa3accd86672126700ffee8279f4072e3[m Add relevant docs to repo
+[33m0387e2156f10130148a44d9389393ec537e3b134[m Add a few sbrktest for lazy allocatioin lab
+[33m936afc6e1a2ac7149d956b000373f248d49d5196[m mstart -> start
+[33m54178ad94d758e557bfa369b7f137e2844e030e1[m simplify kernel mapping calls
+[33m55bc96d4190e40704fb5e447cef9597b08b8f088[m a few core -> CPU get rid of PDF generating support
+[33mb8a31c494cb535d9eb3e4c1971c4c9020c27c239[m one more TRAMPOLINE
+[33m6c78af4a577aa88cc499ea777556a4a16dd4a7fe[m fix mapkstack
+[33m62091abae9613f9b6ac971b72411e5ee722cc530[m Test whether writing below stack fails
+[33mb2e9c8eea5d4f4edb43ae7be9e15986dbfce5b95[m Clear U bit for second stack page so that it functions as a guard page
+[33m38b430687cc248d7d2928e3b7cedf9d220b96013[m nit
+[33m6b379e4707d693bb383f51647f66ec5471d26979[m -MD and TRAPFRAME
+[33m5eab649255edc210c1e05ae62d2cb6fd0f328d8c[m Allocate 2 pages per proc, with the top one unmapped. The page below the last proc is unmapped by default (because the kernel doesn't map anything right below the kernel stacks).
+[33mc5d48db0456472d4edb3ac47763b23141839ca47[m Merge branch 'riscv-kstack' into riscv
+[33m328204d9cc3995a44bb3cce2f5206e392a8601a7[m not much
+[33m06e49a58dcc8ba3f898ba5399449312cd129b0fe[m pi for pipe, rather than p, to avoid confusion with proc's p->lock
+[33m3333665ab68329543d6c51a1d819dc56e1b7cd5d[m not much
+[33m2418ac380ca52429de50b801ab18568e93a53394[m it's not clear that the release will always enable interrupts
+[33m06109901c9c12733e86fb1b264dabef60655de04[m x
+[33mdbd729b32d9b1cfa73d05e59d8bd294823417520[m with per-proc locks, we don't need the intr_on() inside the loop.
+[33m32168df609efb46d3f1111fda4e4f0ff1d527013[m no need to save/restore 14
+[33m91566327012cad2ca99df47f9321dfc012d8a7ff[m One way of supporting a guard page below kstack: allocate kstacks in procinit() and map them high up (below TRAMPOLNE) with an empty mapping below each stack.  Never free a kernel stack.
+[33mb924e44f06c9c0882a2cffe6c9215b12c5aee2e6[m Merge branch 'riscv' of g.csail.mit.edu:xv6-dev into riscv
+[33mce53416f4970ebb137c8e66dc75488cfefaf084d[m Delete x86 comment
+[33mebc39372096280a4a5957d3e3836c859e5d78a79[m conservatively call sfence.vma before every satp load.
+[33m6bbc2b2245c5b006824eb42ef33d5b296158a693[m cosmetic changes
+[33m7797a384236cee31b924d27d8f814ef9543662cd[m another test, to help with locking exercises
+[33m4bc900e78bdbff3ba22ccccd26833cf70fd300b1[m nits
+[33me6addf25bb1332f8722ea28f2b431d93984f89e5[m feeble attempt at build instructions
+[33m061e3be6f89cc0b7479fc2bba8b1348f7a9d070d[m more comment cleanup
+[33mc0266a877a25fdc0d73016bc7e7bf0f1800b3e0e[m document which proc fields are protected by p->lock
+[33m5eb1685700a7665814f1bcf63fc26f5dbf0f719a[m have kill() lock before looking at p->pid document wait()'s use of np->parent w/o holding lock.
+[33m9981bb227093373649acd019d378dfccb54189c8[m tweak some comments.
+[33m2f22a3ed6a8dbdd4dcfb2c0a43dc854a36a59cfc[m Merge branch 'riscv-proc' into riscv
+[33m60ed537427c31d320ca4c8778d21d13304285b00[m Merge branch 'riscv-proc' of g.csail.mit.edu:xv6-dev into riscv-proc
+[33m9d34838b4f7c859b753a32124002d7d845140b0a[m holding p->lock all the way through state=RUNNABLE means we don't need EMBRYO
+[33madcc6129013786e89357c16793eb96c75d687454[m Update runoff list for producing xv6.pdf
+[33mdb72f3108fb729d4a9bbcc7ed3979a08eeadd022[m eliminate ptable. ptable.lock -> pid_lock.
+[33m4ce3a5fa21bc1ecda7b833a0f8fb05cdcd6d3a67[m nits
+[33mc4f6a241cdc220dafe01bc7ca2ca7f8a253a838c[m avoid a double-lock of initproc->lock if child of init is reparenting
+[33m7114bf43ed4bfcfd5534a2aa722c2778501ae2b3[m Merge branch 'riscv-proc' of g.csail.mit.edu:xv6-dev into riscv-proc
+[33m62313be582a5abd3a114eec3c9f5770ea37ef766[m another fork test
+[33mdabbc348bc4edab522901d8473acaabe276cdc45[m Maybe fix two races identified by rtm (thx!):
+[33m75b0c6fc91c1264aaa5d080d9faeb87c90d02ad3[m back-port fork/exit/exit tests to xv6-riscv
+[33mbe88befed702f7bcbf65212a9dcf9456a7bd2ae1[m two exit/exit tests
+[33mfab5e7c1de2288e2b9e41f7010ca85f2a641cf63[m Make size in stat.h be a uint64 Supporting print long using %l (a bit of cheat) Modify ls to print size using %l We should probably update size in inode too.
+[33m6bfb078b146c95918752afd3b3308d748666f4ae[m x
+[33m47e69250d08acc7d91d791148a37f4279f5939c9[m Simplify wakeup1
+[33mcee830af2484fb3e67f3778e03114179eddc4f82[m Apply some corresponding bug fixes from wq branch here
+[33mccf299850b51bb6f899765cc41a826d903e9e885[m Remove some debugging code
+[33m26f306113a1b4057ac1f59050213c8f62c3a211a[m Fix a lost wakeup bug: the disk driver's wakeup() can run after the reading process acquired p->lock and released virtio lock in sleep(), but before the process had set p->status to SLEEPING, because the wakeup tested p->status without holding p's lock.  Thus, wakeup can complete without seeing any process SLEEPING and then p sets p->status to SLEEPING.
+[33m1e4d7065d6582fd57d251dfe405afbbe68a55309[m Merge branch 'riscv' into riscv-proc
+[33m84c759fc02c7843b64a1bafc843cd80fe3c9d7ee[m x
+[33m37ac6f8f4fa9a7fc1ddcacc3a97b30c400e52123[m Don't start processes at the end of the proc table
+[33mda51735980e500922bc108a3444b64ac9450032e[m Avoid two cores selecting the same process to run
+[33mf59c1bf1d82da4b445c1cff10c228ea55fa035d4[m try to continue from walk() failing to allocate a page-table page
+[33mb27f275014cb473960b9e4d36b03455e404116a7[m avoid allocproc() returning a struct proc with non-zero p->sz
+[33m1540c8b15ac35de9027e60804a786d23703d383d[m COW tests
+[33m67702cf706bce7adef472f0caa48d81ddfaeb33a[m Checkpoint switching to per-process locks, in attempt clarify xv6's locking plan, which is a difficult to understand because ptable lock protects many invariants.  This implementation has a bug: once in a while xv6 unlocks a proc lock that is locked by another core.
+[33m40f1041a0a7cd8a1902371cf459989c19f1dc718[m don't enable interrupts until done with sstatus, scause, &c
+[33m535ac52efadc5c5cdb0483ad55c306cfaff71d50[m oops, don't hold mycpu() result across intr_off()
+[33mabfe9999f447c15d904b3c11f32d4a22a45470a0[m have fork() fail, not panic, if not enough phys mem
+[33m18e76a6c47b0f62b2458430d4357f3eb68bfd759[m sbrk() returns a pointer, so it should be 64 bits
+[33m9b99f007434ea3af0c4834a91f19952d5670e16b[m oops, don't hold mycpu() result across intr_off()
+[33m0498bfd15937d64599b8c63948907a8b60e5d6ae[m timer interrupt in the kernel -> yield
+[33mc34bd3d1671f1f6e1b50614c22fbd0c83f504959[m Checkpoint some progress compiling xv6.pdf
+[33m2c0338fe426401e3604ca5ec10d93c4f7512191b[m x
+[33maf6c35e14bc4d9e4c24726600971921cba406a83[m Introduce alloc3_desc and UsedArea to make code easier to read
+[33ma8305b7318e66eb33e7789072e8b91dffa0e4b93[m FD_DEVICE
+[33m46744c4a13ec21e0818a49f31dbc3ad6ad592eed[m for spinlocks, use gcc intrinsics, but say what they compile to
+[33mca39672a300196fb3ae4b05c469fa871fa7c13e8[m clean up virtio code
+[33m4adf01692539c57c7612f105ecf3e8b5291ae018[m eliminate ramdisk
+[33mde9d72c9086ec935d5b2b889f50ff611135f80fa[m virtio disk driver
+[33m5753553213df8f9de851adb68377db43faecb91f[m separate source into kernel/ user/ mkfs/
+[33m91ba81110acd3163f7de3580b677eece0c57f5e7[m gdb backtraces: -ggdb, -fno-omit-frame-pointer, BSIZE=1024
+[33m8607051b5fc79fffa319b913b19e99bc5b90e063[m fix a create()/unlink() deadlock
+[33m31ef85f55280b8cef6b71831ddffef1fb292c32e[m add plic.c
+[33mb05bcce93964fcf890c26567adf84cb83dbe5d37[m add kernelvec
+[33mdff7ab3f8f969cb9c1e95e6d7a74b99428e06971[m make -O work with asm volatile(...)
+[33m5684556c19c50d38ad3873686d893481ea7d5509[m clean up -Wall
+[33m5eb1cb49722cce9afee48886a8db138d5f58d0ff[m push_off() and pop_off() in myproc()
+[33m31136437684b5987ef46f4c6947940cf96de75b3[m spinlocks using gcc intrinsics push_off() / pop_off() set up per-hart plic stuff so all harts get device interrupts
+[33mf1a727b971a59bab6025b4c4111342c27356ca40[m start at support for multiple CPUs
+[33mec3d3a1fceee437c640f9c5c05fc517edfb1899e[m yield if timer interrupt all user tests passed
+[33ma82772594e1807632b3650bff111108f250de3b7[m timer interrupts -> supervisor software interrupt
+[33mcff3ce6e04ce4a353324630df788df21566807a6[m more sbrk fixes
+[33m0e131b226336808c135795f5b9d7defc5a58b2ae[m fix a problem with end. make uartputc() wait until h/w is ready.
+[33mb78894f34ebbceb23bcf36ff820fefb942b54ccf[m check that arguments aren't more than a page in exec()
+[33m0f684b9150b56c3fce1db099e93327ebaaca363a[m fix exec argc
+[33m8baac760500980d4b83e8de2e90265bfaa19df13[m support read() and write() bigger than one page
+[33mcefe223bf5e4b68e5c1202f2f089a164ad656621[m console input and sbrk
+[33mefecbee7c0c265b0b2fe956f308e1a73cc63eda6[m xx
+[33m6eae1be7550ecdc85269ce57c4a2f2dd0e9297b9[m push/pop all registers when handling interrupt from kernel
+[33me630e0743b8c1a0f9ebca702811bd59065c9f457[m xx
+[33ma9c1a6f742886a9d45e5c625cf4f9b1b5c7a8cc4[m takes one uart input interrupt, then panics
+[33m50cbc7510250a64674d619d13f5912edf08b767d[m first shell prints $ prompt, though no console input yet
+[33m7fd1f1eb0aab4d52852fc4f5e83eafc991f9a627[m exec compiles but argstr() doesn't work yet
+[33m5d34fa2a489940f19ee6c4728e4b11b6d8ffad01[m -initrd fs.img, ramdisk.c, file system
+[33m2ec1959fd1016a18ef3b2d154ce7076be8f237e4[m fork/wait/exit work
+[33m0f90388c893d1924e89e2e4d2187eda0004e9d73[m No T_SYSCALL
+[33ma7ca32e3a3ec2d3c1947a06fbcde0f779b0b1fec[m Change mycpu() to use %gs.
+[33m821ee3fc99b6363d7799d4f5cfa629e36b554dbf[m not much
+[33m54e6f829e4019e10734588b9ba63c2c186c94f8e[m Separate system call path from trap path.  Passes usertests on 1 and 2 cpus.
+[33mf241e67d911d790376de26698f8bf8ba02550212[m x
+[33m704775b63d2d78445e45a8b65e87a67abbc45e75[m Make names line up with text
+[33m2fa3a8fd0557ebeb6a59c3de44332232f18ac1d9[m Oops, didn't commit these changes with last commit
+[33ma7ef9a40c48bdf380d75ae3d59198db418992011[m x
+[33m7ccc5f5f4f69c8f1f16f2eda534ff9893ff2226b[m Names of text are better.
+[33meb72653bd7a1dec89a79af3c377c3abf8df2064a[m use x86-64 names
+[33m23a58370a4fa441fd0ee152a3e1e7619e5d8bd6b[m Switch back bpmain back to main
+[33m020fc6a1c68c9e996a8ede395acf2d61cc030f57[m don't care about bootloader
+[33m343080f7aefa5e5ea8834f6bec7b2ed292003357[m Remove unused typedefs
+[33mec110149ed7a9439e73724097ab78110c5661e08[m simplify layout pic
+[33ma0389f707fd8f106c0c0527603e1f55ed21bfa4f[m Remove now unused PDX
+[33md448fd5e6cb6595d70172195afaee56c5097e4ed[m Simplify by freeing user part of addres pace in one page increments.  This undoes commit ffe444 and 052e18, which skipped page directories, but was tailored to two-level page table.  Undoing doesn't seem to affect boottime for xv6 visibly.
+[33ma42b7d5dbb8b88aa1fb4dc508600a272c494e3f5[m Simplify freeing page table
+[33m155c13b7f8f8d03d4f1e9d21c72b1413be550d11[m Avoid repition in walkpgdir
+[33m572e106e6f4916deae4d2809623f20771fff1d39[m x
+[33m3bfcaeaf015ffe0d92937c023e9a0086909a0161[m Make sysexit and trapret paths the same, so that forkret can return through either path.  This helped tracking down a bug: use 144 instead of 32 to find cs in trapframe so that gs is correctly saved and restored.
+[33m322990649b35c893931a9ce67d4ccb25883c7446[m x
+[33mab0db651af6f1ffa8fe96909ce16ae314d65c3fb[m Checkpoint port of xv6 to x86-64.  Passed usertests on 2 processors a few times.
+[33mb818915f793cd20c5d1e24f668534a9d690f3cc8[m Update name Use generic 6.828 url (without year)
+[33m308a3b88c9e59b9065f1af9cdd2e0369cdfd0823[m thanks tyfkda
+[33m343255189e3b5dac4bcd132ecc0cb28158657aa6[m thanks Wolfgang Keller
+[33m80f70c46df6eeb9478341b6dd272c53c7b5ec1cc[m x
+[33m1d19081efbb9517d07c7e6c1a8393c6343ba7817[m Allow holding to be called with interrupts enabled (for Mark Morrissey).
+[33m2c73068e825060d188fd9519ebb5bc59fa39c8b2[m Delete a patch Adjust typesetting of code
+[33me559fd2c5acdb5c3faea2d12c038b52308017ed1[m x
+[33mf30488793b6d98a69a71a6676980ce89b8b72635[m x
+[33m76d4005f9e36fcb3b62b607353fd9baeae51232b[m thanks mtasm
+[33m6710e5589d192789fe1e4b5ad7598309d88ebd79[m thanks wxdao
+[33m96e4e2f4d1dd9a8634088dcd19a9e343b711f7ea[m thanks eyalz800
+[33m8f63beaacb158f24ef7ff2e1f3974702c172d295[m vectors.pl is executable and asks shell for perl
+[33m171c2cc6b8fd59b69a5b461a3c74eec6569662c8[m thanks mataness
+[33m26108a3b99507c1edeed0dab8cb25bab5a330e75[m thanks tyfkda
+[33m7f3528bcb36aee13c29cd3355a904c3c513c9a2b[m x
+[33m210a0f0b30eb1af49b6ed42339b1fcc8582ba653[m Remove unused flags (thanks Wolfgang Keller)
+[33mb2ca8e3e23e583991b4d8285be6569fb0dcf2495[m x
+[33m960a94fb87b2edb53cf58dd2621296f62d69673b[m x
+[33m0b86d037672d01450d999f7cfb6f39236ed253f5[m Because sleeplocks replaced B_BUSY the holding test can be more specific (thanks Mark Morrissey)
+[33m0b6f4c08b9f368735c94d02718712b28af612a6f[m x
+[33m0754d21c865e97582968fa5d155eac133e5829b0[m stricter log consumption by write()
+[33m1ab23170a1dda9fb16bd0a87c54040bbf08ebeaf[m improve swtch comment
+[33m4638cabf8c52c5f08f83942103f2375d2ed46388[m fix runoff complaints about pagination and long lines
+[33m164f4bae54286e1635b24efa03a1c565b9048b4a[m thx
+[33m3e392c728846ce491f3cc24ad266014d7d3cbce1[m Update comment to reflect xv6 doesn't have per-cpu segments anymore
+[33m6389d9d4103eaebdd4749cacf475014e525a1c9a[m nothing much
+[33m4f14d8d1e594bdf45e36a035f6c3fd4ca959711e[m Commit to running on an SMP (perhaps with only 1 core). Remove most code from picirq.c and remove timer.c completely.  Update runoff.list.
+[33m70705966adb7a055582f76f2ecdb5ce9cd3c8a85[m comment fixes
+[33mda3b931ddbc66da95b916b95e5258f3a506ac521[m Thanks Anton Burtsev <aburtsev@uci.edu>
+[33ma4ee6f7de32bfbd73499ac7da19e69ad0741e993[m fix iput() to more obviously avoid deadlock
+[33m1c7aa960051d7bf382e1af73b1a12cf28b295de2[m a little more lock documentation
+[33m70d912b332328cb30cd86fdf63074cf10ba5ed35[m protect ip->valid and ip->nlink with sleep lock in iput()
+[33m3375df5061cefd188fefbc55cf57b066d7ed5da5[m change ip->flags&I_VALID to ip->valid
+[33m14270288b7e5327832cdf6a8d9da52ef58fce652[m Merge branch 'master' of g.csail.mit.edu:xv6-dev
+[33maba8423c4a5ae01828040d04f668f07ec544dcd0[m frans' fixes to iput()
+[33m9cec455b17984431af5d652758743f36f810c37f[m fs comment nits
+[33m825ce074b10a0e1f63fd3a1fe245220d04054e0a[m Remove some debugging statements
+[33m61cb32aa9bc457a6b39c5055cbf7fdd718dab7c2[m Merge branch 'nogs'
+[33m5cbccef811ce0347370723c0b931e108c306279e[m Merge branch 'patch-1' of https://github.com/aliceinwire/xv6-public
+[33m02493116750028a155227ac7e20de84a61513440[m Merge branch 'patch-1' of https://github.com/Saarett/xv6-public
+[33m61f26e3c9770371dd7a5477d79fdf031ba4738c4[m Fix typo in dirlookup
+[33m1fb2ea88907aba99e8f18143f5c6b77f8abce09e[m Update LICENSE
+[33m03b30863279b111fb6b9f154a9bdaa831114adfb[m Free pgdir in setupkvm in case of mappages failure
+[33mc9fa90f7e514f27fa1ac071cd9795f3830ab6a1b[m A tiny bit of clean up (e.g., move code searching cpu array from lapic.c into mycpu() in proc.c.
+[33m2e2d14c235b570a6beb222fc1bfa53de85a98de3[m use panic
+[33m7c00ce8110e045a5d0b7b95194561b71d7c0d2b6[m shorten comment
+[33med396c068b881877330f7d40bfce02db9b1199b3[m Eliminate code for gs trick to track per-cpu state.  We rely on lapiccpunum() to find a per-cpu id with which we locate a cpu's cpu struct.
+[33mfbb4c0944422f860484142010bb9f366f3e87bf8[m Read curproc from cpu structure, but be careful because after a schedule event myproc() points to a different thread.
+[33mabf847a083888bbed4260ecacf849ea19f23e810[m Start of an experiment to remove the use of gs for cpu local variables.
+[33m59cdd6c63b89395d64ec9550181af5ed569b8466[m wolfgang keller
+[33mb4f2235e432d7b52b6d55ab160758f641b38a01b[m Fix spelling Gaoron.
+[33md57d37eb870b8d1e17f064ace2052877b953203e[m Thanks to Wolfgang Keller <nubok@users.noreply.github.com>
+[33mc383612a7d61e708bce84318f2b0b0f3d7a7ebac[m Thanks to Wolfgang Keller <nubok@users.noreply.github.com>
+[33m1772853d392d3022b41f3893e41c5a5b65322fac[m Add support for qemu-system-x86_64 in 64bit hosts
+[33m906610efc9dad4abeea0164c09e138a48bcd9882[m Thanks to Jeehoon Kang <jeehoon.kang@sf.snu.ac.kr>
+[33m8d1f99637af48e28c0b4ebbe044e47abcefb5a5c[m Fix long-standing switchuvm() inconsistency.
+[33me916d668f7b184c41ee3d912ccda8cc7ca4aa765[m Fix unsigned conversion bug.
+[33m462930727fa9a9d61912264683d9f26e992412c6[m Cody
+[33mffe444926e4685301c35b17b254ef2067560f401[m fix possible memory leak in deallocuvm
+[33m91fd3470b0c48b93f14b9f941ee3ffd753b7441c[m Fixed broken build on newer gold linker with NaCl support
+[33m907f23a5bbf17972becc5c84b4378c9ff4aa437a[m Add mikecat's argp test
+[33m2a675089b129adf442de575617a7e3db5a42a794[m fix memory region validation in argptr()
+[33m0df5f11baef529f32d81bb1b1580264067477a5e[m Typo (Thanks to Austin Liew)
+[33m7ddba7a636d121a7f4ad8d6be29a0b6ce40093ec[m Merge branch 'master' of g.csail.mit.edu:xv6-dev
+[33m89826f41bd5c96e6b13692d03d08049c912b9365[m Check result of write (thans to Alexander Kapshuk <alexander.kapshuk@gmail)
+[33mfc1a5da295168dbd935c68e3f56c98b328cce7f3[m Fix a small README typo
+[33m912575ad12b7eacc2b0074e3a91843debd52d5f9[m Remove left-over print statements
+[33md6dc5bcb2da252ea01937a7788b02ce849be2d3c[m Merge branch 'master' of g.csail.mit.edu:xv6-dev
+[33maeaa308943a14acfaab00f0d9af8424d21a991ae[m change allocproc() back to acquiring the ptable.lock. fix bugs where caller incorrectly released lock on error return path.
+[33m469aa8b9b3b719a9fd13bfe750751ccd878cb206[m xx
+[33m33188666da819c3f8e58f6ab5bc993f490644d4a[m Delete two left-over print statements
+[33m6cec0211d8978d21d4206631549812877ae26f1a[m Update comment a bit.
+[33mda91a3a408d3f26de8d46cb73474207b5d7c802a[m Add sleeplock.[ch] to listing
+[33me85cb90cbfb4b209066f0136387a2a1a98d890bf[m one more BUSY
+[33m564a1cf0cb867f7738fcbe466aec02081a16d3ab[m sleeplock files
+[33mdec637bc59a23a7676f2ec0c9db10fe8122607df[m Replace I_BUSY with sleep locks
+[33m2adb7c21dcbf50941b46f1e8d5f1b26ba86f2413[m Move retry loop/sleep/wakeup in bio.c into sleeping locks
+[33m6670d3b5e084d9d900d2ea13e624e72e1e28f84c[m Straight replacement of B_BUSY with a sleeping lock.
+[33m551c2f3576d34e4749a1165af07d90e21ad528be[m Merge branch 'master' of g.csail.mit.edu:xv6-dev
+[33m1b8ccf9482facb15f905a6baca4f5d800a13c542[m x
+[33m34c2efc1d063f4b366c1017c174d117cc96eb990[m use asm() for lock release, not a C assignment
+[33md63ac118e817ecab6fd4f890960f4f73b4dfd5e8[m this might fix the reported deadlock, though I can't reproduce it.
+[33m761ea5471fa7c52beb70ed3340b9201789c37875[m Be a bit more explicit what kind of suggestions are are interested.
+[33m5bf3fbee00fb27cb8cb4eca72dcd9fc4c288ed71[m Make runoff happy
+[33mb7fed77b7be4608b2ce6233a594c4fd7935e62c7[m Fix a few lines that runoff is complaining about that they are too long
+[33m5f03799f84796f057924584cc64cf7f3b5ccd75f[m ack xi
+[33mb8fd4cba1367656b464a8ac303e4141107712c39[m Merge branch 'master' of g.csail.mit.edu:xv6-dev
+[33mae15515d80559ff95b315e3342c3baa00b87be1c[m APIC IDs may not be consecutive and start from zero, so we cannot really use it as a direct index into cpus.  Record apicid in struct cpu and have cpunum() look for it. Replace cpu->id with cpunum() everywhere, and replace cpu->id with cpu->apicid. Thanks to Xi Wang.
+[33mbc8221a59c083811ee2d8c49c0342ea59caa6d51[m comment about sched() saving/restoring cpu->intena
+[33m4b2152cc2d46865f3e4be011698b7a49bca794b8[m curproc -> proc in a comment
+[33m37939f24c2fbb12a57a628fedd024a4865741e74[m better comment
+[33m27ff70dc083b650c5c44d5145c2991f32d8ff547[m ack
+[33maff0c8d5c709dc02669fbaa4b5ff2cfdda122a61[m set iomb to forbid i/o instructions from user space add to test that they indeed trap in user space thanks to pablogventura@gmail.com and nwolovick@gmail.com
+[33m745a4d31a6221c2c4b2b78f308c84edcbfb471d5[m x
+[33m7894fcd21732dd2ddfbb9beca52d037a62ed11f4[m Remove trailing white space with:  for f in *.{h,c}; do sed -i .sed 's/[[:blank:]]*$//' $f; done (Thanks to Nicolás Wolovick)
+[33m6de6a3c952dc8786619bd052e26e6bc1c97be2e6[m ack mikecat
+[33m5625ae49731d25e85bcaf8c8cc8f843969588981[m add check for wrapping of address + size in exec()
+[33m67a7f9597e187dad3dfd9732461fec2de6edbba1[m add alignment check of virtual address to exec()
+[33ma7c03bd91490a10383b7241e41f79e57a09cf212[m p2v -> P2V
+[33m7a77375d64675a6d05b47531ebb24205a3f36483[m x
+[33m1fc87f367c9b3a1125f55e0751909af1e7dfbb8a[m Coding style (thanks to phf).
+[33m5faed8ba6489c60e2df4971af0bd28a6af55b00a[m Fixed QEMU command line avoids raw image warning.
+[33m0f3d9d9d68eb429c5ce0c5bbf66cac6740f3d87c[m It will be for 2016
+[33m987064cb127ac765014f3a8e38cfec1503676515[m Update based on a scan of my 6828 folder
+[33m2a117310b5d5fa5e62e7fc8d6d844e5375a2bf65[m Removed useless variable.
+[33m216fdf846f17192ce02e221a0c7d67277f3cd664[m Again, QEMU command line to avoid image warning.
+[33m1ccb5a6fca282df5e76897631aee6fef08ffc051[m Remove unused variable, nits.
+[33m2c60b7f31f6c5e7687d506695bbab8dbc1972d6a[m Removed useless function and prototypes.
+[33m09396a801a2fc1417e1505f41205255a08393db3[m Thanks to Warren Toomey for RDMUL and WRMUL.
+[33m4a3576b81046b786f615a172aee0ba47d8fe8e48[m Small change to support RWMUL and WRMUL.  Now xv6 truly works with a block size that is a multiple of the sector size.
+[33m19f65413bdf7553036f2c388552580905730060a[m hold ptable.lock for the entire process creation however, processes still modify their own p->* without locking
+[33m20d05d4411e39ee8453310e73a6c92e4e3066e0b[m separate atomic test-and-set from memory barrier. * use xchg only for its atomicness. * use __sync_synchronize() for both CPU and compiler barrier.
+[33m9c65b32d9e8d84372e193ae2516b46d504d38263[m nothing much
+[33mc779cc2be1ad47461bd48f386d8f8a5b58a85f42[m main comments
+[33m241188276c110127ae26978e8b18ddab0b823b9d[m nits
+[33m3431cd492703e85909e7d5c0928ffc292ac518ec[m more comments in entryother.S
+[33m0a69dc9b1745e863f0c16e50dba78804ba0925f7[m even more explicit that entry.S is linked into kernel, unlike bootasm.S.
+[33m858475e4dfabb61dc72ab5b4f105e2a0a636e7e8[m tiny clarifications to some gdt code.
+[33m0a4a4230a32696ef7f1f6272ca24520826195b7f[m shell nits fix Regehr complaint
+[33m50edfe1412e5389ce4e3078b223e7b2e72e6ba66[m nits
+[33m5906118897ef71e21a4868eb33f631eaa22b3800[m Remove console input.lock
+[33m02530a4859ce4a629f37dcb6a2773f4b6e4ac71e[m Add sanity check panic for CRTC interactions
+[33mb019ac4f7d6b440a965cf9f5efa6cdc21e66b618[m Merge pull request #3 from beordle/master
+[33m9cbe056cec9261138cbea5753996f7b716aef9fb[m Merge pull request #5 from kehao95/master
+[33m5371a631d7d2c16b106780235873cc1fcf16ee5a[m Update URL for 2014
+[33mabce9b81408e0cca00d6ca0586cb3d695427a716[m Fix comments
+[33m4f2d38147ff7640426fe4ba240c4d0a92afc4fa0[m Fixed broken build on Arch Linux
+[33mecb40fb19d6d15a8dc77b7d90369494d1185bd33[m coding style (per Jeremías Feltan <jeremias.feltan@gmail.com>)
+[33mb67ed0902dee5bca577ac85fae5c41cdc588bfce[m Update memide to reflect recent changes to fs and buf
+[33m8320d61be5613fb2875be859695752b1487fda20[m Pick up where i left off in april: - move log into metadata part of disk, so that marking that the log's blocks are in use falls out for free - superblock describes the whole disk (sizes and offets) - sizes and offsets are computed in one place (mkfs) and the rest of the code refers to the superblock for these values, instead of recomputing them.
+[33mde4af193c87b3a7fa8762ccaeb81a6addf168799[m One ide command for nsector_per_block generates nsector_per_block interrupts, instead of 1.   ideintr() should wait for nsector_per_block interrupts before waking up the reader; now it wakes up the reader after 1 interrupt, which apparently means that the first sector is available of the command instead of all. For now keep BSIZE to 512.
+[33m895af77fe6ff7c73f198e852a40976ed102a49e4[m check blockno passed to idestart
+[33mc24ac5d76353d04955cc348f1cb5b95743c42b38[m Disentangle block size from the disk's sector size.  Set block size to 1024 to show that they can be different.  Clean up mkfs, simplifying specifying fs parameters, remove some redundancy between fs and mkfs, and fix disk layout bugs. Call blocks in the file system blocks instead of sectors.  Passes usertests for different block sizes.
+[33m7443b9649a6d83443439ae95458434038313b42b[m Fix missing NUL-terminator in grep
+[33m3d2dedd42714fc4eb7844b17b62669e287f27583[m fix buf where concurrent fs syscalls race on log entries
+[33m41f16c21832f120bba96fe1d4ba0079aaf34c11a[m Increase VM memory when running qemu-memfs
+[33m8e54196355cb3a4218471f9efa96eee404fde09b[m Make kernelmemfs depend on kernel.ld
+[33m0dd991dd209605277489d4f5a6881dd77ab4f986[m Fix kernelmemfs linking
+[33m053082fbed145108b811978a0cc0558afcb909ac[m ggdb -> gdwarf-2 for gcc4.8
+[33me7d77aad2b2beb56a44ac5a4052fd748f0e81d9d[m whoops. forgot date.h
+[33maae4e7490fbb61de13f61d90092b177eeb258216[m cmosgetdate() for system-call homework
+[33m75dee1219ffee14f9cb3ec6bb739f06bae27de9c[m Oops (thanks David Lawrence)
+[33m9ba21267e796eb462a657392906e3cbccaedcc99[m no need to generate postscript version
+[33m74c77da6f8a21e905d51dceb6016769a3652b045[m Nice layout for a printout of the code
+[33mac83a21a5b5ae0089b67b21c4ce8b953b59d2264[m Ack all bug reports and patches.  Is this all of them?
+[33m698b8fb598c61e0840d37fb393d742e4a2b30bae[m update for 2014
+[33me2b4583d055b8fe3663f4032d952519e77b03adf[m xx
+[33m8d618cab78c91e4936bade94e9dcbf8fb54fbb19[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m2b2c1971fc2c3cc6fa1f2f3e7b507a3a35a0cbb8[m write log blocks from cache only at end of transaction
+[33m11183588dc69085b834e013564fc48526e23ef70[m nits
+[33m48aa917403de1599a02924e429a9f43ea31e9cc1[m i think this is a working concurrent logging scheme
+[33m71453f72f285a17ccf0520b9dbdafdc701ff2f4a[m a start at concurrent FS system calls
+[33m12eeefc72dc31211c5f54ea64e21c8a5668f92d7[m comments
+[33m2c56547272e43b483d560a61692f1e24926a82fb[m every iput() and namei() must be inside a transaction
+[33m020c8e2384877ffc13579f633ac3c723f80baf8c[m use acquire/release to force order for pid=np->pid;np->state=RUNNING for bug reported by symingz@gmail.com and cs1100254@cse.iitd.ernet.in
+[33m86188d9d49fe62a2f4d8b0677d33608b3b949336[m newer versions of qemu have different binary names (per Joel Nider <joel@nider.org>)
+[33mff2783442ea2801a4bf6c76f198f36a6e985e7dd[m Correct a security bug in copyuvm()
+[33m241c068066c51e9e06adf6d45834b97a50d029cf[m Prevent extra rebuild of fs.img by keeping intermediate object files.
+[33mc440b5cd972c61c4fb0504896beac79dc017afd8[m Use static assert instead of _LP64  (thanks Eddie!)
+[33mcf57e525c14eb2a5f3dd9a16fd78de61ed76a974[m Remove -m32 flag from native gcc compiler But check that mkfs.c is building with LP64
+[33m2ae8392a5c203a7b1bc5b8bff5eabc8b5eab8972[m make the book happy
+[33m792d83cad186c175d4dd5612b12a9db3d4258389[m nits
+[33mc1ee7eb4d31bd17e48857479fec8f4c2065d4b7d[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m8960f60b30b69a1f45ffa9d8b2b204714725f1fa[m junk
+[33m951b77f7eced2165312d5c12d6256e874dba10f8[m Various fixes and improvements to printpcs
+[33m020acb4f10832d0c003f24272b75a95859d4188f[m For the convenience of students
+[33m6650cc934afa222bb729f63fbfe85aa15ebbd778[m Use addr2line (or i386-jos-elf-addr2line, if you cross compile)
+[33m3fb7eceea7fb967d6d4567559f544f5742edae49[m Runoff still complaints these lines are too long, but it is now ok on printout
+[33mf3f4b0fd88fd06df515a332ec68b34efa8616e12[m chmod +x
+[33mc2d393df13cd14762af650c78a7c960b820c4660[m Decode getcallerpcs() (thanks to Peter Froehlich)
+[33m95692c4a8cf38765bac15b05d7a898e4ac8946e8[m Remove left-over from some logging plan making complete syscalls atomic 0 is not a system call (thanks to Peter Froehlich)
+[33m432acbaf9e8817e16026bfcaaa8bca0ba7c8a6f8[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m4ce832ddd280a4cea36e16115ddeaea74213314e[m Remove unused argument to setupkvm (thanks to Peter Froehlich)
+[33m70c555574a140b2696d6f1a5aa524902ef4c820c[m Remove unused argument from lapicinit (thanks to Peter Froehlich)
+[33mb08d16f61d0022cb908f35a27efa100caf27dcf6[m Fix from Peter Froehlich
+[33m9d59eb015141697da616a4b98ac27cf4269cd780[m Make fetchint and fetchstr use proc instead of taking a struct proc
+[33m12abb1a56164a0d71fb7a76a465c912409f2f60b[m don't let dirty blocks be evicted from cache!
+[33m38eee5bca75cc16d40101953bc2003bb77d452e7[m more FS comment clarification
+[33ma5fbfe418abd9bdb876407a73b479cdc39046e9a[m clarify some FS comments
+[33md73dd097a529bc9d13f514ae6884c4d96a0fffa8[m Fix compile error on newer gcc's
+[33m0ca1c0407d3da826ad8415e3204e1c53e394e204[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m9b972c06b172531e5792fc0e05d83319d325e0ee[m Update stressfs to trigger race now the logging code serializes writes
+[33m1e6f0146d2e194045188ba24826eaaaee05605cb[m Use | instead of + for entrypgdir.  Linker doesn't get in our way here.
+[33mc092540e396ae748e3775e582681e51abd94f41d[m eliminate enter_alloc -- use kalloc for everything
+[33m7e7cb106d0b2408794d814ae26ee945bdb83886a[m more regular kmap[] and description
+[33m90a81b32285ed8d9644b95777c1bc0c931cb69c5[m comment nits
+[33m9b59dc44dca3299321531900254d71dddd87a476[m Remove unused 'state' variable that broke the build in recent gcc's
+[33me64c661ae8b91bd7e858bb1895bef96e6ac2b4bb[m Rev 6
+[33m8bfcffeae16abf704d21e94e70ae239d740fd771[m Remove nice font from master
+[33m5c87802de2b1d3fc8c912ab2995760aa8d5b7dbf[m Fetch nice font from font branch, if possible
+[33m5304c854a423be0e718f187d47277b30cb71cbc5[m Move xv6 release tars/pdfs in to 6.828 repo
+[33m01a6c054d548d9fff8bbdfac4d3f3de4ae8677a1[m Remove web directory; all cruft or moved to 6.828 repo
+[33m64a03bd7aa5c03a626a2da4730a45fcceea75322[m Make web page refer to git releases
+[33mb81aadf093d847075787169576a1111f98d56e25[m Remove old book chapters
+[33m09b19091631603ef2e8e21e4f6a4109333218b81[m Re-alphabetize OBJS
+[33m03f48901f0a6f0785f265d8923ce2c0b3cfa3d42[m Note about the meaning of sheet1 in runoff.spec
+[33m861cc158beceb857f5d61a8321379c439ef72bc1[m sources -> sources and text
+[33m5f46b272fe315cf477e45ec8523aba21d10b52e6[m Shorten history of xv6 Cut section about commentary Add (failing) link to xv6 source section pointing to the text. Delete the incorrect/incomplete list of universities using jos/xv6
+[33m79bc8be8de903ff69deb01a3945e52effda5436d[m Setting indent-tabs-mode nil everywhere is dangerous
+[33mb1c66ca8992fabe1ae091ef20013e3e6f50a6016[m Sync up clean and gitignore better
+[33m87904b01a3513ce3fdcce08eafa5ef546aa5c46b[m Update gitignore
+[33m310edc99feeaba8326defa82804e1976b69d22a5[m Fix stale comments in entryother.S
+[33m2fc6c35b2fd64a15d7c4cc54c9e8733c3632039d[m Make the ELF entry point a physical address
+[33m68b58727166bbb339f4790ec779a5a16772557f6[m kernel depends on kernel.ld
+[33me33873067b805f89a22b74a6295c18edc7dd6f30[m Add QEMUEXTRA environment to add extra QEMU arguments, like in JOS
+[33m549c62cc1caafe4f8ac8b2a40eca6e098d322489[m I can't do math; fix bug introduced in 5a9761
+[33m215a9ce237b0610eb2061663aed4b98b8adea33b[m A few missed xv6.pdf dependencies
+[33me3ab68e031df908cc2c19d56d88900c0413df14c[m Update year in URL
+[33m49d64d330e12d2401d01667b97870ed162d96e02[m Update index example in TOC footer
+[33m2a2e6eb13d5565161d48280bb02096af221a5072[m Updated runoff spec; everything but ide.c is satisfied
+[33mc6c0cb82c46fa60c3fd3a3df09d74a9ac36a2b89[m Fix same wonky pagebreak bug in console.c
+[33me76dab4fd7c30dd97260a554880ad8728fdc1b33[m Put filewrite in its own column
+[33m7d9ee3b833aed336e14a42599b63648317a71845[m Fix weird pagebreak bug
+[33m5a97613bab27b3bf5f94d1ebc815be92f1e1a7c2[m Fit exec on a page.  Again
+[33m4e015d81aabb19d319fa73f2da11cd6b7ca5c2c3[m Shorten sys_unlink a little; create now fits in column
+[33m9bb1e53df5cd77986d126cb7800066b6190d684f[m Add blank page to get our super FS spreads back
+[33m7fb21193b063841d53d56b1a33b7ee455fd2a0ae[m Remove comment debug prints from log.c; now fits nicely in a spread
+[33mee1b33065cccc798f502a25d2d741c49a86f63a6[m Define struct log separately from log to avoid confusing column breaker
+[33ma14c96f825bd06030f82cfe05fbebf9d265f40af[m Comment balance
+[33m436f657e2d32e4ff0082ef237c1ab3eb77758626[m Remove unused headers from log.c
+[33m788e27def26aabcc3aa683769cd9092567bcc02f[m Fit fs.h in one column
+[33m3c01f5a0eda1757f237450a6b9477293a72ef6cb[m Remove data.S from runoff, too
+[33m30c1901a5a6beaac2ede35bb2a7505690bda9590[m Remove unused x86.h definitions
+[33mdd4438b4fe934eef3f631238d45b3681a3abdd4d[m Nuke data.S, since we do have a custom linker script.
+[33mce6dd9de27a926e77e275de0287ee36fce93ce7f[m Correct terminology in kernel.ld
+[33m6f3ca059f22703c212ac1ea59ea298eb1efb6743[m Oops, dropped a paren
+[33m2eb214c9dbdd7b7b90997531c171196fc3bd0e9f[m clear_pte_u -> clearpteu
+[33m91aa0f3296ea0b38dd8d008224271639e5d7b53a[m Move copy_pte_u; fits vm.c in one less column and aligns proc.h
+[33m9e4272c14e98dd702326ee46d8cda6b78708d9d0[m Cleanup comments and fit setupkvm on same page as kmap, which aligns lots of other things
+[33m14835ec98749d6d58e43dac3c3c6042482b75a9b[m Style
+[33mcf7b6702934018bfbf6955c3d413ac43024a96ad[m Make mappages fit on the page
+[33m82bb0b56c62b3595d04e6224a67397f221298166[m bootother -> entryother in README
+[33m052e18485d19f26d4182a662054369926d0c4dd0[m Skip missing page directories in deallocuvm
+[33m1eadf4a8fcc34f79075bb61d3546be303745e461[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m371ab7fa96f8e439f4008c973c37aa44ab6ed81e[m inaccessible page under the user stack page, to help exec deal w/ too-large args
+[33m6bb9221395b3bde9af6f5a2c3ccc118c0da2aab8[m Fix layout
+[33me04329aae8ceff7816569ab663237faedd3e5351[m Have one definition of kernel stack size
+[33m62e3b8a92c6f8840cec8a0db13b2bcad10192b4a[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m5a236924444db768813d726ae165d263856d8bff[m fix usertests to correctly test what happens when you call exec() with arguments that don't fit on a single page.
+[33md0f3efca650eccd5179e045cd07f7d723037defc[m Use stosl in memset; makes boot time bearable
+[33me25b74ca8069e340c3f2c267d09beed6d9328250[m Fix layout issues for printed version
+[33m15997d58497f4c716c227787acf9591439e5fe9c[m move the kernel to 0x80000000
+[33m5c292b3d7167022e765c7228b0748cb50ab7d7f1[m simplify the end of entry.S
+[33m5e083578278e340e0661f2dede68676432269f49[m enterpgdir -> entrypgdir
+[33m1ddfbbb194e3aa668b33469eb547132a7a7f940a[m Revert "Introduce and use sleeplocks instead of BUSY flags" My changes have a race with re-used bufs and the code doesn't seem to get shorter Keep the changes that fixed ip->off race
+[33m22f7db5336cb20c82eb1ffa45c0ef63825442c95[m Renumber I_VALID since I_BUSY is gone
+[33m920b7b44b553b228212b0c5913f07614ac958cf8[m dir-locals.el to set style in Emacs
+[33ma7061b4f9717e85ebedf87244921d37babc5d8f4[m Style nits; indentation and tabs
+[33m16f205b5c9de7b49dcff44f2f14377799624083a[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m3a5fa7ed9020eaf8ab843a16d26db7393b2ec072[m Introduce and use sleeplocks instead of BUSY flags Remove I_BUSY, B_BUSY, and intrans defs and usages One spinlock per buf to avoid ugly loop in bget fix race in filewrite (don't update f->off after releasing lock)
+[33m41911afa452750086d81be097572573b27e1ecd6[m segment register -> segment descriptor
+[33m8a9b6dbd4468f6312f1d07226a623879f970bd4b[m Make cross reference with text work
+[33m6f2327580fe9a5f5b093814126fe7ffc02345407[m Eliminate USERTOP; no use for it.
+[33m194f8bf739d441283c56985017c4a6f1b35a99cd[m A comment
+[33md10d324e79bdcd7d7ab57952e6b140009737e868[m Remove sys_init syscall Invoke initlog from forkret on first user process
+[33m39f8cc56d30bd1aaf097f17de0c410424c59a3f0[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m3682474f779c02419623ae16de49a12da8d23af7[m delete dead code
+[33m327cc21fba38359c5b7fd4c9f39b1dc00fb4f182[m make dirlookup and dirlink more similar
+[33mcd3d739e6f3d4d356ac8c34b25f16df82a5f2789[m bootloader reads into a physical address (not a virtual address)
+[33mfa81545f1c15630573dc1d312fa75f261f82b9f1[m Make elf proghdr fields match what objdump prints
+[33m5f069dcf2f9d833a6c4f58ed87269d61c6abb687[m Switch back to #define for PHYSTOP.  Using the E820 to retrieve the memory map is too complicated (must be done in 16-bit real-mode, probably enlarged bootblock beyond 512 bytes, and a #define requires less explanation).
+[33mc3dcf479663bc1bc9144c39ba2dd7607ea9c1c52[m Clean up memlayout.h Get rid of last instances of linear address and "la" Get ready for detecting physical memory dynamically
+[33m427958cb71e485cec4e7c68b280b506e555dd8e0[m Update make clean
+[33meeea49e8d5a0780012ae31fb7285300241aa03b3[m Update list of files to include in printout
+[33md9818bdd7d0c3524c51462e6405d7ca9bdaa5411[m Make Austin happier 2011
+[33ma4b213cf49cccc8287e638badaac10d0521d5886[m Avoid "boot" in xv6
+[33m944964685325aa63a59e5e84d8fd0ba5af45ec8c[m Use 4Mbyte pages during boot
+[33m843eecfcd0c23f2b9466e5c3289c1819950ccb47[m Only commit log to disk if something was written in to it.
+[33m7f1718ca33fb333435b05cd9a0541e6e3b9b7249[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m5053dd6a6d2b481bfcddbd91bacc885b9f0e0ff5[m avoid deadlock by calling begin_trans() before locking any inodes
+[33mc60a3551c2dba29006f5d7917308281e47fa5fef[m Separate more clearly bootloader from xv6 by renaming multiboot.S to entry.S etc. Maybe the string boot shouldn't appear in xv6 code?
+[33mc95ce31c5978bd43e1f0d34e51a4e3d7bcc41b14[m Oops
+[33me0d1ba0d7470f84b94c6eedbf220152a805881a7[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m2e59046362f532748711b9acaceee1cda969cc50[m log write() data usertest for big write()s push begin_trans/commit_trans down into syscalls
+[33me577a62f0dc5a1b22ac5687204ec720bb4d8a367[m Some comments
+[33mbd71a45046eb13797284216c43353b9b6c92f18c[m Make AP processors boot using bootpgdir Remove device mapping from bootpgdir Remove unnecessary vmenable Set CPUS back to 2 in Makefile Passes all usertests
+[33m673b739d314b77532f0c60d0eaed4b518b912694[m One more low address
+[33m8a9933a20031bcdc34f360d23a29c87f8335fd12[m Tiny bit of cleanup
+[33m22c73411ca8d2766469218175715b1f7cc3d0ede[m Shorten boot assembly
+[33m5460667c9cf89f1c728e9af117e9978fcec8fd8d[m x
+[33m832af025a364732d2784e64fa74e516f6c2f3b0c[m Remove jmpkstack
+[33m66ba8079c7e376c189ccb3367b8d13825141b8ec[m Use static page table for boot, mapping first 4Mbyte; no more segment trick Allocate proper kernel page table immediately in main using boot allocator Remove pginit Simplify address space layout a tiny bit More to come (e.g., superpages to simplify static table)
+[33m3a038106431314c85a5950c473b113a7037ac1aa[m Use kernel virtual addresses for BIOS memory, etc.
+[33mb23d8329e7df6cf47b7d20fb19664496b4f29ca4[m Allow gas to use / as divide (instead of comment) Maybe not necessary, but don't want to waste time figuring this out again
+[33ma56c8d609b24e4c1c3a8a5bacdced6ae53376ee2[m One definition of several macros and constants
+[33m11b7438b1046eecca6135b52ddbe686008099fa5[m Speedup sbrk tst a bit (forking 100Mbyte processes is slow)
+[33m6479766334c6eb6ff9325ffa097dc6aece9e7af9[m Adjust sbrk test for large user address spaces All tests pass
+[33m67d4254d15313ce24ef37c6e92b4630211c2229b[m oops
+[33m547c28fc1e0cd834b2f1ab56a5c74e6b7839c582[m Don't map IO space in the user part of the address space Passes all tests now (but need to update usertests to allow for more than 640k)
+[33m9aa0337dc1452a911ac52698c833246a618fc9f3[m Map kernel high Very important to give qemu memory through PHYSTOP :(
+[33mdccb915282854476ce47752df6631dcce3b8f661[m Merge commit 'origin/master' into page
+[33m13a96baefc0ff5d8262c4bc8c797bee4b157443c[m Dirt simple logging Passes usertests and stressfs Seems to recover correctly in a number of simple cases
+[33m97657d703f7a92a088b400980c17249f34640a5e[m Add -fno-omit-frame-pointer to compile flags.
+[33m96b7da5f03e8fd1722cb66ef3cb7fcc02d703860[m do not run past the end of the disk! [ cherry-picked de6075ff0978108daea1d658425bcb37663a98a0 ]
+[33mf70ef994dce8f6948edec8c534ae21742141dd50[m Russ's fix for panic remap
+[33mae603ff5e79bb7b5eea4147425752f33d29fe558[m rebuild xv6-rev5.tar.gz
+[33mc5f538735191330cc112485548e6dc46317eea83[m fixes from Peter Froehlich
+[33ma6cd7509c4cb30a7d58aa2797dc979daaa795fd0[m web: rev5
+[33m688b5c03dd14677d3a74d0dbce199c3d6ad31d63[m updated book pdfs
+[33mcf4b1ad90bcaeeb0c8458098c87948f61d408f94[m xv6: formatting, cleanup, rev5 (take 2)
+[33m9c4fe7ba105c0430c90179fd1e93c3d439a8cbd5[m xv6: formatting, cleanup, rev5
+[33m97b21b5838759e71144d02ff554f594c56fe54ae[m xv6: refresh from 2010 page
+[33m08864affaab14743b59b83f6985dad03545a6d71[m xv6: link to xv6-rev4
+[33m4fa8614db068e92c2628456df7a7d5483e4afe5b[m missing file memide.c
+[33m417c37115e0c7fc3b2a65c3c4d213e566cbc8807[m more trivial cleanup
+[33m89bfdd4db183cbe75a3a0c2254ca48a50e37276f[m multiboot support and memory-only (no disk) kernel
+[33maf6a6a477531aefa6e961c464de495e0c09af673[m mp: do not panic on surprising hw
+[33m1a81e38b17144624415d252a521fd5a06079d681[m make new code like old code
+[33m240679608cd46649d1144408f28f83141f9f3a86[m mkfs: avoid clash with system struct stat
+[33me92fd6142de05627096a1e831140e5bd355e45be[m mkfs: avoid out of bounds access to sb in wsect
+[33m2ea6c764c34d3025b5f3121a0919fda7d1eb9b01[m even more fabulous exec
+[33m06feabeceeccc8dbd2658e9f10dd139c14f01ba6[m check exec() arg length fix double iunlockput
+[33m4655d42e3b65f906eae8c815fb78331790f6e423[m copyout() copies data to a va in a pagetable, for exec() &c usertest that passes too many arguments, break exec
+[33ma9183883b88bfccd1c6a62e27621b2c892d50b67[m map kernel instructions r/o
+[33m26d11ee8dc60fed78c8b34d15670eb6640d92129[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m05d66b06294df89ba3d5b8f6cf535f7edf00bd1f[m my comment is wrong, exec handles BSS fine
+[33m4587b35847b116057e3ef1058da914b8837ff343[m exec questions
+[33m4c274cef7425614e328eb2127362d36b203543a8[m Simplify boot loader by removing some JOS'isms
+[33mfaad047ab22cbe989c208bff5ecb42608ecb8d7b[m change some comments, maybe more informative delete most comments from bootother.S (since copy of bootasm.S) ksegment() -> seginit() move more stuff from main() to mainc()
+[33m124fe7e457c0dc9b671c7ffccb56004eb61da4f0[m Rev 4
+[33mcc21c06e3b610951d4b870b90083f7f502388252[m Update example in TOC footer
+[33m588644f4728e2707138628c62469ba4eeebe18e9[m Consistent style in defs.h
+[33m8440dbfee13a5c728c5060af515f9273889a4679[m Get consoleintr back on one page
+[33m08eef9eae5989d3a709588352e228041e62e2c2c[m Get cgaputc and consputc back on the same page
+[33m5bf11c50b512f06fd96675ca1ddd9ab1a2cf6fa0[m Get rid of the blank page in picirq.c.  It misaligs things now.
+[33m79cd8b3eedeb1f85d3b19fb6119bd5224c4c532a[m Simplify allocuvm/deallocuvm to operate in a contiguous memory model.  This makes their interface match up better with proc->sz and also simplifies the callers (it even gets the main body of exec on one page).
+[33md49d31381df93b40c1c4bc18c97ca42c3256e414[m Nits
+[33m9a4670a138f7ab25062195be2f4d42403dddc077[m Comment inituvm and loaduvm
+[33m93a1e4cb07e329dc9550643f7fe8430da547497a[m Fix comment capitalization
+[33mf25a3f9a41de02116c39b0e65243d111e1cb1026[m Rearrange vm.c so it's in logical order and prints nicely.  Shorten a few functions in uninteresting ways to make them fit.
+[33mf53e6110bed159c8541c6e0d2fc1b1ffac2d141a[m Simplify inituvm and userinit by assuming initcode fits on a page
+[33mb3cfd7fc372424d754f5478c93f6fbe756d9c80f[m Simplify freevm using deallocuvm
+[33mc7c21467c3d3c9f2a04d6fac3b8ef796470b0448[m Oops.  Broke the build when I rearranged proc.c
+[33md599aa2e40fc116d84c609358a9fdc51824b621d[m Remove unused nop_pause function.
+[33md8828817d72962a6220cb1fca315cab4bbf6d0a3[m Rearrange proc.h and proc.c to get our action-packed spreads back (mostly).  They also make sense in this order, so it's not just for page layout.
+[33mdd3ecd42cd6c8dee72e5212848cd8037d47f81dd[m Re-re-arrange bootasm and bootother.  We can't get bootasm and bootmain on the same page, but this will make them easier to flip between.
+[33md2c7f6497810f05b961df11db75def7ea79b8ec2[m I totally misunderstood the even/odd spec.  Add some docs, remove my 'left+' hack, and orthogonalize left/right versus even/odd so you can specify them independently.
+[33m9d7a63e0734b4c7abe5ae00eda302e7d7a22a482[m Specify in runoff.spec which side sheet 1 is on, since it keeps changing
+[33m0fa1ab632f6e328321cdec779e66ed07cac89d04[m Pack five columns into cross-ref.  This saves us an entire page and fixes the single dangling line.
+[33m1280d2680274cf44aa1a9531f06f7699d1f9051f[m Oops, missed a comment about the stack guard
+[33m4d245c79f989aff781a50c855d254b813639ee90[m Add Nickolai and myself and scrunch two lines out of the text elsewhere
+[33md3ecf3eb44379f12b47da9d08e4d1b52cf7c2601[m Slight simplification of copyuvm.  We could simplify other things now that processes are contiguous, but we'd have to think harder about the error paths.
+[33mb1d41d678888fd1a51e4844ab583f7c47f9fb218[m Remove the stack guard page.  Processes are now contiguous from 0 to proc->sz, which means our syscall argument validation is correct.  Add a pointer validation test and remove the stack test, which tested for the guard page.
+[33m41c4bbb505f4389a5c1660b407cd4073d7a72aab[m Make it easy to change the number of CPUs
+[33mb0751a3e9bfce88cb07c1a540ceabf21f2d53b31[m Space police
+[33m5efca9054f1911e206831e16c2ca5ac8c8fc7c12[m Tab police
+[33m5c4dc7395b75d8b41c1104fe59a0d14d81a8a428[m Merge branch 'master' of git+ssh://am.lcs/home/am0/6.828/xv6
+[33mba04b3e70e4f1916c777d62de53088d96b09579f[m Fix similar leak in copyuvm
+[33mdd645ef11911596d73d128c1da53579678c56aee[m Cleanup if allocuvm fails to alloc.  Add a test.
+[33m23c3e52c2fb5f1709bf5053a8e93161931b56bf9[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33m3597d5dc704c192a85b9902f7264fe9025aad277[m oops. last minute simplicifaction to kalloc().
+[33m5048762c7e27789a014cc1e74e1002e749c924ce[m Page break kalloc.c
+[33m87b2099ae44039b119267d41a710a56b4784dbe0[m Our proc.c alignment is perfect.  Since ksegment/usegment went away, we get a column back, so we get our two action-packed spreads.
+[33m13b3f4d2e32eee81ba039ad3c6a6c97bfc9d4638[m Make it possible to express half-page preferences
+[33mfd462b6a01735cc7a14b9cb11c99242c5ed03c03[m Got the meat of spinlocks on one spread
+[33m6a6bf37c3c3dcab6f464d031bf94c56a770b6df6[m Swap bootmain.c and bootother.S.  This puts the whole boot process on one spread, though it separates the two asm files.
+[33mc7ceb71d5757db21a2228ec33bde2f4da1677094[m Sheet 1 is a right page now because of the (much) longer cross-ref
+[33m51e2a7b324020a90bf963d514a0959d930120d71[m print depends on runoff.spec
+[33m29c054df817d55ae6e0fc3bd4c9e2343a2b4ca75[m We don't use lesp/lebp and using them at all from C would be fraught with peril.  Keep resp/rebp, but fix their code style.
+[33m7914ab721436d3c21623010dfab2dc326bf49279[m Page breaking of mmu.h
+[33mb5592b4d2f0ea5f536b206979f829038c55d7ade[m Start PDE defs on new page
+[33m92639b6ba95d1d960a9e808c7163f6d171b2e4a3[m Follow xv6 code style.  Also fixes indexing for these functions
+[33m37ee75f42e9d35a96b84fe0c95479178cd41efac[m Rearrange for better page breaking
+[33m7472b2b451f100162fa4542f5bfe260385f861ad[m Fix too-long lines
+[33m04be8fb232ef0f1f52444b0e513a9a256c5a031f[m Rebalance TOC
+[33m7b814133e42568b2eca3362731cc0968f6e034b0[m Acknowledge patches
+[33m1aee6a6c4f1227dd4737ba5c88306acfba893828[m Hopefully get the printf size spec right, regardless of compiler.
+[33m8d774afb2d45592d85725474a704ac99b0624d2c[m no more pminit, or ELF header at 0x10000 kinit() knows about end and PHYSTOP map all of kernel read/write (rather than r/o instructions) thanks, austin
+[33m880ee18ab14477b669a6b95707721322bfe086c1[m mkfs must be compiled 32-bit.  Fix mkfs warnings
+[33m1e8035be535781e2b317881ab421ac33c7de0299[m Infer qemu path, just like in JOS
+[33m0f0456ec53d2739282eccf62b22f7c933d7cbae5[m Infer TOOLPREFIX, just like in JOS
+[33m9acdfe0d04f3fcf95c6e392e08afb45bdfe16c20[m Merge branch 'page' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6 into page
+[33m7d7dc9331bf33f77c9c3a71350782dadae8dd371[m kalloc/kfree now only a page at a time do not keep sorted contiguous free list
+[33m791d81cadeb3b30ad6ec67c61086c6747f3d5ca2[m Merge branch 'page' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6 into page
+[33m156b307e28c52597fddea68baa5ca1f052520657[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6 into page
+[33m81b30b14d6925a0f5c9eb114724457d90869949c[m Merge remote branch 'origin/master' into page
+[33mfe4623b99c012dc9c9730f59ad701ed279bfd68a[m Fix for gdbstub argument change in qemu 0.11.  Rename qemu-gdb-nox target to qemu-nox-gdb because you frequently want to add the gdb part, but rarely the nox part.
+[33m3c9ff073e09abf15f241aa1812e04d8587c9925d[m oops ended up with 2x vm.c
+[33m979c5686b7a0960e599916f93ea06476e9f25764[m Merge remote branch 'origin/page' into page
+[33mac090078c63c9b467fd723f6bb7f949c05e9b04b[m xx
+[33m4d972493b66d4841c135cf56414f9f54bac948bc[m no more xv6.pdf .ps
+[33m8d8d6c7be31a4fe8aaff131ad72e271e14202b35[m we don't need CR0_WP
+[33m5ab868fd905c68a6fc934d2c2df514c9efae6598[m set only PG and WP in vminit; the rest don't seem to be needed and are confusing
+[33md55b2fac074ac23e30c337014f40ae2156b31b60[m Merge commit 'origin/page' into page
+[33md87f51c5a1c5e7a2a3ba111b1052a297f4f96fb0[m add vm.c
+[33m789b508d538e6faf635e49f268a4f1f9e9b65f05[m uptime() sys call for benchmarking increase PHYSTOP
+[33m83d2db91f75460e1275d67847adec0fca5a9800b[m allow sbrk(-x) to de-allocate user memory
+[33mc4cc10da7ef6d65f0f654445e0af35b8309f16c2[m fix corner cases in exec of ELF put an invalid page below the stack have fork() handle invalid pages
+[33m1afc9d3fcaa7c5992659bb8b69f639b746dda2bc[m add some comments find out the hard way why user and kernel must have separate segment descriptors
+[33mc99599784e950169d85bf1e4446e7dbfb1a40f59[m remove some unused vm #defines fix corner cases with alignment when mapping kernel ELF file
+[33m2cf6b32d4dbc915f5d3b2d7b0e382c0ad20299be[m move jkstack to main.c replace jstack with asm()s
+[33meb18645f17877de4ced951eed5abac61bdfcd5c5[m fix allocuvm() to handle sbrk() with non-page-granularity argument (maybe this never worked, but it works now)
+[33mb738a4f1a2dd2956123a734327aeaf9d09b5faca[m kill TLB shoot down code
+[33mde40730dad816ab576f64bf02041bcf812c929e9[m more cleanup
+[33m30f5bf054856805b69ef2c5a7485c8d2fecc7098[m some cleanup
+[33maf03ab142de8c68ad56a829e39e8faee9db252d3[m a few nits passes all tests on two-processor smp
+[33mb364c4b88156919949aa6f3c805efae009e7459b[m oops, vm.c
+[33m4714c20521a047fba652854e5bf59158b5d85a4e[m Checkpoint page-table version for SMP Includes code for TLB shootdown (which actually seems unnecessary for xv6)
+[33m74c82bc1584dda4cee6b0788055a52c32a10b2e0[m nits
+[33m40889627ba50db29a64bc6a1553c2b21e6a99b78[m Initial version of single-cpu xv6 with page tables
+[33mb7a517f2277670e156f150ee2cb7aae6426c6aef[m another rev2 -> rev3
+[33m5d142a707d3ea2745c892165738b79f028810d28[m point at rev3
+[33m7d7465a8581e672b073b3cbf83f1460cb86aed16[m 8ae0 instead of 8e00, thanks yandong
+[33m5e710e688ee946ba2557bb0c924063105ff7a99b[m Add stressfs and gdbutil to dist
+[33mb0170c4b821aaeffd7775597d1e35f201e1508ba[m GDB utilities
+[33mf4c12f116d328c0b56eabac327a9cc4882c57128[m Add the test we used in lecture to creash the IDE system when the locks were moved around.
+[33md6cd7d0804c774ddafed204f577e274ad6d81aa3[m Merge branch 'master' of git+ssh://am.lcs/home/am0/6.828/xv6
+[33m745e73cd3da656b9f115abb1b92df3aa8ef88e98[m Comment typo
+[33maaf63e62d763216448854bc6f921943a5140462e[m Merge branch 'master' of git+ssh://amsterdam.csail.mit.edu/home/am0/6.828/xv6
+[33mab777a9ad0355e6df16ee53bad348d5fbb1f347f[m fine-tune comment
+[33mfb4868745cd9c8224e1d93066d0b4f4539be5689[m fine tune comment
+[33m2c536bff67ed209b1c5aa3d40e40731813bfcd9a[m Remove memcpy prototypes at Russ' request to prevent code from calling memcpy directly.
+[33m6639ce56d986cdae197e4f013dde536178ad23f8[m Provide memcpy for compatibility with older versions of gcc
+[33m77a9aa55cd0c18ef33ebfa484b534511af4af53d[m Record debug info for assmebly code
+[33m29d8c2eebbce0274a50558bffc94099083a2cb16[m Handle backspace on serial input and output better.  Better solutions are welcome.
+[33mbab819ed8d77abe65ea16945f42e76b3d4d1ff8b[m Be consistent with JOS make targets
+[33m3adc415471c8b53ef024cde0846c206372cbf04e[m Hack to make newlines on the serial port work
+[33m67f7909fe113d1e91cbafeaf3377da813cdcd382[m Use the symbol file
+[33m01396b3a8787d3b6e694675d3f28ddbc90f6b832[m xv6 runs the console on the serial port, not the parallel port
+[33mccd980bedfcff49ec75cfda4e631b54f0a69bf82[m nit in comment
+[33m074ac7ccd43c08d01a237ce6f14cac10715a51ef[m add .gdbinit.tmpl to dist
+[33m8252f6287d51731d96a4d4b539ab8b57bb1b06b2[m add uart.c
+[33m01b667e45d87a788e8029091a43d96d707f52402[m rev3
+[33m37ba1c1ea602a9e68b75bb736f4b1d1779eb0567[m ignore .gitignore
+[33m568bbae801dcde879a3738d482ed2b0570875c6c[m qemu-gdb target and script
+[33mc51e175bf06862150643e2746056171500e0b928[m new pdf
+[33mc9ee77b8a20e63663b6ffa35b81f8164fefd319a[m formatting tweaks
+[33md26025d12463a902133bdc5b60d377d473294a8d[m can set just %gs now.
+[33m7e0cc8e36ea91d0299f375f3b3476ab58ab71dde[m another attempt at cpu-local variables. this time do it ourselves instead of piggybacking on TLS. add -fno-pic to Makefile; pic code breaks our fake TLS.
+[33m374362c55c7e1268ce6c52b029458ef22144c114[m lapic: disable microdelay because it makes Bochs slow
+[33mf8ab2079cda8fc89f576b3b78a23a9c62891d74d[m fix TLS again; still not quite but a lot better.
+[33m57ae146362df2350737e5194ca81d925b9466124[m Fix TLS for PIC systems
+[33m45a978263651815caf7d0741201175c8969c2cc3[m fix bootblock build with gcc 4.4
+[33m48755214c9a02d6249caf3126d3b41d67eda4730[m assorted fixes:  * rename c/cp to cpu/proc  * rename cpu.context to cpu.scheduler  * fix some comments  * formatting for printout
+[33m0aef8914959af9e472852611eb6352c211093d35[m shuffle and tweak for formatting. pdf has very good page breaks now. would be a good copy for fall 2009.
+[33mb3bebfce8a790975ba941d346e6bcff1b5afecf9[m exec tweaks
+[33mfd8e3681010b2beea2f409038b5936831c9c8d50[m remove //DOC in the right place
+[33m4ed996f552cac7fc6e9713355bdd36e303c76b72[m strip //DOC comments during printing
+[33md42cbd75b2921d881d133016b5e6dc3e85f89f1a[m merge
+[33m00e571155ce6f836a7f78e7a725c1b3de7868b5a[m more doc tweaks
+[33mee1e68266304b925d0384bf59d1d1521ef22870d[m undo
+[33m7fff3131baabc583cb3dd7d1c91f549ce6eec3cd[m test commit email
+[33m2c5f7aba38f8e7207a81fdef36d7720bda9dc4e5[m initproc, usegment, swtch tweaks
+[33mb121486c3fa2eb3c8e57fe2ae9ec0f7357da1fc1[m spinlock: rename parameter lock -> lk
+[33mb8912d999f918bd755699099a339d193eb593e8b[m mmu.h: unused SEG_NULL
+[33mf9a06440ab746256ecbf9fccdb251487cb2c29f7[m rearrangements and cleanup for text
+[33m2de1c550cab8a5812dc9965313fce00816a003eb[m trap cleanup
+[33m887f19686cf377db55953dac651ca8147c268092[m bootasm cleanup
+[33m8b75366ce4ae7ad5f77225b247d097955574ba0b[m s/IRQ_OFFSET/T_IRQ0/: it's a trap number, not an irq number. move the SYSCALL number up, so does not overlap the IRQ traps.
+[33m27ff8f0e6f56e5f84688bcd41a7b4018b4e61173[m compile fixes
+[33m34295f461a416e40bb76e67c568a761222dc6913[m group locks into structs they protect. few naming nits.
+[33m949e55902bb0c976f74b5217b82deac65ff8d781[m usys.S: put before init.c, STUB -> SYSCALL
+[33m90bab90832d1f3863d8345bcc2a2e5f59c270af8[m exec sanity check
+[33mf3685aa391431d5eafbc918e1d143dd731c64787[m simplify
+[33m7f399ccaa4fb14527238be333fab207ae3a57856[m use ftable like btable and itable
+[33mce72cadbe075ebe8ab9a2c8fa826277431504e9b[m fix bug fix
+[33m13ae8808c4ebb1c2a48abad1d16428042d943e0e[m tidy fs.c; bmap callers always expected allocation
+[33mf12551b5996ae6121d33afc94002ce6f7c64dcfd[m inode reuse bug.
+[33m0badeaa29fa6bd7e72e460f4c4c68d57fec8e388[m bio.c: use struct like icache does
+[33mc47bc4fd54c1787e429a9b78080614f1f3eb96bd[m ide.c: make names more regular
+[33m7b644318dd3b17fe5ec0229db956119986082738[m clean up %fs %gs use
+[33me97519a6d2efd56eb5b5ff2e4c4b20048a33c7af[m sync with c; .text is implied
+[33mba6cd8a685cdf86f308ba8c8cd1faa39adf86fa5[m drop NADDRS and INDIRECT; too many names
+[33m030a47736fbb0febddce2647e5a80b98ca409695[m tab police
+[33m215738336aec0d5118a90a79d380c41910f6ee4b[m move fork into proc.c
+[33mdae9b0d48a94683c0a49e88e4b739482788d7175[m missed this file in last checkin
+[33m19333efb9eb634f17bea41d0cec8ee28c595cce8[m Some proc cleanup, moving some of copyproc into allocproc.
+[33m0c7f483838c48db05e7ea44232a55135d7c262a0[m move T_DIR etc into stat.h; move type up
+[33m74afa70d3051553df46d1ea0d76149a7a86c0a47[m Add serial port input/output. Delete parallel port output. Works well with qemu -nographic mode.
+[33m0ca9ca0c55922f72dbf324c4ac1aecf8069d1dbe[m slight rearrangement; sleep on b not buf.
+[33md827c8f3c82208c1df5c13b191880824f864fa91[m Add MIT license file; update xv6-rev2.tar.gz with LICENSE. Other files unchanged.
+[33m2157576107d6e81c643e14e134b60b8ae519c256[m be consistent: no underscores in function names
+[33mb7f653dc49dd4af29a3b7bdd66cd712bea166623[m xv6: boot loader adjustments
+[33m8220135362c02b5e4a5532a561c6c1bd4b4d1540[m xv6: use stosb for memset
+[33mc396d065d3f5e5a0f966857d710a434a2f2db066[m xv6/x86.h: add stosb, fix bugs in insl/outsl (rep not repne)
+[33m4003e9bed8a306048c7dfe7143949778f96f7273[m xv6/x86.h: inline assembly cleanup
+[33m8eb20827c273df183986f95fc13cad8b28ea8ae6[m Explain why itrunc() is OK w.r.t. crashes.
+[33m15a269363777c0cd95e2a56e7def0a4dc3122e21[m try harder to get directory refcounts right
+[33mf3e87bc838a09163f91ab79696a34f8c19386c55[m make mkdir crash-safer, as noticed by many students on midterm
+[33me1626709d6bfcf82dc630e3ae15887e05bb3aa47[m free the indirect block
+[33me670a4835858b48e1568742dbe939800e2d44c13[m as rtm noticed, avoid doubly-freeing pipe page
+[33mdeca9fef83450fa9659b750497d46e7887064aa5[m indent
+[33mc100d9ee2d7d02253b55349bf55796efb3be5699[m cleaner swtch.S
+[33m228e500a0c2b5a26492c84f73951a46c58c86509[m save cpus.intena in sched(), so we get the right EFLAGS.IF value once a timer-preempted kernel thread resumes execution in trap() after yield(). otherwise the kernel could get an arbitrary number of nested timer intrs.
+[33m15ce79de141f66c7dd2f2948ce4584a2d31f7040[m check cp->killed before returning to user from a timer interrupt
+[33m00ce31c09cd46331a0b509ac7987dd3ce5def1f3[m update .cvsignore
+[33m289bbef733c00be99491499dae63ae3ae1952fdb[m minor cleanup
+[33mf73b81205e6c3ffc14b6f657f50ce3dd1fc99722[m minor cleanup with STUB macro
+[33mc780dbf96735123f19ad022cefd555614725fc88[m include explicitly initialized globals (int x = 0;) in cross-refs, also thanks to greg price.
+[33m6186836d28944dbe3451bc154c0268ac2c90a313[m fix: when two names only differed in case, crossrefs only included one of them. thanks to greg price.
+[33m2ce40d7088932b2875739379f54f7d74fc2e374c[m be clear what the root i-number is
+[33mbe38c8413e1841dc8171555e8da66f3ca8a2e2bb[m document lock->locked=0 vs xchg(&lock->locked, 0)
+[33m0159c8bb941772d91537037ff2489a9261d740ca[m trap 9 does not push ec: fix from Greg Price <price@mit.edu>
+[33mc7317d4dc74bcb1d0e939c6b06a724fce1510a4e[m always save and restore %fs, %gs to ensure old segment entries are never accessible to user from the hidden CPU segment registers.
+[33madcd16c3f7588b4a28d37495f05e94278c9e3a1e[m restore std toolprefix
+[33m4651d04ad13f4f49a54e745397c5fecdfe60beca[m omit *.d from tar file
+[33me9ae6f5cbe1cd6098dd4310c72688869e9b489ca[m add copyright notice
+[33mf68317533e8dc6cebd37b2d8c95d09ee666f90b0[m make bochsrc work for bochs 2.2.6
+[33m35a6cf84ec5ee903d2c06726f89a7816fd39d267[m make pdf, ps, tarball
+[33me87dca5cc55fb4452a38d4a1130a61cf82faa563[m nits in index.txt add slides for shell, x86 intro, x86 virtual memory  (deleted JOS from slides)
+[33mf53494c28e362fb7752bbc83417b9ba47cff0bf5[m DO NOT MAIL: xv6 web pages
+[33mee3f75f229742a376bedafe34d0ba04995a942be[m simplify growproc
+[33m98754d687e1999eecf8de1b4557218f4f5c055c5[m avoid a bug w/ exit()
+[33m56082468ea935c09ab2ed89ee83f9b0869f580b1[m the old explanation of AP startup might have been correct, but I understand this one.
+[33m02cc595f28f10067dcaacc7e147a3db7da277244[m clean up circular buffers, so pipe can queue 512 bytes rather than 511
+[33m5c5470a2fa608204326c6eb06647037532a14655[m fix obvious printf nits after reading through code
+[33m1808b2f1b3ba3eefe777ffcc87073ae45a788ad5[m now rev2
+[33m150785a1fdfd8b6d81ec60668932d547b887092e[m add nice font
+[33m9b62657ecdbbdafda3a2e7a27ff50195468681b3[m formatting updates
+[33m5b7f8cbe7cda336b3a23c1b16fa36ef282b13803[m bochs faster
+[33m174729fc55509ceb6787467785200716de2d76d0[m xv6: latest (as of January 2008)
+[33meadbd55af2b5d5a7e20f9b6803686ceed01f43ec[m oops - wrong bit (vic zandy)
+[33mc2258bf4d249c34f26a4ed3c2d6ced81744c654e[m fork minibug
+[33m4f06ae0d4252796ee3245ecd83ec5ea105d6a75b[m More complete lapic startup (thanks Silas)
+[33ma6c4711a38d3f8f3a4737558a4682ea38fcfaa7a[m bda[0xE] is a 16-bit segment number, not a real address.  So shift 4.
+[33mfd6b029401e359ce25cf0c3d8c0f047b2e2a5632[m proc_wait -> wait
+[33m949352af6695cfbfc91a5c0e24ddae95c497b008[m Model verifying that wakeup really can be called after release without causing deadlock.
+[33m943fd378a1324ca60da72b271769fea4a86e36cb[m Incorporate new understanding of/with Intel SMP spec.
+[33m9fd9f80431ad85552c0969831a3ccc3e800ac464[m Re: why cpuid() in locking code?
+[33mc840f3ecdc718c4a6eb6fbd9e0cbb0a012c3adf4[m tricks
+[33maf7366c945e93eaee149e1b37c9dcf03c809b3a2[m interrupts during system calls
+[33mab08960f6402f5c7cbb7b6e81694a60b6abed4c8[m Final word on the locking fiasco?
+[33mf97f0d2b3d3afbad3ef154b047f1b0408fd7288b[m cleaner
+[33mc95bde8163eca7a19c95f3b05156e0ad33312589[m yank out stack overflow checking ugliness
+[33m4f74de0edc243ffdae0233eb5c84d09c44677ccf[m okay, that was long enough - revert
+[33mce2e7515552adca3a60e349de2931112736d17bf[m test: store curproc at top of stack
+[33maefc13f8ba13475fa721d6da837db5e368ee1b0a[m nit
+[33m3807c1f20b5f7dca7ec7ca4bbe38bc5904e980ff[m rename splhi/spllo to pushcli/popcli
+[33m39c3fb1b157927058f24b72d43be6f15c1d422b7[m overkill: use segments to catch stack overflow (delete before next year)
+[33m8c8b748a2f0f10188c1a58c529239fff3a3b1b01[m now spllo is okay
+[33mb5dcebdbebcac9beb7efd6b27aeb390293dc8334[m better lapic writes, suggested by cliff
+[33m47212719617ddc3900a8ca4012944c69b93ea765[m use larger, allocated cpu stacks
+[33m0fe118f3f6ce989282ca9825a8004e140276ecc8[m don't call it ss - that's the stack segment
+[33mc8919e65379f13005d1ba6f50a87adc72cdfb93d[m kernel SMP interruptibility fixes.
+[33m75506c6655eadf08cbef7772781a30b5527a72cf[m use console lock
+[33md522571068b91098b725e311b3afc8fe78913281[m make slow bigdir last test
+[33mad12b487b5d99ede06b4353d1ccb4179acfb1851[m changes since two days ago:
+[33mb30ab3f5af135b797f58f0977e2fce5be282a9c4[m use standard bios location
+[33m666f58c711eafbdccb8abfe530b935505ab6eaa6[m believe it or not, this was working
+[33m90d975e9c8a540efb380435f0dfc1369bad684ae[m comment bochs nonsense
+[33mfbaa7b428e3292dec10781f5fa5c9a3eae982426[m various comment and print tweaks
+[33m56c1a151d2e3e0d10bf1b7c69e64fcdf35cc1f61[m debugging prints
+[33md5596cd61dd588781cde4b647075e39f07608c0a[m Apparently the initial interrupt count lapic[TICR] must be set *after* initializing the lapic[TIMER] vector.
+[33m355073ea9e7528e45143efaa9631efcf159a2b68[m oops, interrupts on in syscall traps doesn't work after all
+[33m3eda2714e67a499e833ec33bc27f4c6bf45638eb[m tell SETGATE to leave interrupts on for T_SYSCALL panic if unknown fault with CPL=0 (i.e. in kernel)
+[33md7a90d3b5c73e2f5698d1635812164c0cfee32dc[m This should fix building on FreeBSD
+[33m6197c042088bab45cb7d183e08032146b561f8b7[m Fix compilation on 64-bit machines (thanks to andersk for patch)
+[33m411ee74127720fe68a7d971cadd91dea4cb7a608[m fix comments
+[33me9f8419fbe33a94f4d0b18ec8c509156bdb84d2a[m sh
+[33mab4cedb5930cb21f0a4810f64be0ab6cfca026f3[m continuous quality management
+[33mef2185247d468309a375b0e16d73e8723cdf29a0[m symlink implementation
+[33me51ae8a2724005dd69c72b28b4a5f218136c1fa4[m do not toss .ps
+[33m9863fea78cf88b40827d0d61ced2608278094ea4[m clumsy cd
+[33mfbd8857d4d5edcbf97185d95fa57406d36e75b7b[m make new Homework 8 work
+[33m37321196a4d2a3893422a9f628de41a8a128b47f[m oops - broke circular buffer
+[33m71d5bf4d08b3ce328fe403f464f4ec95f2d8ca29[m oops - broke arg counting
+[33mde1329dda231ed4b376727c7d2fa50ed27505740[m longjmp -> swtch in comments
+[33m05109382d6392163f64ed5be66232a2d33f108fe[m tweak
+[33m42f3c3f7be9717b66ba6e133a113c0f751c53133[m DO NOT MAIL: xv6-rev1
+[33m55401f2adbf9917de75d8bc98fd8775db31b3c9a[m final xv6 for 2007
+[33mfebdc07c35a2a3e95a3525d2244951dd56a4872d[m bootothers now in main
+[33mbc54fa391561a4b4700184ad130452bd4d5d48a6[m spelling
+[33mbf2932a6863e3af0226cd1635f7a404a475f5ad9[m final nits
+[33m68a2d5373d4f7d37a263d13e013882b86232c482[m match README
+[33mf04006009263d18f3b38b905a3ed18e029963351[m nits
+[33mcffa9543012ee0bc2a1d355ed00839b03fe7ae0c[m nits
+[33m5573c8f296091a484e486dcf153ce60b7c632df3[m delete proc_ on proc_exit, proc_wait, proc_kill
+[33meb52c7de1dea182cc3519dc07c62b7f5fe2dfb15[m comments; rename irq_ to pic_
+[33m5516be1fed10ac87848668964c495266d02ae915[m spaces around else for rtm
+[33me4d6a21165c01dd743a68e323fb06708ef820ab7[m more consistent spacing
+[33mc1b100e93044469de30c634107bc645361cc1a73[m nits
+[33m3e1eaf226d501fc4f57592e1c75c885f8b2e5d99[m fix offsets
+[33ma491dba00c4ff5c76a6287f40d045aa9aedc0d61[m more cmain -> bootmain
+[33md844f0f9d955d9ddb2cb4cda1b0e544e7f9ed6ce[m Change dev read/write functions to take inode* instead of minor number.
+[33me3f271e88092683d1d1866ccffffce8528698f48[m oops
+[33mc35c064e0498db832a9440c5d031d5aaefd1f515[m cmain -> bootmain
+[33mfc210467548dabbbf196227ec279b3c3301c9951[m nit
+[33m818fc0125e7d73fdf4f1a94f178254e5d05c9831[m replace setjmp/longjmp with swtch
+[33mb52dea08bc1252bd842bf86f34d912c9ab7a02df[m never returns!
+[33m0c931af50fe311c402c2a4ee8e263e28f46aa410[m nits
+[33m6eed1ee9b0e752109285bb44421cc9d59b0c171c[m formatting
+[33mc2f354e4e1abb4eaea466d36c26623e47917f74b[m clumsy blank pages to make some files align better
+[33m2d7d2b18cf5f1a565458574323e6f5b3bd6352a3[m rename 8253pit -> timer
+[33m9e82bfb04cc5644f32823fa9ec406261f05073b8[m rename 8253pit.c to timer.c
+[33meae04163a758cf1fa8cc47c8668e1e769f289bc6[m runoff
+[33m1a89baa7c650dfdaafb07591c387d747a96f16a2[m add grep; add lost echo
+[33m51c0c1a8fefe26ad057f064db9191b3904739a31[m avoid double echo
+[33m7834cca60426ea156822ba05d702cf56a914467d[m remove _ from pipe; be like file
+[33m76f09d7dd00f84bf69f7b83983c3b4843223f616[m clean up Makefile; add wc
+[33ma1af36650054eb683233105749bfa2169d20042d[m add struct stat decl
+[33m4c917f6df277025dbec740bfe35456ccb52b164b[m do not call proc_exit until lock dropped
+[33m1baead533fe8d10d91b10967ac9c536fa2e41585[m oops
+[33mb9432848937dc5250a90f9c9325af5bd4a59ade9[m handle printf("%s\n", 0)
+[33m43baa1f22417ef920c718731d3a2741c52c516fb[m nit
+[33me6ffaa9d8eb4755e82cb7f4ebb47e70e7c8df42d[m oops
+[33m3341e30f6e080c93e61e60410052bc7290dd7e16[m nit
+[33ma759b8a45098b7f52a92c5415f48becd2a69b02d[m formatting tweaks
+[33m2868ca0f37232ba67b3244c6563d4b4c3c65b941[m comment non-check of cp->killed
+[33m8970df0c1bc3b69829d2ce9cc09550c7fcd48f70[m No one is going to find this inode. There is only one ref to it -- the caller -- and no links to it.
+[33m1b25f3b057fb61f0f099922058b52478fb1c98db[m New shell.
+[33mf0d11fea8251ef959cf1197b62e523922855df3a[m Move keyboard code into kbd.c; add backspace handling.
+[33mc1bfbfa2f7b995ee38ef138ca3250274213dc010[m oops
+[33mfa74a74984641565797adb3713e244008c9459ea[m move mp.h to low-level
+[33ma8acdf02eec50333066a678adf263a16b323c87c[m no more ioapic.h
+[33m773159fbeee3ae4a22ffba37d36bd1c997d32440[m make code match comment
+[33m3a2310f7465ed92db7ce9ecfd619e8ac2011a789[m make code match comment
+[33m64c47374772c2311bf6d751869eabb95b017c2a7[m make code match comment
+[33m19b42cc0787da77516c0edadd6f206a09c4d936d[m Rename main0 to main.
+[33m558ab49f13634d972e956020a12d14fdb1416b94[m delete unnecessary #include lines
+[33m99b11b6c64c17b94288c659e9398261e69a0cf75[m Simplify MP hardware code. Mainly delete unused constants and code.
+[33mb63bb0fd00cb34ed1d776e6836f5a2bb90de98c1[m Clean up lapic code.
+[33m112873bc6501b4763205f3f5ca6a120888217c68[m nits
+[33mda942337841c41c4ed6abe3b0eee9a753d551b6f[m nits
+[33m3ce164707868e188ebdba315141d2d8ca1704285[m nits
+[33m603deefc6b18610ce89f44c18fd933929588d3ea[m oops
+[33m629c1fe743c681c950805b2f3802c90026e58224[m Edit exec.
+[33me79b16598cce3a69d5f4711a6795cec9037056b7[m nits
+[33m13491bf367a64f65cf77b8a8fbc89c146db4fae8[m formatting shuffle
+[33m1ccff18b2404e18fc889901f85b72777193c0b3f[m fileincref -> filedup (consistent with idup)
+[33m7895178df374a1a89c193e5c83a37a35243aadc2[m nits
+[33m6c34f97cb889456c2340a3935d1253f99ec13522[m tell what an inode is
+[33ma505fd66511db520df12f3fcb83d49b395e4da8a[m FS cleanup.
+[33md003d232fc34d92426aed61af13d3815355c1db8[m Another attempt at the bio.c comment.
+[33mefc12b8e616ed3394468c1802da8e1f39e387cd3[m Replace yield system call with sleep.
+[33me1872bb130da5a9b198ca484da8534304ea9fc79[m formatting, fix comment
+[33me0240674f5b30adf92714162cf51dabc43b17aa7[m make kfree loop same as kalloc
+[33m7bb73cdbc78a1f0df07539125e681c084b66d876[m nits
+[33m8e67005320c56cac63654bcf61a8128bd89e4ff9[m cut bootmain to 1 sheet
+[33m8d2e9a4867c21f1ff84b78cd82f386394d768b3a[m shuffle for formatting
+[33md7b44dbcfc6c0eec97c60832409f75fc64444d1d[m minor cleanups
+[33mcb30c81860a965e46e53d6f71633da7898299890[m nit
+[33m872a63e104ab34b9588f404fa2d7ac05e789eacf[m nits
+[33m766ba5cc06b45439cd3987aa782147041dab65c4[m first ever correct use of strncpy
+[33maa6824ab64be037bfce9b0d991e6692282f8c1ab[m remove unused variable
+[33m07090dd705df557cba5ce4ea46b2a274876343a5[m Remove struct uinode. Remove type arg to mknod (assume T_DEV).
+[33mfa1b34106ad99cf8021227b4c1e62353ae4d0fda[m not first anymore
+[33m97ac612fb16748e6b011de4deaa803ec5f0afef8[m nits
+[33mffa58d3616e5d829faa8e8a201f25c785800ccb2[m align
+[33mdd8689743404e31dc227a4f8ccff1b6d756dfee9[m make wakeup1 static
+[33me0e7d07e5afc1a073b659cbf0b8594071f05a816[m test that fork fails gracefully
+[33m5af5f6aa7f52db85f0f22555ae39395dbe68b731[m Reorder spinlock.c: acquire and release first
+[33m4bcd0f6a77e20c78632b64fe6ee57129556a531d[m Add yield system call, for zombie test program (bad idea?).
+[33m1b789e1d50df4e7b98fa131fc29caf29a5f38bfa[m Remove puts in favor of printf. Allow multiple arguments to ls.
+[33m8e88f9e2c617cc1002039c6e37c3c831319b1f8f[m comment nits
+[33m4d39b63388237f5a30206b9df9999bc9f007b7bf[m nits
+[33m895c182d74d331be10826e80f8247aaae4b195db[m finish comments
+[33m124f32ae38260ff32ddd176d37ebb98d19675178[m tweak
+[33m902b13f5d6bab19f7a218acc655421cdb63f4313[m simplify ide queuing nits in comments
+[33m2bc72bdd29d605f7106204cc8293f9e5be4113e9[m bring bootasm and bootother more in sync
+[33m5d1f4b8a3ae587c918293f79e44e87e6f185f7de[m Rework comments a bit.
+[33m2036534834841641edf3a6d1e142c4798e146b7b[m add missing iput() at end of _namei()
+[33mb55513796f2234d1fbdb816015506f981befb60d[m oops, O_CREATE doesn't truncate, so holes can't exist, thus no bug
+[33m3d5f21ee1f1d0521653c54257fe3728fbaa9a556[m test concurrent open/unlink of same file (ok) test files with holes (not ok)
+[33m68ae4cc127af9ba0cea53e009568d660a86af57e[m comment what +m means; omit needless __
+[33m2aae7205373580cb5ab34731b202af9afa32caf3[m omit needless ampersands
+[33m649bc99fe4c0eba9431745ac55bd771852d47bf9[m align, sort
+[33mb1fb19b6df716c0ad30b05236c356bc34457c70b[m Use parent pointer instead of ppid.
+[33m3a057d12aed586b01d808d55a8b4c700523bbd95[m avoid hardcoding init as pid 1 proc[0]
+[33m1d7839a1daab5ebc37c4be4eded849714ff8f329[m my mistake found by robert
+[33me9ddc7c099b8f34a76295b60e0d93e033a9272b7[m NREQUEST = NBUF
+[33m15868c4bbfff7f913487497d5165a36be1be0424[m better comment
+[33mf0721f1be4c017d7e8d9d79b249fa04dda14a9ec[m tweaks
+[33meaea18cb9cbb86018dae8f1decfa217ecbe85fa5[m PDF at http://am.lcs.mit.edu/~rsc/xv6.pdf
+[33m3dcf889c1b5c2c5ddf5b4756f2a731c344f6f08e[m cleanup
+[33m6bf2e5c898db477300189de1a5083a9692a6cbb6[m add ln
+[33mc88bf235fe2e5df91d0f486c3a5fc5a5a2e273da[m check unlink of non-empty directory
+[33mbd39955ecc4848d79fc361cfba51cd74b37b94de[m ARGMAX -> MAXARGS
+[33mfbf910395282f5ea28a63b7a12580e63d9cd7d67[m remove namelen parameter
+[33m0073beee5248acc90c6bd57bb618014f3357c8f4[m remove dead code
+[33mf32f3638f4c34fbf2fc4398878e6304612bb3283[m Various cleanup:
+[33m2d61a40b2059b9a198e7c4ff04c6ced88cb3ce65[m bug in usertests!
+[33me2a620da49f7e01fb93761e15ed9d40b3835400c[m checkpoint - simpler namei interface
+[33mef30c2c7499de88862560e0560d7de7860ffad1d[m no more w
+[33mbcca6c6bdeacd537a9c84ec9205da06616ecb8bd[m shuffle fs.c in bottom-up order
+[33m0655445ba911b59378c57e0c58258c7d6c171880[m cleanup loop
+[33m2186f88c211b26e2807fbe8f0752e51dcc533ce3[m formatting, cleanup
+[33mcce27ba9fb61921436b86f48e95d85b44f535d92[m formatting
+[33m07ddc0fa820df0c506895e06e7e5ef09182dcc77[m nit
+[33mfe5f50a03dd4a6a96385b0bc825fdb7865cb22d2[m fixes
+[33m5e8c5d8bb8a54bca73ddc3e2ac0750b56bf96dcc[m formatting; split kbd constants into kbd.h
+[33mea6e370964465783e28afc5e7c92d50096899059[m i cannot prove that release before wakeup is wrong, but i cannot convince myself it is right either
+[33m4bc5056c19457f2c7128449259b770174d3361c9[m formatting, simplify
+[33m8d0a83565a2b8e0ee2b7e6cab93c6ba7b5a58224[m formatting, sleep bug fix
+[33mf1f8dd91bc4e8b58972f17416b664f3a950092cd[m formatting
+[33m29ff8d495c8cd67df6ee3830daea64eaa422756d[m ide_write unused => gone
+[33m8c4b5fc5b33c49f74af3547df9e60012758ab5d3[m Gcc expects to be able to pick up the return address off the stack, so put one there for it. (Bug was hidden by bad segment limits.)
+[33m2ef3a64bb4923d3458bac1393dd9e205f0acd93a[m Because limit gives the address of the last addressable byte in the segment, the limit argument to SEG16 and SEG needs to have 1 subtracted from it.
+[33m64659055bd8ed3717a691d0311666d94195aebee[m ditto
+[33m3163085ace9f530bdf6dbc83c62d5e3842728860[m Cannot use "g" as an arg constraint because some memory references aren't actually valid and gcc is a bit too smart in parsing (%0) and a bit too dumb in knowing which memory refs are not valid.  Using "r" seems to constrain gcc to use a register as in (%eax) and not substitute a memory reference like (-36(%ebp)).
+[33m5e03dd86c8de6180ddbddb16974e5af1a010f60b[m add test for rm .
+[33m15b326b630d7b52321b0bdaa3af82415a0e3c110[m nit
+[33m8908cc9b15a67bf8180c42af06d37f476e493e54[m correct line numbers
+[33m8139713c46aa63abb65d53fc237a21ffe91aa0bb[m add note
+[33m2715cd35921ee748154ebdce04ed84a1e543338f[m and spinlock
+[33mdca5b5ca2e3687f27ebf589fe3855966932840d8[m avoid assignments in declarations
+[33m6861140a667cd7219cf9bc1e051faadfc8c46c6f[m replace bogus loops with slightly less bogus loops.
+[33m3d145283a25ed9dcd8e0544e3db9d6733ab7d8b7[m tweak kalloc
+[33m9736728d23af42f740fcb217f418e3e8bdd9984d[m cleanup main
+[33m7d4aef6cfd36c19583fafb7ae49a69c6ce47b680[m various cleanups
+[33mb6095304b7ee2b69d2ee4a9a7265999d1a2b9675[m Make cp a magic symbol.
+[33m3bbbaca14db70c6f255139c66a62b4cd5191462c[m move variable declaration up
+[33mbc0117033440edb34ef1c0f72c0ceac5a7ee6831[m The final curproc[cpu()] is now cp
+[33mab5c2dbb592fde4219fd3b2bf8d82e2299f6f9c9[m Clearer namei
+[33m806f4c11f7fc737ac4f964d3489f5f37260ccea3[m oops
+[33m9583b476bf0caa3fca61f08dcb8afe138f4b4fb9[m try to use cp only for curproc[cpu()]
+[33m22330658fff5039b69e6b68ac3f5197c417003b6[m spacing
+[33m4249490230bc24524ed62a36a2e2e8483ce177bc[m notes
+[33mf2f062da61eaca1dee675281c3b6b95d220ab322[m check p->killed for long-lived sleeps
+[33m1cb183a987bb08cb0b25a6b8bd7e4011325c8ca9[m 2007
+[33mc65e499f3b65f210f95be77477c39640df1da3dc[m help gcc
+[33m95c07f82670df0540fdb8fbb61f8d3fc335e6880[m move ialloc body up, avoiding double check for end of loop
+[33m32eea7665a9349c507bcf31b5f0422827484f6cc[m panic like bget
+[33m3f98d050e19e6abda1c9c563009958b90bc8e250[m refactor bget to be more like iget - make it clear that sleep loops
+[33m9ad44da676bbc651f3727ba093a26152dd427116[m unused
+[33mc16e0916a7d82d8001289943294ef727ffe0a3e8[m cleaner table
+[33m19b1f63813072a57c5b2d620049a4cb7f55b8af6[m cleaner table
+[33m453c6a65a20a70260e0b86a16192a65660efcbe1[m convert syscall dispatch to table
+[33mc664dd5d23d50a6baee02d0ab8e921db51178f61[m missing void
+[33m61dff66b35bee1ba6c58271a6864d905e2c0d1ab[m fix error message
+[33m115e177400d50838986840ff382ee644f291216b[m standardize on not using unsigned keyword
+[33md80b06a1e0232f4c5e9b9c8ff635e4022e13667c[m iincref returns new ref
+[33m35a24c8318dd784b62c57b1933ded6e880faaa55[m fix index bug
+[33m2e51e12f0917229ff2bc8dfca22c9b35172e9445[m make ls work on directories
+[33m3fd50978a8756be8859cc5b98fca51d2e7127623[m spacing
+[33m5d0fe3445bbe19b85c32ed066b134d7e6ad8cc9d[m more bugs
+[33m5f0c20ec14dc1c97519e0843d715fd91b430e77c[m fix . .. unlink bug
+[33m5bbba977d1257659485a924d01f1975e5d5f2c91[m done
+[33mb6dc6187f7b0868f0a08e80a20c2a13c32e519ed[m add DPL_USER constant
+[33mf83f7ce2f6ef5b840d8af8ed2573e1934865406f[m set init name
+[33m00d0f794cfd7a1df3b73f28028c8768bae3fef09[m fix various bugs
+[33mbda5186c0d6baee0f45b543513ffb0f629c9f348[m silence warning
+[33med960d2c191a595a3c4e0714417cabb08e8271c0[m watch for zombies
+[33me204d0a151a0611085510840465ee418cccfefcb[m atoi, for kill
+[33me0924827eef75ac29f17909c6f932222eda72fbd[m add kill
+[33me695b849af8d88a5e7b719d396c1035d37126b36[m spacing
+[33maf689dcf7e3a6a8bdec8afff0f0e799f31929203[m oops
+[33m39c84ccf48ca854eca47917a7585d0a2ce32f74a[m fix wait bug in init
+[33mf8f7fcbebdae7d3c8ac697373d0769d1ccfc31ae[m handle EOF in shell
+[33m349ee132f0c7060ad04c5667da24d8cb40654be8[m add zombie program
+[33ma7d18bb6f081e1520af7eeed4e3a633aafc81124[m comment tweaks; more informative process list
+[33m7366e042d9a7a21397115ca49c0d9344a9365ada[m save process name for debugging
+[33m7e89fb90bd0beb91e5d67af362d6a8a3a1b4c626[m add safestrcpy
+[33mcd08e6e065370611ea0cde431af222cf3420ca56[m typo
+[33ma059f0259612a8c5df71605daad5487c13520405[m change gets to return \n, to distinguish 0-byte read from empty line
+[33m07018064bbc27a4b8aad99832fbe3a0e608775d9[m add EOF handling to console_read - works with cat
+[33mca3d5776711f2580f6a9a9bbea410af1a88dfce2[m add rule to generate init.sym
+[33m71d1122a03c16424091fb98dab29709a0478953d[m add bootmain.c to runoff.list
+[33mb4c1a88d6c3f9a2d07e088162ab94bfd9ad5467a[m forgot to check in long ago
+[33mcc9c9814b2d1ca6d0124a06d2ca01b48eae20d20[m bug reported by nelson
+[33m4b5443c3cdfba07bd02a024e628be4494033d19e[m record tim's bug and patch
+[33m7356f26a680b3c22053ad30170625b1f520102a6[m a few notes
+[33mf8ac63967522b517e8539591ef7156ee9d72cbae[m a few other nits
+[33mb438eff6bf21dc66697b4a37510dd652677deb7c[m Have kernel build rule create kernel.sym, which can be used in Bochs to make breakpoint setting easier:
+[33mc25e0a5ff86739517925f9aa71234d33d87ca7a8[m accumulate bugs
+[33m05eecb6313b55f0e1ff26faf673066450482aa5c[m a copy of xv6.pdf that can be sent to turkey and duplexes correctly
+[33m5cc0bd5ceaf805ab44f851e6a3f1952a29e9d7b7[m sent to printer - CTC job 6955 40 copies
+[33m2c88030df0a756924050bbb2de07d1d441f984d8[m dist tarball
+[33mca0140339d18e13259a3b8feb0ce9e47013f0edb[m fix toc example
+[33me936743429a8f66f1a50d467c02d1ab3da69889d[m tweak
+[33mb02e13f0f67d86c895b1272ebaca6f4902d7dbb1[m shorten
+[33m3689c7f5cea4b0b48ab1c96ff6346f0a475b7a62[m unnecessary struct jmpbuf
+[33mba969aa6a85ad5d6cdfbefc063e50d23f30e9311[m make lines shorter
+[33m5788b3604a5c57165bb65ccd5a75464ded18fa35[m nit
+[33m4fb684548aef31639fec850a6011259716f4291e[m formatting nits
+[33mefb01c1dc05ad96268a84c866f0c9d467e76ba42[m only need a page
+[33m5c596bb3a7b3e08760ac5c033680c9957e4e2842[m consistency.
+[33m5cb7877e0f1dd09a513859f018d3981a9c9d17ad[m use bootstrap processor as specified by MP table. typically 0, but not guaranteed.
+[33mf80873e60276a644ef085750881ee43911fed492[m update line numbers
+[33m5eb6212dfef41a016bfcb214d84236c02828da2c[m xv6 style
+[33mdb2d8e4b8271aade61c1365aafdaf4e41909994e[m dist rules
+[33mfb6ddf3ea2ae8b1bbd15cb029147e3782cce3921[m tweaks
+[33m66d46d691def24c1d76b43efd911dcab641fbe7c[m fix file names
+[33m8be7e703ca6db8bef090d77b984800a8d32fd671[m wording nit
+[33m8e1d1ec934d5ebcd4d8208f88857be12c8a97a06[m some comment changes
+[33m50f88503664aae07e22e3ed2575853e396f909b5[m move ide_intr lower
+[33m4194835901c7151630c22ae7cd8fbba7d3b736ab[m tweak fs.h spacing; add comment
+[33mcd12eea3c739bc08f0d1a4492073d2ff18f4c453[m make trap fit on one page
+[33m1656b1b2326069e82933cbaf34a68ca3abe2aa9d[m move growproc up higher
+[33mbe29b8e263ee60c30e8f55162bc05ee4515634c9[m ++
+[33md6d636aad3e47eb2b4b1c88ff8e1c9c505c58931[m make setjmp fit on one page
+[33mab299eb39a077f70ffa1deb8cb7561482037c413[m can break after }; too
+[33md911d83ca1ff002f170f2c77975c1a6d705856a6[m fix various comments
+[33mec5783cbd2b52b3e566938fc8d07851e117005e2[m runoff changes
+[33m72a590d9e50de4d361bb8f0f81e156abf5014f39[m quiet
+[33m2cbb4b18424833d7135ea4002d38ecd1d97dcfa9[m stop using fd to name files
+[33m5692823b1f7014121f15e6579415c93012543531[m minor makefile fixes for printing cut last line of readme so that readme fits on single page
+[33m2e898063ae0c6c1f7f9926b3a09370f88ef3374a[m a bit more structure
+[33m4d33ef86128f75b16262506e1a80729f5f76a274[m explain how to use
+[33m339a9beaf59732dce501caf3ce995a0d4d90113b[m new targets bochs and qemu
+[33mf3c393ba9f7bd9ae9b08a688eb955b8c73c04dec[m fix tests
+[33m641e29c5833dd7342d996ea2492899de04f8e585[m add copyright notice
+[33m95edc8921f3ac7d524815ce21c10ae96b81b5828[m debugging help
+[33m41abfaa92e4b4b88f4b97f5d0829a6a4086f1be7[m missing def
+[33m21eafd48e2a08f1c74430492550d63248b5832d5[m fix disk bug
+[33m3c821bf9ae6e99d38b1cb0d5a8ca94c48b7d9690[m better comment
+[33mb6cac0a53b45a8f35e348dc3235243c066aab747[m check preconditions in sched
+[33me7a5b3c5ee2d440892ab7e9bb98ad82efb25219f[m comment memory barriers
+[33m0b75a8e8bea4f4c8230daae8d81eda04c19e622c[m no recursive interrupts
+[33m5a71f9330162dd9f8a302c3ed1fa33539acdfdec[m debugging rearrangements
+[33mab17e3198be3ae4bf50bf02241c5c1abb3128915[m debugging prints
+[33m1542186378ba1c53744d19b3f2c8382976bd5d21[m allow long names again
+[33m0517a730db6e59e31bac11e43fd0ee9de7200b19[m remove bogus test
+[33m0294e3e2906de29cafd1662956e9539d817d1dba[m comments
+[33m19297caf0d141e23fa2f5da6e2fb0ffa181d7a82[m fix ide, pit interfaces
+[33m6c8acf9e046aaf31f528e1890c923525552b0dd4[m check super-long lookups
+[33m0d6bbd3172b995ef8a1450ebbd29811eb3875d4a[m clean namei search loop
+[33m7a054598fa35a7c538d79589619ef3be1ff47866[m fix build bug
+[33m70c3260dc40460bf2d893812c1dde5261e6327ba[m fix pipe bug
+[33mbb207a1d42c9a75a64af35de4f12912176ebfc8d[m comments
+[33m52253dce6581ab381091720d3df9f3037ce38f7b[m remove fstest
+[33m224f6598c1c6f794bcbe39c510c682efba6c1de5[m refactor syscall code
+[33m31085bb4166c18b3dee059160d64b4edd7c5e2f4[m more comments
+[33m7e019461c8bf0afbe73f959ca3394cce832501fd[m fix build
+[33ma64cd81342188c80ce6aef13f1b98300018d786e[m one regression test program
+[33m1dca3afbbbbbf6ae7ac9d55e027d724a4cbc3459[m remove _ prefixes
+[33m05a7bbe08b952b321824faff86dbefe077dd4051[m comment fixes
+[33m94d7e2597544199ba793aa43ebd43c08abf052de[m avoid system binary clashes
+[33m7678a19ecf6fc9d8f0ded5b590df4e3499701139[m better page breaks
+[33m44e6909a6d33689cefb283ecb91dfe1d874f8e0b[m more simplifying
+[33me00baa9f5d15d745a26cbb0a9ae54e3ea4fb9696[m get precedence of <, >, and | right simplify
+[33m1133b215d8ce5f72d2252cf19b81fc29289d0b38[m more defensive programming
+[33mf70172129c94e4d53b56fc10a7d859679b581bd2[m run without lapic and ioapic, if they are not present if no lapic available, use 8253pit for clock now xv6 runs both on qemu (uniprocessor) and bochs (uniprocessor and MP)
+[33mf9bc4452b5437570f1709430e9364cc3e323cf3a[m nit in console interrupts
+[33md6b20251f0094661b32b08973f536102d6e9dfeb[m fd.c -> file.c
+[33m26dfb4c80df3b6cada200477d9a1b694a1232d80[m runoff fixes
+[33m2a55cc55012ab090c67e25c845cb6cbe3e8fdc56[m runoff tweaks
+[33me9d2250e150c9c0d2050d1c9d3435820c2d9f8cb[m goodbye lgrind
+[33mf3fc72c5b6045092b76d968df91a6d312428394c[m clean up after mkfs
+[33m0cfc7290e8307b66ade6d5eb736c89cc4062c302[m wrap long lines
+[33mdb8fb62e4d599f4e08a3b6420e42b2445e8d7fe3[m for vs while
+[33m236d33698b4520f8722e5ff8ce2c5d277c6b7153[m weird spacing
+[33m50e514be986e4d5b136879d1221b721b17493a78[m fd_* => file_*
+[33m9936bffa45c928ead9660a0df32d08a50b2b09c2[m fd.* -> file.*
+[33m39593d2f1aab1355d61b75c041b31a88d2043a04[m struct fd -> struct file
+[33m89ebd895b8d1efe2d562971e6cdcb6571982b5b1[m what is NULL?
+[33m42d5d65b9ab683ba7ea7e84129a8e86728081b62[m renumber system calls
+[33m2685309fb47a0f60d3b59138d8029c5d901fde91[m split syscall.c into sysfile.c and sysproc.c
+[33m61d03d0eeff3137a6453a773dfe8a51746804920[m rm rm
+[33md4c64e5d434d8b9ef4488dddbe8807aed9fd7e98[m writeable => writable
+[33m48b824703b35e17965c738743c7394e1fc0017ec[m break single-line if statements
+[33m96d467b3a9027412eed8bf5ec3c4521db44469ef[m more named constants
+[33m799c9176bcd14a4e7642566c5046e83b1a88f6ff[m more tabs go away
+[33mf552738889f56586728d1b5d2a63cde0cf124929[m no /* */ comments
+[33m9e9bcaf143bf8507e947f9934371744c3d50a8ea[m standardize various * conventions
+[33m03b6376f56074cd1dcbb1b35639e303c3a8a0181[m standardize on unnamed args in prototypes
+[33mcea3c34644c1a9658330fcf2df49e13aef1bc3c7[m spacing
+[33ma650c606fecc7e3938345e2bc52050a9ea725e7a[m spacing fixes: no tabs, 2-space indents (for rtm)
+[33m45854caa93eecc3f80d34940b7cf6a400b640d69[m print "0" for null string
+[33md90113b638ce1324544f8aaf75daa0d414907a33[m tweak
+[33m0992df4b90beac0447297806943ac4b6b2ced46e[m clear np->mem after freeing
+[33m21a88dd053069c17b619a89bf2c8beefb672fcd5[m some pipe support in sh bug in proc_wait
+[33md49a2d53867b2b3a7d627be217c12b3a95676766[m nits
+[33m56ac0d72fc2c6c3535e06f26140700b4dc096a00[m change sections and order of files in printout
+[33mfae7779da70cf76468f8ec0ca8a888bde2bc64fc[m New formatting scripts.
+[33ma81e02133a2e8cb20ba62113a67bc9bee746c8bf[m a few nits
+[33m82537b7156b98f5b1277641fef99d0b75a402a95[m nits
+[33m97c74a3a642c17dfcd605018c3fb45a1f4f4d5e2[m nits
+[33m0b6ab8416e50dcbf790163282f461647e180dbc6[m don't send keyboard interrupts to the second cpu, if we have only one cpu. xv6 seems to work fine on uniprocessor now.
+[33m7abf49d2f22af633f2fb3546f9f9fd818cef25df[m remove duplication don't use the same name for two different pieces of code
+[33m801affcd147606873b10db04c9fbf80dede969f6[m centralize credits
+[33m97a5bba6d25588706d2765097b4e940793f2fd9f[m index for printout some cleanup
+[33m2aa4c3bc29b67dcc4810aca96fd0ae8aa7c32b5e[m complain if no disk 1 lots of cleanup
+[33m18432ed5edaeb2a6ffd91f557880c277d96784c1[m nits
+[33m7a37578e9efcba67d82fbfee7d03cba830a41106[m clear killed flag in exit idecref cwd in exit
+[33mdfcc5b997ce9c313b9ac0e7d8da39c4416b472a8[m prune unneeded panics and debug output
+[33md7ce6545e7179e9a4b950838c354b485e3f3fdb8[m better printout
+[33m3b95801add8122af978f9c071d96e3f58acfd0cc[m i broke sbrk, fix it
+[33m2b19190c13a12b276ac5cd3a69187d2ab504f36e[m clean up stale error checks and panics delete unused functions a few comments
+[33mb52151e032025f97e42ddc0147c9e49fb958a948[m some text in readme generate postscript printout
+[33m45b6fe7e1a339db9d96c9747195ecbd54c945133[m remove smallcap version
+[33m03c70cc2e629e2ad8dcd5718be0132f17b9b8328[m consistently ignore more than 14 chars in path component forbid create or write of existing directory mkdir("d1/d2/d3"), .. should refer to d2, not cwd mkdir increase parent link count
+[33ma6c28c9779da5f0b98a1698d66eae0708e395e7d[m mkdir check error from mknod chdir return -1 if target not a dir
+[33ma84585de6380dfc1c9988015ba0d3c77ecfa5395[m fstests bugs
+[33m80f292f830058bce5874aa091602eb9f61430b8e[m fix writing the indirect block
+[33m5051da6de3fcabb9e280d3bf36549da0ac0d5738[m inode addrs[NDIRECT] -> NADDRS fix race in mknod / creat use last component in dirent in mknod, not path
+[33m74493bf4460f4024e06760289735e9d5dcb9dc3f[m kill user process when it generates an unhandled trap (e.g., 13) fix bug in test code of malloc
+[33m81d521999844f1dfa9c419463bbb8e355817062a[m bug in sbrk test malloc
+[33mbcfb84b6a9077b5e035325b3396c062d1f183ac4[m big directory test
+[33m1be766853771bda6023b8024041453413fb777bb[m fix bugs in indirect-file code clean up test program
+[33mea2909b6b5ceb54383ab23fd195ebae29cfdb7ca[m user-level malloc (untested) nit in sbrk indirect block fix dup to share fd struct
+[33m8b58e81077abf4e843873f16c03077e2fafce52d[m i/o redirection in sh better parsing of sh commands (copied from jos sh) cat: read from 1 if no args sbrk system call, but untested getpid system call moved locks in keyboard intr, but why do we get intr w. null characters from keyboard?
+[33mf18ab5c04e5380e0fb27f63e8335e5d621315c1d[m compiling, but untested dup
+[33m16083d4462b9a57ec1e1fc81cea73da9479982a5[m removed block system call renumber system calls (run gmake clean!) skeleton for dup system call
+[33m8787cd01dfa6080d219f3dd7bbf03f3eb988a74e[m chdir cd in shell nits in mkdir, ls, etc.
+[33mceb0e427962d0656e672955585c04093b9efda90[m proc[0] can sleep(), at least after it gets to main00() proc[0] calls iget(rootdev, 1) before forking init
+[33m350e63f7a9b1be695c0cf69e380bd96733524f25[m no more proc[] entry per cpu for idle loop each cpu[] has its own gdt and tss no per-proc gdt or tss, re-write cpu's in scheduler (you win, cliff) main0() switches to cpu[0].mpstack
+[33m69332d1918fda38b25fc3ec8c786d16bb17e9e68[m oops
+[33me958c538fa1e711479f09cab807a6a7cde5d8aeb[m commented out code for cwd
+[33md7b3b802f414dbf18b5e196ab1a342b19d5f7be8[m user-level programs: mkdir and rm shell parses arguments (very simplistic) readme version of README (sh doesn't deal with capital characters) printf recognizes %c nicer output format for ls
+[33mbdb66433031ca96f2fd127995186623cd10c45b3[m set size for directories correctly in wdir and mkfs mkdir ls shows stat info for each dir entry
+[33md15f0d1033a7da6448966d9626ec2776781e4188[m start on mkdir stat
+[33me4bcd2a3a919ef040d2a577a1025f286c3b57168[m wdir now uses readi/writei
+[33m17e3cf15bac0c1ac60780ce7d1d228442ff08ed9[m fix iget() bug that allocated in-use inode[] entries
+[33m8abe2bcf156cce7beec21b259a59aaaa538165c0[m don't print unallocated dir entries
+[33m211ff0c67ea6737853cf932313cf4e27cc15f55c[m namei returns locked parent dir inode for create / unlink don't hold fd table lock across idecref() (latter does block i/o) idecref calls iput() in case last ref -> freeing inode dir size is 512 * # blocks, so readi/writei &c work unlink deletes dirent even if ip->nlink > 0
+[33mc372e8dc348e4bb30aae7642db92ecbeedbc83ab[m zero freed blocks multi-block directories track size of directory (size = number entries in use) should namei (and other code that scans through directories) scan through all blocks of a directory and not use size?
+[33m9e5970d596d7b1634200d50e96130886f593cede[m link()
+[33m05e975511bcf7f33955208319655dbfc687a7b0c[m zero out all of dirent.name when creating don't increase length of directory
+[33mcd93074e5bed8fdbc84f2960c3219c7cf791b020[m LRU disk cache replacement
+[33m22bac2cb9d0b8050573a4b5c6cb5d8f460ee4167[m free inode only when noone is holding a pointer to it.  should fix open-unlink- read problem, but untested
+[33m14938f9392524ad1b198bf36e63d42e0e61dab85[m buffer cache, fifo replacement
+[33m7ce01cf9be997dfec50786b8aec663c84b63c209[m mknod set nlink = 1 usertests for concurrent create/delete, and read() after unlink()
+[33m4357207237e074b5a42ee9739eadd040fd1cf296[m fix getblk to actually lock the block no more cons_put system calls usertests tests two processes writing files
+[33m1f544842ceb5af73b1f2b13222d72dd4ad7cd08a[m fstat primitive ls
+[33m0633b9715e106ac97fafcf3a68c06da1f0cf873a[m unlink,mknod,create with multi-component pathnames should work now remove console init code from userfs
+[33m24437cd554995f729969299e72699e2ba5d9b068[m fix deadlock---iput(dp) asap working unlink, but doesn't free dir blocks that become empty remove out-of-date comment in ioapic
+[33m17a856577f9db766b8ef7099d0575d378dff5dd1[m init creates console, opens 0/1/2, runs sh sh accepts 0-argument commands (like userfs) reads from console
+[33m5be0039ce9e22f140a29e167526c64c723c5be3c[m interrupts could be recursive since lapic_eoi() called before rti so fast interrupts overflow the kernel stack fix: cli() before lapic_eoi()
+[33m8a8be1b8c36e38f58f8ba3e425b6e701ad65abf3[m low-level keyboard input (not hooked up to /dev yet) fix acquire() to cli() *before* incrementing nlock make T_SYSCALL a trap gate, not an interrupt gate sadly, various crashes if you hold down a keyboard key...
+[33m28d9ef04ddaa4cf32f3c63c976afdc535a36db98[m printf convert userfs to use printf bfree ifree writei start on unlink
+[33m939f9edeac042b2678bd2943a32822fb2eed75b4[m iread for T_DEV O_RDWR, etc. create file
+[33m2601de00325bebd850fb74409e77e68d52b7021a[m fix test program: don't close before writing set fd to writeable on open for write
+[33m6fa5ffb56ffdbe5a37bfc04d063fbff2bf929c27[m devsw checkpoint: write(fd,"hello\n",6) where fd is a console dev almost works
+[33m6c0e444fcdf7ba21442513acbc69c7fca9def06b[m oops, update directory inode too
+[33m241113985f7122c65345885dec02e008601ff7ef[m block bitmap balloc
+[33m0e84a0ec6e7893dad13dff9a958c5bc987b79c82[m fix race in holding() check in acquire() give cpu1 a TSS and gdt for when it enters scheduler() and a pseudo proc[] entry for each cpu cpu0 waits for each other cpu to start up read() for files
+[33me8d11c2e846ad15b32caacc8a919722b76d00f79[m mknod,ialloc,iupdate
+[33m104207726be721843e44b8616faa87222aa5f0c2[m bwrite
+[33m8ec6530feea5153e00dced60d33fbfdd9d5c3184[m generalize async read to support write too
+[33m366189214ea663b20a0323b65661987a7de6f56d[m nit
+[33mc8b29f6d038090a5b5b6272406afbadcf31e9809[m better interrupt plan---this one appears to work ioapic
+[33m32630628a996e29018641af262272339ed6fef88[m open()
+[33me46fb46fcf4302bf5ed913101c5c7b510fe03ad4[m acquire+release ide_lock in ide_intr
+[33m8455980b27a57e9c51693a4acbe91b820f4ab319[m exec arguments
+[33mc59361f1430ec485596d1bf5d43339af0b5a2705[m primitive exec
+[33m54a4b00346575f3e2da1c9aeb023aaba4412a31d[m update
+[33m9d3fb6714181f44300a0a5431279841427e4ef06[m namei
+[33m11a9947f1a68e23001690955d8d0975ad4d6cf0c[m bread iget mkfs makes a file system image put this in your .bochsrc: ata0-slave: type=disk, mode=flat, path="fs.img", cylinders=1024, heads=1, spt=1
+[33m29270816285978e44b317c6e5c7bfa7a89ec24dd[m uint32_t -> uint &c
+[33mbd228a81566befa6154807d327d8c873f6a76c79[m prevent longjmp / forkret from writing over tf->edi
+[33m0dd4253747eef56d0f1539fac7d62234f6af5f51[m add ide_lock for sleep
+[33mb5f17007f41770fee97fa850635976ceb7aa7492[m standarize on unix-like lowercase struct names
+[33me0966f459f5543faf9e574b7415bec2bf11e6b42[m no more cons_putc; real_cons_putc -> cons_putc
+[33mb5ee516575b4d2f1fd7de014230fee7cf8b6b538[m add uint and standardize on typedefs instead of unsigned
+[33m857d60cb0c56df19a5125584c677aa56c4488e98[m cleaner
+[33mee9c7f3bfc45563e4caebcb7995e75bf39a8e0f3[m goodbye PushRegs
+[33mf15a3ae2633a9f3c76be7ce76b2ab85e2229e502[m cleaner
+[33mc54c79267fd4c3404000b3c545c428209e4d8a3d[m nitpicks
+[33m564f787e916392af7b1960d079abf110234305d4[m Eliminate annoying Pseudodesc structure. Eliminate unnecessary parts of mmu.h.
+[33m6e6a1dd7d717246f58bc3bbdf2a32e7e3f901cf3[m various little fixes that should have been in earlier checkins
+[33m84d79573da7d701b0bbed92eb874bfd8c2610f75[m more idiomatic c
+[33m96e16b96c9ff03f7cbba6fa050ed57e239904412[m no memlayout.h
+[33m9692d5add55a3f1dd7c5fa8182f4ba315f3ebedd[m was empty; gone
+[33m8a7eb80e47546fab8decf3fdc1579cd8a137e406[m fix main return type
+[33mb75c11b20edad4e507d5bc2455177de59a38ec9f[m add %s to cprintf for cons_puts
+[33mb74f4b57ae48719fca4fc621732b055b2debaf3e[m Keep interrupts disabled during startup.
+[33mef2bd07ae4cb2e27d62cfdcb7e71d82948fb80ed[m standardize on not using foo_ prefix in struct foo
+[33m6b765c480f8c810fc495a32baa696bbeb75adc09[m rename swtch.S to setjmp.S
+[33mb53f99d0d2cff21c6c208f5d00bb2cd2c6e39210[m standardize on #include "foo" not <foo>
+[33m4763a042c8b1f773c7517a145c72f455bde78b7f[m add minimal comments to generator vector table
+[33m679a977cb2d4df42ce1f144593716aeb855d7a92[m remove acquire1 and release1
+[33mf3d290220f072a7053b9a368bf7c42e8e2945c7e[m add cons_puts for atomic (readable) output
+[33m9b37d1bfaa65c96e7a465c285599aa45117182ea[m Add user.h for prototypes. Add cons_puts for cleaner output.
+[33mb903b693ec1525f1c033fa8738f78a6d956f1adf[m tidy up
+[33m72fef4f85513d200ca6b986b0bcc5c608142a1d6[m Don't kill process when inside kernel.
+[33m4ed974f5ea8cbb6ee296782d94d83d8edbc92026[m more name cleanup
+[33m6f2b626d2882c2b9df5039b324c4167be3d74f28[m remove non-idiomatic increment/decrement
+[33m51716a869c2e596b43dcc9d030a6626b29cf4829[m Rename fd_reference to more suggestive fd_incref. (Fd_reference sounds like it might just return the ref count.)
+[33m856e1fc1ad22a24bd71c706bc06ba868e044ddc8[m Attempt to clean up newproc somewhat.
+[33m65bd8e139a8368e987455a10ec59dd7b079b3af1[m New scheduler.
+[33m40a2a08319511fd157d2d77eefbda52423cc81ec[m Undo change from this morning that wasn't intended to get in.
+[33m643b122b4a721dbdb208ec5f8d15e56b63ac58d5[m move everything having to do with proc_table_lock into proc.c
+[33m3497670122cd0561661a0a2e617ec9ece789c2f0[m silence load_icode signedness warning
+[33m67a9314ad1318886ee8b9921ab453f08749cf73e[m Add void for ANSI C
+[33m7f419a0d29e0f785dce21b784c4849ae66c790ca[m Change fetchint, fetcharg, and putint to return -1 on error, 0 on success. They had been returning 0 on error, 1 on success, but all the callers were checking for return value < 0.
+[33m46bbd72f3eeaff9386b2a90af88f3d46b458a0e8[m no more recursive locks wakeup1() assumes you hold proc_table_lock sleep(chan, lock) provides atomic sleep-and-release to wait for condition ugly code in swtch/scheduler to implement new sleep fix lots of bugs in pipes, wait, and exit fix bugs if timer interrupt goes off in schedule() console locks per line, not per byte
+[33md9872ffa951291fcc3f7a92c0d235b86435c5714[m and the file
+[33mf27a68a24a3e0980499db8920fc7306dbab7d52d[m extract lapic code from mp.c
+[33m6eb6f10c5668bc2bdf5e561e0060e7e917ed55c1[m passes both usertests exit had acquire where I meant release swtch now checks that you hold no locks
+[33m8148b6ee535b85e97f3b5f3a850b70fdfbbcaf2d[m i think my cmpxchg use was wrong in acquire nesting cli/sti: release shouldn't always enable interrupts separate setup of lapic from starting of other cpus, so cpu() works earlier flag to disable locking in console output make locks work even when curproc==0 (still crashes in clock interrupt)
+[33m664324745e2257289f7a61e43892ce6e8b8ed9b7[m cvs add spinlock.h fix race in schedule()
+[33m4e8f237be819424f922399f8d121d9867b675541[m no more big kernel lock succeeds at usertests.c pipe test
+[33mb41b38d0da0854f3fa92967b70180ea1156154d4[m give each cpu its own clock, so that preemption works on cpu 1
+[33mb548df152b5a53ea8cfcb2d94fbdee07884d8050[m pre-empt both user and kernel, in clock interrupt usertest.c tests pre-emption kill()
+[33m5ce9751cab960e3b226eb0720e781e793a0be4ed[m Changes to allow use of native x86 ELF compilers, which on my Linux 2.4 box using gcc 3.4.6 don't seem to follow the same conventions as the i386-jos-elf-gcc compilers. Can run make 'TOOLPREFIX=' or edit the Makefile.
+[33m7ea6c9d19747c84ede9b056475cd9046c89a4d33[m queue with disk requests
+[33m084f21430c152eeaeaf8534fab41eca91a5fe7a9[m oops
+[33m72ea69fbdfb6db6111cf3e1f5ef540e4a87ec29c[m read the disk using interrupts
+[33m7837c71b32fc716101a859302e0349061416bd6e[m disable all interrupts when acquiring lock user program that makes a blocking system call
+[33mb22d898297a2496ba4cfd31d445769fbebc0a46d[m timer interrupts disk interrupts (assuming bochs has a bug)
+[33m8b4e2a08febc8b957b44732dbc7da831479a0005[m swtch saves callee-saved registers swtch idles on per-CPU stack, not on calling process's stack fix pipe bugs usertest.c tests pipes, fork, exit, close
+[33mf7cea12b38a86e9b37fa5bc635310d3f85e5f8db[m disable interrupts when holding kernel lock
+[33mbd303ed06096395778c80558e013b64bb47b9e9c[m timer interrupts
+[33mc41f1de5d41a527a3fa2d1e94215766130eac456[m file descriptors pipes
+[33mb61c2547b8b489cab16984c0940a1cb6593a2a3d[m system call return values initialize 2nd cpu's idt
+[33ma44ee3cde8b55c314410210b9f3076797b9925fc[m stick mpstack in cpu structure
+[33mbf3903612d998ca8d95a48fb7cc0e5bfbe68f4c4[m system call arguments
+[33m89eb5fbe6d120f19d69c3c84bed69611a746ff03[m boot more than two CPUs, each on own initial stack
+[33m7df1310b2a8e0d825287d64d09c2c8d82e51907c[m bug in trapret
+[33mdf5cc91659b0a2190072e6fc305060c8de95ed82[m compile "user programs" curproc array
+[33mbf49aedbed02cdbf40430178847d34c48c36c693[m send console output to parallel port
+[33m8352b998019565946b8f5b3b8f72175c5076efec[m oops
+[33m21a88fd487177841c882d9017bd9f4476801c6f6[m checkpoint. booting second processor.  stack is messed up, but thanks to cliff and plan 9 code, at least boots and gets into C code.
+[33m7baa34a421e4c970ee90c2537ceacd7230f2474e[m start on MP; detect MP configuration
+[33mae6e8aa730fa410118c0532938d4a9e62b08bbe8[m checkpoint
+[33mbe0a7eacdab4443199ed0ed4379a84edc7c98fd6[m sleep, wakeup, wait, exit
+[33ma4c03dea09b7b5f2463147e979d20b035b81de96[m primitive fork and exit system calls
+[33mcb83c71628378bc0e295dd71bf6641379fbcdf37[m fix some trap bugs
+[33m84eb544b23b17fed07b8c33142d48fdceffce10c[m foo
+[33m0a70d042d04e084da4226e7d0d684dedcae06d78[m more or less take traps/interrupts
+[33m70a895f63c504f255a28f63efdcfc6b39b2572c5[m xx
+[33m55e95b16db458b7f9abeca96e541acbdf8d7f85b[m import
