@@ -296,6 +296,14 @@ fork(void)
       np->ofile[i] = filedup(p->ofile[i]);
   np->cwd = idup(p->cwd);
 
+  for(i = 0; i < NVMA; i++) {
+    if(np->vma_[i].used) {
+        np->vma_[i] = p->vma_[i];
+        filedup(np->vma_[i].f);
+    }
+  }
+  np->vma_cnt = p->vma_cnt;
+
   safestrcpy(np->name, p->name, sizeof(p->name));
 
   pid = np->pid;
@@ -357,6 +365,14 @@ exit(int status)
   iput(p->cwd);
   end_op();
   p->cwd = 0;
+
+  // 修改exit, 当进程退出时，取消它与文件的所有映射
+  for(int i = 0; i < NVMA; i++) {
+    if(p->vma_[i].used) {
+      fileclose(p->vma_[i].f);
+      uvmunmap(p->pagetable, p->vma_[i].addr, p->vma_[i].length / PGSIZE, 1);
+    }
+  }
 
   // we might re-parent a child to init. we can't be precise about
   // waking up init, since we can't acquire its lock once we've
@@ -700,4 +716,12 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+void init_vma(struct vma *vma) {
+  
+}
+
+void free_vma(struct vma *vma) {
+
 }

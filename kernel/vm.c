@@ -169,10 +169,16 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
     panic("uvmunmap: not aligned");
 
   for(a = va; a < va + npages*PGSIZE; a += PGSIZE){
-    if((pte = walk(pagetable, a, 0)) == 0)
+    if((pte = walk(pagetable, a, 0)) == 0) {
+      // continue;
       panic("uvmunmap: walk");
-    if((*pte & PTE_V) == 0)
+    }
+      
+    if((*pte & PTE_V) == 0) {
+      continue;
       panic("uvmunmap: not mapped");
+    }
+      
     if(PTE_FLAGS(*pte) == PTE_V)
       panic("uvmunmap: not a leaf");
     if(do_free){
@@ -272,6 +278,9 @@ freewalk(pagetable_t pagetable)
       freewalk((pagetable_t)child);
       pagetable[i] = 0;
     } else if(pte & PTE_V){
+      // printf("pa: %d\n", pa);
+      uint64 pa = PTE2PA(pte);
+      printf("panic pa: %p\n", pa);
       panic("freewalk: leaf");
     }
   }
@@ -305,8 +314,11 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
       panic("uvmcopy: pte should exist");
-    if((*pte & PTE_V) == 0)
+    if((*pte & PTE_V) == 0) {
+      continue;
       panic("uvmcopy: page not present");
+    }
+      
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
     if((mem = kalloc()) == 0)
@@ -373,8 +385,11 @@ copyin(pagetable_t pagetable, char *dst, uint64 srcva, uint64 len)
   while(len > 0){
     va0 = PGROUNDDOWN(srcva);
     pa0 = walkaddr(pagetable, va0);
-    if(pa0 == 0)
-      return -1;
+    if(pa0 == 0) {
+        // printf("va: %p not mapped!\n", va0);
+        return -1;
+    }
+      
     n = PGSIZE - (srcva - va0);
     if(n > len)
       n = len;

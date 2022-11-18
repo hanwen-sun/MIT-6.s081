@@ -489,8 +489,11 @@ writei(struct inode *ip, int user_src, uint64 src, uint off, uint n)
   uint tot, m;
   struct buf *bp;
 
-  if(off > ip->size || off + n < off)
+  if(off > ip->size || off + n < off) {
+    // printf("off: %d ip->size: %d\n", off, ip->size);
     return -1;
+  }
+    
   if(off + n > MAXFILE*BSIZE)
     return -1;
 
@@ -498,6 +501,7 @@ writei(struct inode *ip, int user_src, uint64 src, uint off, uint n)
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
     m = min(n - tot, BSIZE - off%BSIZE);
     if(either_copyin(bp->data + (off % BSIZE), user_src, src, m) == -1) {
+      // printf("either_copyin fail!\n");
       brelse(bp);
       break;
     }

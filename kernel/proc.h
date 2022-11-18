@@ -82,6 +82,21 @@ struct trapframe {
 
 enum procstate { UNUSED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+// virtual memory area
+struct vma{
+  int used;
+  uint addr;
+  uint length;
+  int prot;
+  int flags;
+  int fd;
+  struct file *f;
+  int offset;   // 文件内部的偏移;
+
+  uint unmap_start;
+  uint unmap_end;
+};
+
 // Per-process state
 struct proc {
   struct spinlock lock;
@@ -103,4 +118,6 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  struct vma vma_[NVMA];          // virtual memory area;
+  int vma_cnt;                 // how many vma has been used!
 };

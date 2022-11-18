@@ -36,6 +36,7 @@ err(char *why)
 void
 _v1(char *p)
 {
+  // printf("check content1!\n");
   int i;
   for (i = 0; i < PGSIZE*2; i++) {
     if (i < PGSIZE + (PGSIZE/2)) {
@@ -43,6 +44,7 @@ _v1(char *p)
         printf("mismatch at %d, wanted 'A', got 0x%x\n", i, p[i]);
         err("v1 mismatch (1)");
       }
+      // printf("%d i\n");
     } else {
       if (p[i] != 0) {
         printf("mismatch at %d, wanted zero, got 0x%x\n", i, p[i]);
@@ -114,6 +116,7 @@ mmap_test(void)
   if (p == MAP_FAILED)
     err("mmap (1)");
   _v1(p);
+  printf("_v1 ok!\n");
   if (munmap(p, PGSIZE*2) == -1)
     err("munmap (1)");
 
@@ -122,8 +125,8 @@ mmap_test(void)
   printf("test mmap private\n");
   // should be able to map file opened read-only with private writable
   // mapping
-  p = mmap(0, PGSIZE*2, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-  if (p == MAP_FAILED)
+  p = mmap(0, PGSIZE*2, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);   // 特别注意, 这里没有新makefile, 所以是测试
+  if (p == MAP_FAILED)                             //munmap写回是否成功;
     err("mmap (2)");
   if (close(fd) == -1)
     err("close");
@@ -138,7 +141,7 @@ mmap_test(void)
   printf("test mmap read-only\n");
     
   // check that mmap doesn't allow read/write mapping of a
-  // file opened read-only.
+  // file opened read-only.    文件如果是只读的, 不能有写;
   if ((fd = open(f, O_RDONLY)) == -1)
     err("open");
   p = mmap(0, PGSIZE*3, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
@@ -169,6 +172,7 @@ mmap_test(void)
     p[i] = 'Z';
 
   // unmap just the first two of three pages of mapped memory.
+  printf("go here!\n");
   if (munmap(p, PGSIZE*2) == -1)
     err("munmap (3)");
   
@@ -272,9 +276,11 @@ fork_test(void)
   if(*(p1+PGSIZE) != 'A')
     err("fork mismatch (1)");
 
+  //printf("go here!\n");
   if((pid = fork()) < 0)
     err("fork");
   if (pid == 0) {
+    printf("go here!\n");
     _v1(p1);
     munmap(p1, PGSIZE); // just the first page
     exit(0); // tell the parent that the mapping looks OK.

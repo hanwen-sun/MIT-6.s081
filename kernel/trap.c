@@ -3,8 +3,13 @@
 #include "memlayout.h"
 #include "riscv.h"
 #include "spinlock.h"
+#include "sleeplock.h"
 #include "proc.h"
 #include "defs.h"
+#include "fs.h"
+#include "fcntl.h"
+#include "file.h"
+
 
 struct spinlock tickslock;
 uint ticks;
@@ -13,7 +18,7 @@ extern char trampoline[], uservec[], userret[];
 
 // in kernelvec.S, calls kerneltrap().
 void kernelvec();
-
+int mmap_handler(uint64 va, int cause);
 extern int devintr();
 
 void
@@ -65,7 +70,29 @@ usertrap(void)
     intr_on();
 
     syscall();
-  } else if((which_dev = devintr()) != 0){
+  } else if(r_scause() == 13 || r_scause() == 15) {
+    // 1. 判断出错地址是否在vma范围内;  (所有都要判断吗?)
+    // 2. 如果不在和pagefault一样分配;
+    // 3. 否则, 先分配一个page, 再读文件
+    uint64 va = r_stval();
+    struct proc *p = myproc();
+
+    // 判断va是否位于有效区间;
+    if(PGROUNDUP(p->trapframe->sp) - 1 >= va || va >= p->sz) {
+        printf("the va: %p is invalid address!  p->sz: %p\n", va, p->sz);
+        p->killed = 1;
+    } 
+      
+    
+    if(mmap_handler(va, r_scause()) == -1) {
+        printf("handle mmap error!\n");
+        p->killed = 1;
+    }
+    //printf("page fault: %p\n", va);
+    // int flag = 0;
+    
+    // printf("page fault done!\n");
+  }else if((which_dev = devintr()) != 0){
     // ok
   } else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
@@ -218,3 +245,84 @@ devintr()
   }
 }
 
+int mmap_handler(uint64 va, int cause) {
+    int vma_id = -1;
+    struct proc *p = myproc();
+
+    for(int i = 0; i < p->vma_cnt; i++) {
+      uint64 start = p->vma_[i].addr;
+      uint64 end = p->vma_[i].addr + p->vma_[i].length;
+      /*if(p->vma_[i].used) {
+          printf("i: %d, start: %p, end: %p\n", i, start, end);
+      } */
+
+      if(va >= start && va < end) {   // 特别注意, 这里是小于;
+        //printf("allocate vma page!\n");
+        vma_id = i;
+        break;
+      }
+    }
+    va = PGROUNDDOWN(va);
+
+    if(vma_id != -1) {
+        //printf("allocate vma page page_fault reason: %d\n", r_scause());
+        char* pa = kalloc();
+        struct file *f = p->vma_[vma_id].f;
+        struct vma vma_current = p->vma_[vma_id];
+        if(pa == 0)
+          p->killed = 1;
+        else {
+          if(f->readable == 0 && cause == 13)  return -1;
+          if(f->writable == 0 && cause == 15)  return -1;
+
+          int flags = 0;
+          int prot = vma_current.prot;
+          if(prot & PROT_READ)
+            flags |= PTE_R;
+          if(prot & PROT_WRITE)
+            flags |= PTE_W;
+          if(prot & PROT_EXEC)
+            flags |= PTE_X;
+
+          flags |= PTE_U;   // 特别注意, 这里要赋值, 才能给user调用;
+          flags |= PTE_V;
+          memset(pa, 0, PGSIZE);   // 这里memset的作用是什么?
+          //printf("vma pagefault va: %p pa: %p\n", va, pa);
+          if(mappages(p->pagetable, va, PGSIZE, (uint64)pa, flags) != 0) {
+            printf("allocate page fail!\n");
+            kfree(pa);
+            return -1;
+          }
+
+          int new_offset = va - vma_current.addr + vma_current.offset;
+          // printf("new_offset: %d\n", new_offset);
+          // 读取文件具体内容;
+          // 这里一定不能用fileread, 因为会改变文件实际的offset
+          // 一定要利用vma的offset
+          
+          int r = 0;
+          ilock(f->ip);
+          if((r = readi(f->ip, 1, va, new_offset, PGSIZE)) <= 0) {
+            printf("readi error!\n");
+            return -1;
+          }
+            
+          iunlock(f->ip);
+          // p->vma_[vma_id].offset += PGSIZE;
+        }
+    }else {
+        char* pa = kalloc();
+        if(pa == 0)
+          p->killed = 1;
+        else {
+          //printf("normal pagefault va: %p pa: %p\n", va, pa);
+          memset(pa, 0, PGSIZE);
+          if(mappages(p->pagetable, va, PGSIZE, (uint64)pa, PTE_R | PTE_W | PTE_X | PTE_U) != 0){   // return 0 -- success;  特别注意,
+            kfree(pa);        //char* 不用转 void* ?                                             
+            return -1;
+          }
+        }
+    } 
+
+  return 0;
+}

@@ -484,3 +484,129 @@ sys_pipe(void)
   }
   return 0;
 }
+
+uint64
+sys_mmap(void) {
+  uint64 addr, len;
+  int prot, fd, flags, offset;
+  struct file *f;
+
+  if(argaddr(0, &addr) < 0 || argaddr(1, &len) < 0 || argint(2, &prot) < 0 || argint(3, &flags) < 0 
+    || argfd(4, &fd, &f) < 0 || argint(5, &offset) < 0) 
+    {
+      // printf("failed 1!\n");
+      return -1;
+    }
+    
+  
+  // printf("port = %d, flags = %d\n", port, flags);
+  // check read only;
+
+    if((!f->readable && (prot & PROT_READ)) || (!f->writable && (prot & PROT_WRITE) && (flags & MAP_SHARED))) {
+      // printf("failed 2!\n");
+      return -1;
+    }
+      
+  
+  struct proc *p = myproc();
+  if(p->sz + len > MAXVA)
+    panic("out of the max virtual address!");
+  
+  addr = p->sz;
+  p->sz = p->sz + len;
+  if(p->vma_cnt + 1>= NVMA)
+    panic("mmap!");
+  
+  filedup(f);
+
+  // vma_init(&p->vma_[p->vma_cnt]);
+  p->vma_[p->vma_cnt].used = 1;
+  p->vma_[p->vma_cnt].addr = addr;   // 这里不方便封装;
+  p->vma_[p->vma_cnt].length = len;
+  p->vma_[p->vma_cnt].prot = prot;
+  p->vma_[p->vma_cnt].offset = offset;
+  p->vma_[p->vma_cnt].flags = flags;
+  p->vma_[p->vma_cnt].fd = fd;
+  p->vma_[p->vma_cnt].f = f; 
+  p->vma_[p->vma_cnt].used = 1;
+  p->vma_cnt++;  
+
+  return addr;
+}
+
+uint64
+sys_munmap(void) {
+  uint64 addr, len;
+  if(argaddr(0, &addr) < 0 || argaddr(1, &len) < 0) {
+    return -1;
+  } 
+  // 根据地址范围找到vma_id, 并判断是否在中间"打洞";
+  // 如果该地址范围被修改, 写回;
+  // 如果vma被全删除, 标记清除该vma, 并减少文件引用;
+  // 使用uvmunmap删除地址的映射(不释放物理地址);
+  // 成功返回0, 失败返回-1; 
+  int vma_id = -1;
+  struct proc *p = myproc();
+  uint64 unmap_start = addr, unmap_end = addr + len;
+  // printf("unmap_start: %p, unmap_end: %p\n", unmap_start, unmap_end);
+
+  uint64 vma_start = 0, vma_end = 0;
+  for(int i = 0; i < p->vma_cnt; i++) {
+    //if(p->vma_[i] == 0)
+      //continue;
+    
+    vma_start = p->vma_[i].addr;
+    vma_end = p->vma_[i].addr + p->vma_[i].length;
+    // printf("vma_start: %p vma_end: %p\n", vma_start, vma_end);
+    if(unmap_start >= vma_start && unmap_end <= vma_end) {
+      vma_id = i;
+      break;
+    }
+  }
+  
+  if(vma_id == -1)
+      panic("not found munmap area!\n");
+  
+  if(unmap_start > vma_start && unmap_end < vma_end) 
+      panic("unmap between the vma!\n");
+  
+  // 先回收!
+  //printf("unmap_start: %p, unmap_end: %p\n", unmap_start, unmap_end);
+
+  struct vma vma_current = p->vma_[vma_id];
+  struct file *f = vma_current.f;
+  
+  // filewrite(vma_current.f, addr, len);   // 先写回文件, 这里有问题, 不能直接用filewrite;
+  if(vma_current.f->writable == 0 && vma_current.flags & MAP_SHARED) {
+    printf("cannot write back!\n");
+    return -1;
+  }
+
+  // 改变vma的addr, len, offset;
+  int write_offset = vma_current.offset;
+  if(unmap_start == vma_start) {
+    vma_current.addr = unmap_end;
+    vma_current.offset += len;
+  }
+  else if(unmap_end == vma_end) 
+    write_offset = vma_current.offset + (vma_current.length - len);
+  vma_current.length = vma_current.length - len;
+  // 写回文件 
+  if(vma_current.flags & MAP_SHARED) {
+    // int r = 0;
+    begin_op();
+    ilock(f->ip);
+    writei(f->ip, 1, addr, write_offset, len);
+      // f->off += r;
+    iunlock(f->ip);
+    end_op();  
+    // filewrite(f, addr, len);   // 这里可以改变文件偏移;
+  }
+  uvmunmap(p->pagetable, addr, len / PGSIZE, 1);   // 这里是否收回物理地址?
+  if(vma_current.length == 0) {
+    fileclose(vma_current.f);
+    memset(&p->vma_[vma_id], 0, sizeof(p->vma_[vma_id]));
+  }
+
+  return 0;
+}
