@@ -134,6 +134,9 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
+  for(int i = 0; i < NVMA; i++) 
+    memset(&p->vma_[i], 0, sizeof(p->vma_[i]));
+
   return p;
 }
 
@@ -297,7 +300,7 @@ fork(void)
   np->cwd = idup(p->cwd);
 
   for(i = 0; i < NVMA; i++) {
-    if(np->vma_[i].used) {
+    if(p->vma_[i].used) {
         np->vma_[i] = p->vma_[i];
         filedup(np->vma_[i].f);
     }

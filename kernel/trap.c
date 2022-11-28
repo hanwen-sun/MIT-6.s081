@@ -81,12 +81,13 @@ usertrap(void)
     if(PGROUNDUP(p->trapframe->sp) - 1 >= va || va >= p->sz) {
         printf("the va: %p is invalid address!  p->sz: %p\n", va, p->sz);
         p->killed = 1;
-    } 
+    }    // 这里特别注意, p->killed后后面不能执行了;
       
-    
-    if(mmap_handler(va, r_scause()) == -1) {
+    else {
+      if(mmap_handler(va, r_scause()) == -1) {
         printf("handle mmap error!\n");
         p->killed = 1;
+      }
     }
     //printf("page fault: %p\n", va);
     // int flag = 0;
