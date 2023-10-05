@@ -528,7 +528,7 @@ sys_mmap(void) {
   p->vma_[p->vma_cnt].flags = flags;
   p->vma_[p->vma_cnt].fd = fd;
   p->vma_[p->vma_cnt].f = f; 
-  p->vma_[p->vma_cnt].used = 1;
+  // p->vma_[p->vma_cnt].used = 1;
   p->vma_cnt++;  
 
   return addr;
@@ -592,7 +592,7 @@ sys_munmap(void) {
     write_offset = vma_current.offset + (vma_current.length - len);
   vma_current.length = vma_current.length - len;
   // 写回文件 
-  if(vma_current.flags & MAP_SHARED) {
+  if(vma_current.flags == MAP_SHARED && (vma_current.prot & PROT_WRITE) != 0) {
     // int r = 0;
     begin_op();
     ilock(f->ip);
@@ -604,6 +604,7 @@ sys_munmap(void) {
   }
   uvmunmap(p->pagetable, addr, len / PGSIZE, 1);   // 这里是否收回物理地址?
   if(vma_current.length == 0) {
+    vma_current.used = 0;
     fileclose(vma_current.f);
     memset(&p->vma_[vma_id], 0, sizeof(p->vma_[vma_id]));
   }

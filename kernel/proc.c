@@ -5,6 +5,8 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "fcntl.h"
+//#include "file.h"
 
 struct cpu cpus[NCPU];
 
@@ -20,7 +22,7 @@ static void wakeup1(struct proc *chan);
 static void freeproc(struct proc *p);
 
 extern char trampoline[]; // trampoline.S
-
+// extern struct file;
 
 // Allocate a page for each process's kernel stack.
 // Map it high in memory, followed by an invalid
@@ -364,19 +366,26 @@ exit(int status)
     }
   }
 
+  // 修改exit, 当进程退出时，取消它与文件的所有映射
+  for(int i = 0; i < NVMA; i++) {
+    if(p->vma_[i].used) {
+      //struct file *f_ = p->vma_[i].f;
+      if(p->vma_[i].flags == MAP_SHARED && (p->vma_[i].prot & PROT_WRITE) != 0) {
+        filewrite(p->vma_[i].f, p->vma_[i].addr, p->vma_[i].length);
+      }
+
+      fileclose(p->vma_[i].f);
+      uvmunmap(p->pagetable, p->vma_[i].addr, p->vma_[i].length / PGSIZE, 1);
+      p->vma_[i].used = 0;
+    }
+  }
+
   begin_op();
   iput(p->cwd);
   end_op();
   p->cwd = 0;
 
-  // 修改exit, 当进程退出时，取消它与文件的所有映射
-  for(int i = 0; i < NVMA; i++) {
-    if(p->vma_[i].used) {
-      fileclose(p->vma_[i].f);
-      uvmunmap(p->pagetable, p->vma_[i].addr, p->vma_[i].length / PGSIZE, 1);
-    }
-  }
-
+  
   // we might re-parent a child to init. we can't be precise about
   // waking up init, since we can't acquire its lock once we've
   // acquired any other proc lock. so wake up init whether that's
